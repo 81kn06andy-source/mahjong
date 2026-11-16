@@ -432,7 +432,7 @@ function score(p,self,wt){const h=S.hands[p],ml=S.melds[p],c=Array(34).fill(0);h
  for(let pr=0;pr<34;pr++)if(c[pr]>=2){c[pr]-=2;
   for(const d of decs(c)){const l=[],st=[...mset,...d],ps=st.filter(x=>x[0]==='p').map(x=>x[1]);
    const nw=ps.filter(t=>t>=27&&t<31).length,nd=ps.filter(t=>t>=31).length;
-   if(nw===4)l.push(['大四喜',16]);else if(nw===3&&pr>=27&&pr<31)l.push(['小四喜',8]);else{if(ps.includes(dw))l.push([WIND[dw-27]+'風位',1]);ps.filter(t=>t>=27&&t<31).forEach(t=>l.push([HON[t-27],1]))}
+   if(nw===4)l.push(['大四喜',16]);else if(nw===3&&pr>=27&&pr<31)l.push(['小四喜',8]);else{ps.filter(t=>t>=27&&t<31).forEach(t=>l.push([HON[t-27],1]))}
    if(nd===3)l.push(['大三元',8]);else if(nd===2&&pr>=31)l.push(['小三元',4]);else ps.filter(t=>t>=31).forEach(t=>l.push([HON[t-27],1]));
    const inSeq=d.some(x=>x[0]==='s'&&wt>=x[1]&&wt<=x[1]+2);
    const an=d.filter(x=>x[0]==='p'&&(self||x[1]!==wt||inSeq)).length+mset.filter(x=>x[2]).length;
