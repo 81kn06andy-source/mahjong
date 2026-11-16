@@ -607,7 +607,7 @@ function init3d(){if(!window.THREE)return false;try{const T=THREE;
   ['gesturestart','gesturechange'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}))}
  cv.addEventListener('wheel',e=>{if(!e.ctrlKey)return;e.preventDefault();zoomBy(1+e.deltaY*.01)},{passive:false});
  const fit=()=>{const el=$('#gl'),w=el.clientWidth||1,h=el.clientHeight||1;R.setSize(w,h,false);setBg(w,h);cam.aspect=w/h;cam.updateProjectionMatrix();G.fk='';
-  const tw=Math.min(h*.1534,w*.965/17.9*.9025,66.5),D=h/(2*tw*Math.tan(hcam.fov*Math.PI/360));hcam.aspect=w/h;hcam.updateProjectionMatrix();const yc=h-28-tw*TL/2-6;hcam.position.set(0,(yc-h/2)/tw,D);hcam.lookAt(0,(yc-h/2)/tw,0);G.htop=h-28-tw*TL-8-tw*.6;G.tw=tw};
+  const tw=Math.min(h*.1457,w*.965/17.9*.857,63.2),D=h/(2*tw*Math.tan(hcam.fov*Math.PI/360));hcam.aspect=w/h;hcam.updateProjectionMatrix();const yc=h-28-tw*TL/2-6;hcam.position.set(0,(yc-h/2)/tw,D);hcam.lookAt(0,(yc-h/2)/tw,0);G.htop=h-28-tw*TL-8-tw*.6;G.tw=tw};
  fit();try{new ResizeObserver(fit).observe($('#gl'))}catch(_){addEventListener('resize',fit)}
  let last=performance.now();const Y=new T.Vector3(0,1,0),tmp=new T.Vector3();
  (function loop(now){requestAnimationFrame(loop);const dt=Math.min(.05,(now-last)/1000);last=now;const k=1-Math.exp(-dt*11);
@@ -699,8 +699,8 @@ function actCancel(){G.sub=null;if(S.phase==='claim')pass();else{G.hideK=G.subK;
 function tiltBy(d){G.ph=Math.max(.3,Math.min(1.18,G.ph+d))}
 function zoomBy(f){G.zoom=Math.max(.55,Math.min(1.5,G.zoom*f))}
 function resetView(){G.th=0;G.ph=.74;G.zoom=1;G.px=0;G.pz=0}
-function panLim(){return Math.max(0,1-G.zoom)*20}
-function panClamp(){const L=panLim();G.px=Math.max(-L,Math.min(L,G.px||0));G.pz=Math.max(-L,Math.min(L,G.pz||0))}
+function panLim(){return G.zoom<.98?1:0}
+function panClamp(){const L=panLim();G.px=Math.max(-14*L,Math.min(14*L,G.px||0));G.pz=Math.max(-24*L,Math.min(8*L,G.pz||0))}
 function panBy(dx,dy){const H=($('#gl')&&$('#gl').clientHeight)||400,k=2*(G.fr||30)*G.zoom*Math.tan(G.cam.fov*Math.PI/360)/H;G.px=(G.px||0)-dx*k;G.pz=(G.pz||0)-dy*k*1.35;panClamp()}
 function fsToggle(){try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen().catch(()=>note('這裡無法全螢幕'))}catch(_){note('這裡無法全螢幕')}}
 function pickAt(e){const r=G.R.domElement.getBoundingClientRect(),v=new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1),rc=new THREE.Raycaster();rc.setFromCamera(v,G.hcam);
