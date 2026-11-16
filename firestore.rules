@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 牌桌狀態：每個房號一份
+    match /mj/{room} {
+      allow read: if true;
+      allow write: if request.resource.size() < 900000;
+      // 聊天訊息：只能新增，不能改或刪別人的
+      match /chat/{msg} {
+        allow read: if true;
+        allow create: if request.resource.data.keys().hasOnly(['u','n','ts','t','a','d'])
+                      && request.resource.size() < 250000;
+      }
+    }
+  }
+}
