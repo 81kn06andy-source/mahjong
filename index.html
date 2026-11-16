@@ -276,6 +276,12 @@ body.ingame #wrap{padding-top:6px;padding-bottom:6px}
  .vb .sit{height:32px;padding:0 8px;gap:6px;font-size:13px}.vb .sit i{width:18px}}
 .mb3:not(.lb){display:inline-flex;height:22px;padding:0 10px 0 8px;gap:5px;font-size:11px;border-top-width:2px;border-top-right-radius:12px;background:#120a06d9}
 .mb3:not(.lb) .st{display:none}.mb3:not(.lb) .ma{font-size:14px}.mb3:not(.lb) .ma img.mi{width:18px;height:18px}.mb3:not(.lb) .wd2{font-size:10px;padding:0 5px}.mb3:not(.lb) .zj{font-size:10px;padding:0 5px}.mb3:not(.lb) .sc{font-size:11px}
+#ovH .ov{-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}
+#ovH .ovb{position:sticky;bottom:0;z-index:2;padding:4px 0}
+@media (max-height:520px){#ovH{inset:1%}#ovH .ov{padding:6px 10px;gap:4px;justify-content:flex-start}#ovH .ov h3{font-size:15px}
+ #ovH .ov .tl span{font-size:12px;padding:1px 8px}#ovH .ov>div{font-size:12px}
+ #ovH .ov .t.m{width:min(3.3cqw,6.4vh);height:min(4.6cqw,9vh);font-size:min(2.1cqw,4vh)}#ovH .ovg{gap:3px 8px}#ovH .ovm{font-size:15px}
+ #ovH .ovb button{padding:7px 16px;font-size:14px}}
 </style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="gs" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient></defs></svg><div id="wrap">
 <div class="bar"><input id="room" value="table1" aria-label="房號"><input id="name" placeholder="暱稱" aria-label="暱稱" maxlength="8" onchange="setMe()"><button onclick="join()">進入牌桌</button><button class="g" id="rst" onclick="reset()">重置牌桌</button><span id="msg" class="sm"></span></div>
 <div id="prof" hidden><div class="ph0"><span>選你的角色（上面可以改暱稱）</span><label class="up">📷 用自己的照片<input type="file" id="ph" accept="image/*" hidden onchange="onPhoto(this.files[0]);this.value=''"></label></div><div id="avs"></div></div>
@@ -425,7 +431,7 @@ function score(p,self,wt){const h=S.hands[p],ml=S.melds[p],c=Array(34).fill(0);h
  for(let pr=0;pr<34;pr++)if(c[pr]>=2){c[pr]-=2;
   for(const d of decs(c)){const l=[],st=[...mset,...d],ps=st.filter(x=>x[0]==='p').map(x=>x[1]);
    const nw=ps.filter(t=>t>=27&&t<31).length,nd=ps.filter(t=>t>=31).length;
-   if(nw===4)l.push(['大四喜',16]);else if(nw===3&&pr>=27&&pr<31)l.push(['小四喜',8]);else{if(ps.includes(dw))l.push([WIND[dw-27]+'風位',1]);ps.filter(t=>t>=27&&t<31).forEach(t=>l.push(['見字 '+HON[t-27],1]))}
+   if(nw===4)l.push(['大四喜',16]);else if(nw===3&&pr>=27&&pr<31)l.push(['小四喜',8]);else{if(ps.includes(dw))l.push([WIND[dw-27]+'風位',1]);ps.filter(t=>t>=27&&t<31).forEach(t=>l.push([HON[t-27],1]))}
    if(nd===3)l.push(['大三元',8]);else if(nd===2&&pr>=31)l.push(['小三元',4]);else ps.filter(t=>t>=31).forEach(t=>l.push([HON[t-27],1]));
    const inSeq=d.some(x=>x[0]==='s'&&wt>=x[1]&&wt<=x[1]+2);
    const an=d.filter(x=>x[0]==='p'&&(self||x[1]!==wt||inSeq)).length+mset.filter(x=>x[2]).length;
@@ -684,7 +690,8 @@ const WZ=8.15,WO=-1.82,XS0=-.6,XS1=7.35,A0=.27;
 function rampA(t){return t<0?0:t<300?A0*ease(t/300):t<2350?A0:t<2750?A0*(1-ease((t-2350)/400)):0}
 function barPose(t,j,l){const h=TT/2+l*TT,k=16-j,a=rampA(t),m=Math.max(0,Math.min(1,(t-300)/2000)),mm=1-Math.pow(1-m,1.6),XL=9+(-8*GAP+WO-9)*mm,X=XL+k*GAP;
  if(X<=XS0)return{x:X,y:h+.005,z:WZ,th:0,vis:true};const d=(X-XS0)/Math.cos(a);const y=-d*Math.sin(a)+h*Math.cos(a)+.005;return{x:XS0+d*Math.cos(a)+h*Math.sin(a),y,z:WZ,th:-a,vis:y>-1.3&&X<XS1+.6}}
-function startTrans(){G.tr={t0:performance.now()};setTimeout(shuffleSnd,0);if(G.push)G.push.forEach(p=>G.sc.remove(p.g));G.push=[];const T=THREE,sec=[0,1,2,3].map(()=>Math.random()*220);
+function startTrans(){if(!G.lph||G.lph==='lobby'){if(G.push){G.push.forEach(p=>G.sc.remove(p.g));G.push=null}G.tr={t0:performance.now()-TRA+250};G.st.classList.add('trans');$('#trH').innerHTML='<div class="trc"><b>🀄 牌牆準備中…</b><button type="button" onclick="skipTrans()">略過</button></div>';if(sOK()&&SBUF.out)playSample(SBUF.out,0,3.2,.95,.2);return}
+ G.tr={t0:performance.now()};setTimeout(shuffleSnd,0);if(G.push)G.push.forEach(p=>G.sc.remove(p.g));G.push=[];const T=THREE,sec=[0,1,2,3].map(()=>Math.random()*220);
  for(const o of G.objs.values()){if(!o.g.visible)continue;const g=o.g.clone(),x=g.position.x,z=g.position.z,r0=Math.hypot(x,z),dx=r0>.01?x/r0:0,dz=r0>.01?z/r0:1,sd=Math.abs(dx)>Math.abs(dz)?(dx>0?1:3):(dz>0?0:2);
   G.sc.add(g);G.push.push({g,r0,dx,dz,y0:g.position.y,q0:g.quaternion.clone(),s0:g.scale.x,ax:new T.Vector3(-dz,0,dx),s:620+sec[sd]+Math.random()*80,d:Math.max(260,(r0-2.45)/11*1000)})}G.st.classList.add('trans');$('#trH').innerHTML='<div class="trc"><b>🀄 自動洗牌中…</b><button type="button" onclick="skipTrans()">略過</button></div>'}
 function skipTrans(){if(G.tr)G.tr.t0=performance.now()-TRC}
