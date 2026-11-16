@@ -282,6 +282,7 @@ body.ingame #wrap{padding-top:6px;padding-bottom:6px}
  #ovH .ov .tl span{font-size:12px;padding:1px 8px}#ovH .ov>div{font-size:12px}
  #ovH .ov .t.m{width:min(3.3cqw,6.4vh);height:min(4.6cqw,9vh);font-size:min(2.1cqw,4vh)}#ovH .ovg{gap:3px 8px}#ovH .ovm{font-size:15px}
  #ovH .ovb button{padding:7px 16px;font-size:14px}}
+#ovH .ov>*:not(.ovb){zoom:var(--ovz,1)}#ovH .ov{touch-action:pan-x pan-y}#ovH .ov{align-items:safe center}
 </style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="gs" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient></defs></svg><div id="wrap">
 <div class="bar"><input id="room" value="table1" aria-label="房號"><input id="name" placeholder="暱稱" aria-label="暱稱" maxlength="8" onchange="setMe()"><button onclick="join()">進入牌桌</button><button class="g" id="rst" onclick="reset()">重置牌桌</button><span id="msg" class="sm"></span></div>
 <div id="prof" hidden><div class="ph0"><span>選你的角色（上面可以改暱稱）</span><label class="up">📷 用自己的照片<input type="file" id="ph" accept="image/*" hidden onchange="onPhoto(this.files[0]);this.value=''"></label></div><div id="avs"></div></div>
@@ -805,7 +806,7 @@ function render(){if(!S)return;homeShow();if(!G.ok)return render2d();
  $('#prof').hidden=!lob;
  $('#lab').innerHTML=[1,2,3].map(k=>plate((b+k)%4)).join('');G.labs=[...document.querySelectorAll('#lab .np')];
  const ce=$('#cenH');ce.innerHTML=cen;ce.className='cm-'+cm;
- const oh=$('#ovH');if(!ov)G.peek=0;const ok=ov?S.gid+':'+S.v0+':'+JSON.stringify(w):'';if(ov&&G.ovK!==ok){G.ovK=ok;G.ovT=performance.now();clearTimeout(G.ovTm);G.ovTm=setTimeout(render,4400);if(G.booted&&w&&!w.draw)setTimeout(()=>celebrate(w),0)}const ovw=ov&&performance.now()-G.ovT<(w&&!w.draw?4300:2900);oh.innerHTML=ovl;oh.hidden=!ov||!!G.peek||ovw;if(G.dealA){act='';tgOut=''}$('#actH').innerHTML=ovw?'':ov&&G.peek?'<div class="act"><button onclick="G.peek=0;render()">回到結算</button></div>':act;$('#tgH').innerHTML=tgOut;$('#sayH').innerHTML=sOn&&S.say.s===b?`<div class="bigsay sf" ${sSt}>${S.say.t}！</div>`:'';document.body.classList.toggle('ingame',!lob);if(window.chatMount&&$('#cbtn'))chatMount();sndTick();homeShow();
+ const oh=$('#ovH');if(!ov)G.peek=0;const ok=ov?S.gid+':'+S.v0+':'+JSON.stringify(w):'';if(ov&&G.ovK!==ok){G.ovK=ok;G.ovT=performance.now();G.ovz=1;oh.style.setProperty('--ovz',1);clearTimeout(G.ovTm);G.ovTm=setTimeout(render,4400);if(G.booted&&w&&!w.draw)setTimeout(()=>celebrate(w),0)}const ovw=ov&&performance.now()-G.ovT<(w&&!w.draw?4300:2900);oh.innerHTML=ovl;oh.hidden=!ov||!!G.peek||ovw;if(G.dealA){act='';tgOut=''}$('#actH').innerHTML=ovw?'':ov&&G.peek?'<div class="act"><button onclick="G.peek=0;render()">回到結算</button></div>':act;$('#tgH').innerHTML=tgOut;$('#sayH').innerHTML=sOn&&S.say.s===b?`<div class="bigsay sf" ${sSt}>${S.say.t}！</div>`:'';document.body.classList.toggle('ingame',!lob);if(window.chatMount&&$('#cbtn'))chatMount();sndTick();homeShow();ovPinch();
  {const x=S.seats[b],on=!lob&&!ov&&S.turn===b;$('#meH').innerHTML=`<div class="mb3${on?' on':''}${lob?' lb':''}" style="--c:${COL[b]}">${say(b)}<span class="ma">${x?mini(b):'💺'}</span>${lob?'':`<b class="wd2">${WIND[(b-S.dealer+4)%4]}</b>${b===S.dealer?'<b class="zj">莊</b>':''}`}<span class="nm">${N(b)}</span><span class="sc ${S.score[b]<0?'neg':'pos'}">${S.score[b]>0?'+':''}${S.score[b]}</span>${lob&&!x&&p<0?`<button onclick="sit(${b})">入座</button>`:''}<span class="st">${st}</span></div>`}
  $('#info').textContent=lob?'':`${matchLen()===1?'':`第${Math.min(4,(S.rc??S.rw??0)+1)}/4圈 · `}${WIND[S.rw]}風圈${S.streak?` · 連莊${S.streak}`:''} · 可摸 ${Math.max(0,S.wall.length-14)} 張 · 底${S.cfg.base}/台${S.cfg.tai}`;
  sync3d({p,b,lob,ov,cl,w,can,tp:tpI});placeLabels();
@@ -957,6 +958,11 @@ function invBox(t){let e=$('#invB');if(!e){e=document.createElement('div');e.id=
 function copyInvite(){const t=inviteText(),ok=()=>invMsg('✅ 已複製邀請，貼到 LINE 給朋友吧！');
  const legacy=()=>{try{const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;top:0';document.body.append(ta);ta.select();ta.setSelectionRange(0,t.length);const r=document.execCommand('copy');ta.remove();if(r)ok();else invBox(t)}catch(_){invBox(t)}};
  try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,legacy);else legacy()}catch(_){legacy()}}
+function ovPinch(){const h=$('#ovH');if(!h||h.dataset.pz)return;h.dataset.pz=1;let p=null;const D=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY)||1,set=z=>{G.ovz=Math.max(.6,Math.min(2.2,z));h.style.setProperty('--ovz',G.ovz)};
+ h.addEventListener('touchstart',e=>{if(e.touches.length===2){p={d0:D(e.touches),z0:G.ovz||1};e.preventDefault()}},{passive:false});
+ h.addEventListener('touchmove',e=>{if(p&&e.touches.length===2){set(p.z0*D(e.touches)/p.d0);e.preventDefault()}},{passive:false});
+ h.addEventListener('touchend',e=>{if(e.touches.length<2)p=null});
+ h.addEventListener('wheel',e=>{if(!e.ctrlKey)return;e.preventDefault();set((G.ovz||1)*(1-e.deltaY*.01))},{passive:false})}
 function peek(){G.peek=1;render()}
 (async()=>{init3d();try{db=await claude.use('db')}catch(e){db=null}
  if(!db){$('#app').innerHTML='<div style="padding:24px;font-size:16px;line-height:1.7"><b>還沒設定好連線</b><br>請把 Firebase 的設定貼到 firebase-config.js（照說明文件第 1 部分）。</div>';return}
