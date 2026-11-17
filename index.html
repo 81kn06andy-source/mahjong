@@ -351,7 +351,10 @@ html.r90 .vb .smenu{width:min(380px,calc(var(--r9w) - 30px))!important;max-heigh
 #hall .hlr{display:flex;gap:8px;align-items:center;font-size:13px;color:#7a6250}#hall .hlr input{flex:1;min-width:0;box-sizing:border-box;padding:9px 12px;border:2px solid #d9bf8c;border-radius:12px;font-size:16px;font-weight:700;background:#fff;color:#2b1a12}#hall .hlr button{padding:10px 16px;background:#f1e4c8;color:#6a4a30;font-size:14px}
 @media (max-height:520px) and (orientation:landscape){#hall{padding:8px}#hall .hlc{width:min(760px,100%);padding:10px 14px;gap:7px}#hall h1{font-size:20px}#hall .hll{max-height:38vh}#hall .hlrow{padding:6px 10px}#hall .hgo{padding:9px;font-size:15px}#hall .hle{padding:12px}}
 .vb{z-index:25}.vb.mv{right:auto}.vb #setb{width:37px;height:37px;font-size:19px}@media(max-height:500px){.vb #setb{width:33px;height:33px;font-size:16.5px}}#setb{touch-action:none;cursor:grab}#setb.drag{cursor:grabbing;opacity:.85;transform:scale(1.12)}
+html.r90 #home{overflow:hidden;align-items:center}html.r90 #home .hc{margin:auto}
+@media (max-height:520px) and (orientation:landscape){#home{overflow:hidden;align-items:center}}
 #home .hwho{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:#7a6250}#home .hwho button{width:100%;padding:12px 16px;border-radius:14px;border:2px solid #dcc79f;background:#fffaf0;color:#6a4a30;font-size:18px;font-weight:800}
+@media (max-height:520px) and (orientation:landscape){#home .hwho button{padding:7px 12px;font-size:15px}}
 #ovH .ov>*:not(.ovb){zoom:var(--ovz,1)}#ovH .ov{touch-action:pan-x pan-y}#ovH .ov{align-items:safe center}
 </style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="gs" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient></defs></svg><div id="wrap">
 <div class="bar"><input id="room" value="" aria-label="房號"><input id="name" placeholder="暱稱" aria-label="暱稱" maxlength="8" onchange="setMe()"><button onclick="join()">進入牌桌</button><button class="g" id="rst" onclick="reset()">重置牌桌</button><button class="g" onclick="closeAsk()">關閉牌桌</button><button class="g bclose" onclick="toggleBar()">✕ 關閉選單</button><span id="msg" class="sm"></span></div>
@@ -392,7 +395,7 @@ html.r90 .vb .smenu{width:min(380px,calc(var(--r9w) - 30px))!important;max-heigh
  ['pointerdown','pointermove','pointerup','pointercancel','click','dblclick','mousedown','mousemove','mouseup','contextmenu','wheel'].forEach(t=>addEventListener(t,e=>{if(!R9())return;const x=e.clientX,y=e.clientY;try{Object.defineProperty(e,'clientX',{value:y,configurable:true});Object.defineProperty(e,'clientY',{value:innerWidth-x,configurable:true})}catch(_){}},{capture:true}));
  const gb=Element.prototype.getBoundingClientRect;Element.prototype.getBoundingClientRect=function(){const r=gb.call(this),w=document.getElementById('wrap');if(!R9()||!w||!w.contains(this))return r;return new DOMRect(r.top,innerWidth-r.right,r.height,r.width)};
  const mq=matchMedia('(orientation:portrait) and (pointer:coarse) and (max-width:900px)');
- window.r90Upd=function(){const b=document.body,h=document.getElementById('hall');if(!b)return;const on=mq.matches&&((h&&!h.hidden)||(b.classList.contains('intable')&&(!h||h.hidden)));/* 牌桌和大廳在手機直拿時都自動轉橫向 */de.style.setProperty('--r9w',innerHeight+'px');de.style.setProperty('--r9h',innerWidth+'px');if(on!==R9()){de.classList.toggle('r90',on);scrollTo(0,0);setTimeout(()=>dispatchEvent(new Event('resize')),40)}};
+ window.r90Upd=function(){const b=document.body,h=document.getElementById('hall');if(!b)return;const hm=document.getElementById('home'),on=mq.matches&&((h&&!h.hidden)||(hm&&!hm.hidden)||(b.classList.contains('intable')&&(!h||h.hidden)));/* 牌桌和大廳在手機直拿時都自動轉橫向 */de.style.setProperty('--r9w',innerHeight+'px');de.style.setProperty('--r9h',innerWidth+'px');if(on!==R9()){de.classList.toggle('r90',on);scrollTo(0,0);setTimeout(()=>dispatchEvent(new Event('resize')),40)}};
  addEventListener('resize',()=>r90Upd());addEventListener('orientationchange',()=>setTimeout(r90Upd,200))})();
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const lsg=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
@@ -600,6 +603,9 @@ function settleHTML(p,w,ovT,N){const B=S.cfg.base,T=S.cfg.tai,dl=S.dealer,hs=hum
  const lb=matchEnds()?'再來一'+(matchLen()===1?'圈':'將'):'繼續下一局';
  if(p>=0)o+=`<div class="ovb">${R[p]?`<button disabled>已按繼續，等其他玩家…</button>`:`<button onclick="rdy()">${lb}</button>`}${G.ok?'<button class="g" onclick="peek()">看牌桌</button>':''}${matchEnds()?'<button class="g" onclick="hallShow(1)">🏠 回大廳</button>':''}</div>`;
  return o+'</div></div>'}
+// 開房設定畫面：手機橫向時自動縮放到剛好一頁（不用滑動）
+function fitHome(){const hm=$('#home'),c=hm&&hm.querySelector('.hc');if(!c||hm.hidden||!hm.clientHeight)return;c.style.zoom=1;if(!document.documentElement.classList.contains('r90')&&innerHeight>520)return;const z=Math.min(1,(hm.clientHeight-16)/c.offsetHeight,(hm.clientWidth-16)/c.offsetWidth);c.style.zoom=Math.max(.5,z).toFixed(3)}
+addEventListener('resize',()=>setTimeout(fitHome,150));
 // 結算內容自動縮放到剛好一頁（手機不用捲動）
 function fitSettle(){document.querySelectorAll('.ov.sx').forEach(ov=>{const w=ov.querySelector('.sxw');if(!w||!ov.clientHeight)return;w.style.zoom=1;const H=ov.clientHeight-20,W=ov.clientWidth-24,z=Math.min(1,H/w.scrollHeight,W/w.scrollWidth);w.style.zoom=Math.max(.3,z).toFixed(3)})}
 addEventListener('resize',()=>setTimeout(fitSettle,120));// 手機進牌桌時的溫馨提醒（每次打開網頁提醒一次，可選不再提醒）
@@ -1163,7 +1169,7 @@ function dealSnd(st){if(!sOK())return;const s=st>=17?S.dealer:(S.dealer+((st-1)%
  if(SBUF.push){const off=.25+Math.random()*1.6;playSlice(SBUF.push,60,off,st>=17?.09:.17,.75*v,pan);return}
  try{dealBufs()}catch(_){return}const R=a=>a[Math.random()*a.length|0];if(st>=17){playPan(R(CLB.dOne),120,.7*v,pan);return}playPan(R(CLB.dLand),110,.8*v,pan)}
 const matchLen=()=>S&&S.cfg&&S.cfg.len===1?1:4;
-function homeShow(){const h=$('#home');if(!h)return;setbInit();setTimeout(setbPlace,0);if(G.hallAuto&&S){G.hallAuto=0;if(me()>=0)hallShow(0)}const on=!!S&&S.phase==='lobby'&&me()<0&&!G.homeOff;h.hidden=!on;document.body.classList.toggle('intable',!on&&!!S);if(!on&&S)tipShow();r90Upd();if(!on)tryLock();if(!on)return;
+function homeShow(){const h=$('#home');if(!h)return;setbInit();setTimeout(setbPlace,0);if(G.hallAuto&&S){G.hallAuto=0;if(me()>=0)hallShow(0)}const on=!!S&&S.phase==='lobby'&&me()<0&&!G.homeOff;h.hidden=!on;document.body.classList.toggle('intable',!on&&!!S);if(!on&&S)tipShow();r90Upd();setTimeout(fitHome,60);if(!on)tryLock();if(!on)return;
  const a=document.activeElement;if(a!==$('#hName'))$('#hName').value=$('#name').value;if(a!==$('#hRoom'))$('#hRoom').value=room||$('#room').value;
  if(a!==$('#hBase'))$('#hBase').value=S.cfg.base;if(a!==$('#hTai'))$('#hTai').value=S.cfg.tai;
  [['#hLen',matchLen()],['#hAi',aiLv()],['#hTs',tLim()]].forEach(([q,v])=>document.querySelectorAll(q+' button').forEach(b=>b.classList.toggle('on',+b.dataset.v===v)));homeAv();
