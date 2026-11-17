@@ -140,6 +140,8 @@ img.mi{width:1.5em;height:1.5em;border-radius:50%;object-fit:cover;vertical-alig
 @media(max-width:620px){.st3{height:70vh;min-height:420px;border-radius:14px}.np{padding:2px 6px}}
 .st3{height:calc(100svh - 20px);max-height:880px;min-height:340px}
 body.ingame .bar{display:none}body.ingame.showbar .bar{display:flex}
+/* 進到牌桌後（包含入座等人時）上方的房號列和選角色區塊預設收起，讓牌桌滿版；要改時從 ⚙️ →「房間 / 暱稱」打開 */
+body.intable:not(.showbar) .bar,body.intable:not(.showbar) #prof{display:none!important}
 body.ingame #wrap{padding-top:6px;padding-bottom:6px}
 #meH{position:absolute;left:0;right:0;bottom:0;z-index:4;pointer-events:none}
 .mb3{pointer-events:auto;position:relative;display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;background:linear-gradient(#2a1a10e6,#120a06f2);color:#f4e8d4;font-size:13px;border-top:2px solid var(--c);white-space:nowrap;overflow:visible}
@@ -240,6 +242,40 @@ body.ingame #wrap{padding-top:6px;padding-bottom:6px}
 #home .hav svg,#home .hav img{width:44px;height:48px;object-fit:cover;border-radius:8px}
 #home .h2c{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 #home .seg{display:flex;background:#f1e4c8;border-radius:12px;padding:3px;gap:3px}
+/* 滿版結算畫面 */
+#ovH:has(.sx){inset:0!important;z-index:30}
+.ov.sx{position:absolute;inset:0!important;border-radius:0!important;background:radial-gradient(ellipse at 50% 0,#1f6b55,#0b2e25 75%)!important;display:block!important;padding:18px 16px 0!important;overflow:auto;font-size:15px!important;color:#fff}
+.sx .sxw{max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:12px;zoom:1!important}
+.sx h2{margin:0;font-size:26px;display:flex;align-items:center;gap:8px;color:#ffd34d;text-shadow:0 2px 0 #0006}.sx h2 .mi,.sx h2 svg{width:42px;height:42px}
+.sx .sxs{margin:-4px 0 0;font-size:15px;opacity:.9}
+.sx .sxh{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;background:#0004;padding:8px 10px;border-radius:12px}.sx .sxh .t.m{width:30px;height:42px;font-size:20px}
+.sx .sxg{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;width:100%;align-items:flex-start}
+.sx .sxt{border-collapse:collapse;background:#fffaf0;color:#2b1a12;border-radius:12px;overflow:hidden;min-width:240px;box-shadow:0 6px 16px #0005}
+.sx .sxt caption{caption-side:top;font-weight:800;font-size:16px;color:#ffd34d;padding:0 0 6px;text-align:left}
+.sx .sxt th{background:#c0392b;color:#fff;font-weight:800;padding:7px 12px;font-size:14px;text-align:left;white-space:nowrap}
+.sx .sxt td{padding:7px 12px;border-top:1px solid #ead9b8;font-size:15px;white-space:nowrap}.sx .sxt td:last-child,.sx .sxt th:last-child{text-align:right}
+.sx .sxt td small{display:block;font-size:11px;color:#8a6a50;font-weight:400}
+.sx .sxt tfoot td{font-weight:800;background:#f6ead0}.sx .sxt tfoot tr:first-child td{border-top:2px solid #c9a45c;font-size:17px;color:#b3261e}.sx .sxt .sxe td{font-size:14px;color:#6a4a30}
+.sx .sxp td .mi,.sx .sxp td svg{width:24px;height:24px;vertical-align:middle}.sx .sxp .n{font-weight:800;font-variant-numeric:tabular-nums}
+.sx .sxp tr.win td{background:#fff3c4}.sx .sxp tr.win .n:nth-last-child(2){color:#1e8a4a}.sx .sxp tr.lose .n:nth-last-child(2){color:#c0392b}
+.sx .sxd{font-style:normal;background:#c0392b;color:#fff;border-radius:6px;padding:0 5px;font-size:12px;margin-left:4px}
+.sx .sxr{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.sx .sxr span{display:inline-flex;align-items:center;gap:4px;background:#0005;border-radius:14px;padding:4px 12px;font-size:14px}.sx .sxr span.ok{background:#1e8a4a}.sx .sxr .mi,.sx .sxr svg{width:22px;height:22px}
+.sx .sxc{font-size:13px;opacity:.85;min-height:1em}
+.sx .ovb{position:sticky;bottom:0;display:flex;gap:10px;justify-content:center;padding:12px 0 16px;width:100%;background:linear-gradient(transparent,#0b2e25 40%)}.sx .ovb button{font-size:18px;padding:12px 28px;border-radius:14px;font-weight:800}.sx .ovb button[disabled]{background:#6b7f78;opacity:1}
+.sx .fin{background:#fffaf0;color:#2b1a12;border-radius:12px;padding:10px 16px}
+/* iOS 風格清單 */
+.sx .ios{width:100%;max-width:420px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang TC","Noto Sans TC",system-ui,sans-serif}.sx .iow{max-width:860px}
+.sx .ioh{font-size:13px;color:#ffffffb3;letter-spacing:.02em;padding:0 16px 6px}
+.sx .ioc{background:#fff;color:#1c1c1e;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px #0004}
+.sx .ior{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;font-size:17px;position:relative}
+.sx .ior+.ior::before{content:"";position:absolute;top:0;left:16px;right:0;height:1px;background:#3c3c4329}
+.sx .ior b{font-weight:600;color:#3a3a3c;white-space:nowrap}.sx .iot span,.sx .iot b{font-weight:700;color:#000}.sx .iot b{color:#d0342c;font-size:19px}
+.sx .iof{font-size:13px;color:#ffffffa6;padding:6px 16px 0;line-height:1.4}
+.sx .iop{padding:8px 12px 8px 14px}.sx .iop.win{background:#fff8dc}
+.sx .ion{display:flex;align-items:center;gap:6px;width:118px;flex:none;font-size:15px;overflow:hidden}.sx .ion em{font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.sx .sxd2{margin-left:8px;align-self:center}.sx .ion .mi,.sx .ion svg{width:28px;height:28px;flex:none}
+.sx .iot2{flex:1;display:flex;flex-wrap:wrap;gap:1px;align-items:center;justify-content:flex-start;min-width:0}.sx .iot2 .t.m{width:24px;height:34px;font-size:16px}.sx .iot2 .omg{display:inline-flex;margin-right:6px;padding:1px;border-radius:5px;background:#e9e3d3}.sx .iot2 .t.win{margin-left:8px}
+.sx .iov{display:flex;flex-direction:column;align-items:flex-end;min-width:70px}.sx .iov b{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}.sx .iov b.pos{color:#1f9d55}.sx .iov b.neg{color:#d0342c}.sx .iov small{font-size:11px;color:#8e8e93;white-space:nowrap}
+@media (max-width:640px),(max-height:520px){.sx .ion{width:64px;flex-direction:column;font-size:12px;text-align:center}.sx .ion em{max-width:64px}.sx .ion em{font-size:12px}.sx .iot2 .t.m{width:17px;height:24px;font-size:11px}.sx .ior{font-size:15px;padding:9px 12px}.sx h2{font-size:20px}}
 #tmr{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);right:calc(env(safe-area-inset-right,0px) + 14px);z-index:60;background:#000c;color:#fff;font-weight:700;font-size:15px;padding:5px 14px;border-radius:16px;pointer-events:none;white-space:nowrap;box-shadow:0 3px 10px #0006}#tmr b{display:inline-block;min-width:1.4em;text-align:center;font-size:18px;color:#ffd34d}#tmr.hot{background:#c0392bee}#tmr.hot b{color:#fff}#tmr[hidden]{display:none}
 #home .seg button{flex:1;padding:9px 4px;border-radius:9px;background:transparent;color:#6a4a30;font-weight:700;font-size:14px;border:0}
 #home .seg button.on{background:#c0392b;color:#fff;box-shadow:0 2px 6px #0003}
@@ -402,11 +438,15 @@ function wins(h){const c=Array(34).fill(0);h.forEach(t=>c[t]++);
  if(h.length===17&&c.filter(x=>x%2).length===1&&c.includes(3))return true;
  for(let p=0;p<34;p++)if(c[p]>=2){c[p]-=2;const r=sets(c);c[p]+=2;if(r)return true}return false}
 function spot(){let best=null,bd=-1;for(let k=0;k<8;k++){const x=23+Math.random()*49,y=23+Math.random()*47;let d=1e9;for(const q of S.pile)d=Math.min(d,(q.x-x)**2+(q.y-y)**2);if(d>bd){bd=d;best={x:+x.toFixed(1),y:+y.toFixed(1),r:Math.round(Math.random()*80-40)}}}return best}
-async function save(){S.v++;try{await ref.set({s:JSON.stringify(S),t:Date.now()})}catch(e){note('寫入失敗：需要有編輯（可互動）權限才能打牌')}}
+// 3) 存檔用「交易」：只有在雲端版本還是我手上這一版時才寫入，避免兩個人同時動作時互相蓋掉（以前會造成某人的「過」或出牌消失而卡住）
+//    同一台裝置的連續存檔依序排隊；被別人搶先時放棄這次寫入，重新讀取最新牌桌
+function save(){const base=S.v;S.v++;const js=JSON.stringify(S),r=ref,nv=S.v;if(!r)return Promise.resolve();
+ G.sq=(G.sq||Promise.resolve()).then(()=>db.runTransaction(async tx=>{const sn=await tx.get(r),d=sn.exists?sn.data():null;let cur=0;if(d){if(typeof d.v==='number')cur=d.v;else{try{cur=JSON.parse(d.s).v||0}catch(_){cur=0}}}
+  if(d&&cur!==base)throw{stale:1};tx.set(r,{s:js,t:Date.now(),v:nv})})).catch(e=>{if(e&&e.stale){if(r===ref)r.get().then(sn=>{if(r!==ref)return;const d=sn.data();if(d&&d.s){S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},JSON.parse(d.s));busy=-1;render()}}).catch(()=>{})}else note('寫入失敗：需要有編輯（可互動）權限才能打牌')});return G.sq}
 const defRoom=()=>{let r=lsg('mj_room');if(!r||!/^[A-Za-z0-9]{1,16}$/.test(r))r=String(10000+Math.floor(Math.random()*90000));return r};
 function join(){G.viewT=Date.now();room=($('#room').value||'').replace(/[^A-Za-z0-9]/g,'').slice(0,16)||defRoom();$('#room').value=room;lss('mj_room',room);lss('mj_name',$('#name').value);
  if(unsub)unsub();ref=db.doc('mj/'+room);rc=-1;
- G.hadDoc=0;unsub=ref.onSnapshot(sn=>{const d=sn.data();if(sn.exists)G.hadDoc=1;else if(G.hadDoc&&!sn.metadata.hasPendingWrites){G.hadDoc=0;if(S&&me()>=0){S=fresh();hallShow(1);invMsg('牌桌 20 分鐘沒有動靜，已自動關閉');return}}S=d&&d.s?JSON.parse(d.s):fresh();if(!S.pile){S=Object.assign(fresh(),{seats:S.seats})}S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},S);render()},e=>note('連線錯誤：'+e.message))}
+ G.hadDoc=0;unsub=ref.onSnapshot(sn=>{const d=sn.data();if(sn.exists)G.hadDoc=1;else if(G.hadDoc&&!sn.metadata.hasPendingWrites){G.hadDoc=0;if(S&&me()>=0){S=fresh();hallShow(1);invMsg('牌桌 20 分鐘沒有動靜，已自動關閉');return}}S=d&&d.s?JSON.parse(d.s):fresh();if(!S.pile){S=Object.assign(fresh(),{seats:S.seats,v:S.v||0})}S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},S);render()},e=>note('連線錯誤：'+e.message))}
 let rstT=0;
 function reset(){if(!ref)return;const b=$('#rst');if(Date.now()-rstT>4000){rstT=Date.now();b.textContent='再按一次確定重置';setTimeout(()=>{if(rstT&&Date.now()-rstT>=3900){rstT=0;b.textContent='重置牌桌'}},4000);return}
  rstT=0;b.textContent='重置牌桌';clearTimeout(bt);const v=S?S.v:0;S=fresh();S.v=v;sel=-1;rc=-1;busy=-1;save();render()}
@@ -424,13 +464,13 @@ function drawProf(){$('#avs').innerHTML=`<label class="avb avup">📷<span>用�
 function pickAv(a){myAv=a;lss('mj_av',a);drawProf();homeAv();setMe()}
 function setMe(){lss('mj_name',$('#name').value);const p=me();if(S&&S.phase==='lobby'&&p>=0){Object.assign(S.seats[p],{name:($('#name').value||'玩家').slice(0,8),av:myAv,pv:myPv});save();render()}}
 function onPhoto(f){if(!f)return;const r=new FileReader();r.onerror=()=>note('照片無法讀取');r.onload=()=>{const im=new Image();im.onerror=()=>note('照片無法讀取');im.onload=()=>photoFrom(im);im.src=r.result};r.readAsDataURL(f)}
-function photoFrom(im,done){const c=document.createElement('canvas');c.width=c.height=96;const m=Math.min(im.width,im.height);c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,96,96);let u='';try{u=c.toDataURL('image/jpeg',.8)}catch(_){}if(!okImg(u))return note('照片無法使用');
+function photoFrom(im,done){const c=document.createElement('canvas');c.width=c.height=200;const m=Math.min(im.width,im.height);c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,200,200);let u='';try{for(const q of [.82,.7,.58,.45]){u=c.toDataURL('image/jpeg',q);if(u.length<58000)break}}catch(_){}if(!okImg(u))return note('照片無法使用');
   db.doc('mjav/'+uid).set({img:u}).then(()=>{myImg=u;myPv=Date.now();lss('mj_img',u);lss('mj_pv',myPv);note('');pickAv('p');if(done)done()},()=>{const t='頭貼上傳失敗：Firestore 規則還沒開放頭貼（mjav）';note(t);const h=$('#hNote');if(h)h.textContent=t})}
 function fillBots(){const used=new Set(S.seats.map((x,i)=>x?(typeof x.av==='number'?x.av:-1):-1));let k=0;S.seats=S.seats.map((x,i)=>{if(x)return x;while(used.has(k))k++;used.add(k);return{id:'bot'+i,name:'電腦'+ANN[k],bot:1,av:k}});save();render()}
 function start(){S.gid=(S.gid||0)+1;const w=[];for(let t=0;t<34;t++)for(let k=0;k<4;k++)w.push(t);
  for(let i=w.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[w[i],w[j]]=[w[j],w[i]]}
  S.wall=w;S.hands=[[],[],[],[]];S.dice=null;S.wk=0;S.drawn=null;S.melds=[[],[],[],[]];S.pile=[];S.win=null;S.last=null;S.pass=[];S.say=null;
- S.ak=0;S.turn=S.dealer;S.phase='dice';save();render()}
+ S.ak=0;S.rdy={};S.turn=S.dealer;S.phase='dice';save();render()}
 function roll(){if(S.phase!=='dice'||S.dice)return;const d=()=>1+(Math.random()*6|0);S.dice=[d(),d(),d()];save();render()}
 function deal(){if(S.phase!=='dice'||!S.dice)return;const w=S.wall;S.hands=[0,1,2,3].map(()=>w.splice(-16));S.drawn=w.pop();S.hands[S.dealer].push(S.drawn);S.hands.forEach(h=>h.sort((a,b)=>a-b));S.dc=[0,0,0,0];S.dc[S.dealer]=1;S.mj=[0,0,0,0];S.phase='discard';save();render()}
 const PIP=[0,[4],[0,8],[0,4,8],[0,2,6,8],[0,2,4,6,8],[0,2,3,5,6,8]];
@@ -449,14 +489,18 @@ function tTick(){let e=$('#tmr');if(!e){e=document.createElement('div');e.id='tm
  const off=()=>{e.hidden=true};if(!S||!ref||me()<0||document.body.classList.contains('intable')===false)return off();
  let key,lim,who,mine,pend;
  if(S.phase==='discard'&&S.seats[S.turn]&&!S.seats[S.turn].bot){lim=tLim();key='d'+S.gid+':'+S.turn+':'+S.pile.length+':'+S.wall.length+':'+S.melds[S.turn].length;mine=S.turn===me();who=mine?'輪到你出牌':`${esc(String(S.seats[S.turn].name||'玩家'))} 出牌中`}
+ else if(S.phase==='dice'&&!S.dice&&S.seats[S.dealer]&&!S.seats[S.dealer].bot){lim=tLim()?Math.max(8,tLim()):0;key='r'+S.gid+':'+S.dealer+':'+S.streak;mine=S.dealer===me();who=mine?'輪到你擲骰子':`等 ${esc(String(S.seats[S.dealer].name||'玩家'))} 擲骰子`}
  else if(S.phase==='claim'&&S.last&&(pend=tPend()).length){lim=tLim();key='c'+S.gid+':'+S.pile.length+':'+S.last.from;mine=pend.includes(me());who=mine?'要吃、碰、槓嗎？':'等其他玩家決定'}
  if(!key||!lim)return off();
- const now=performance.now();if(G.tK!==key){G.tK=key;G.tT0=now}if(G.dealA||G.tr)G.tT0=now;
+ const now=performance.now();if(G.tK!==key){G.tK=key;G.tT0=now}if(animBusy())G.tT0=now;
  const rem=lim*1000-(now-G.tT0),sec=Math.max(0,Math.ceil(rem/1000));e.innerHTML=`⏱ ${who} <b>${sec}</b>`;e.classList.toggle('hot',sec<=3);e.hidden=false;
  if(rem>0)return;const bk=rem<=-4000-me()*700;
+ if(S.phase==='dice'){if((mine||bk)&&G.tDo!==key){G.tDo=key;roll()}return}
  if(S.phase==='discard'){if(mine&&G.tDo!==key){G.tDo=key;autoDiscard(S.turn)}else if(!mine&&bk&&G.tDo!==key){G.tDo=key;autoDiscard(S.turn)}}
  else{if(mine&&G.tDo!==key+'m'){G.tDo=key+'m';pass()}else if(bk&&G.tDo!==key+'b'){G.tDo=key+'b';pend.filter(q=>q!==me()).forEach(q=>{if(!S.pass.includes(q))S.pass.push(q)});save();render()}}}
 setInterval(()=>{try{tTick()}catch(_){}},250);
+// 牌桌太久沒動時，其他真人每秒幫忙推一下（接手電腦、幫斷線的人摸牌、結算後大家都按繼續就開下一局）
+setInterval(()=>{try{if(!S||!ref||me()<0||S.phase==='lobby')return;if(S.phase==='over')return rdyGo();if(stale()>4000){auto();botGo()}}catch(_){}},1000);
 function pick(i){const p=me();if(G.dealA)return;if(S.phase!=='discard'||S.turn!==p)return;if(sel===i){sel=-1;discard(i)}else{sel=i;render()}}
 function discard(i,p=me()){if(S.phase!=='discard'||S.turn!==p)return;const t=S.hands[p].splice(i,1)[0];if(S.dc&&S.mj&&!S.mj[p]&&S.dc[p]<=2&&S.melds.every(m=>!m.length)){const h=S.hands[p];for(let x=0;x<34;x++)if(wins([...h,x])){S.mj[p]=1;break}}S.pile.push({t,f:p,...spot()});S.last={t,from:p};S.claims={};S.drawn=null;S.ak=0;S.phase='claim';S.pass=[];S.say=null;save();render()}
 function opts(p){if(p<0||S.phase!=='claim'||p===S.last.from)return{};const h=S.hands[p],t=S.last.t,o={};
@@ -516,10 +560,35 @@ function pass(){S.pass.push(me());save();render()}
 function draw(p){if(S.wall.length<=14){S.phase='over';S.win={draw:1}}else{S.drawn=S.wall.pop();S.hands[p].push(S.drawn);if(S.dc)S.dc[p]++;S.hands[p].sort((a,b)=>a-b);S.turn=p;S.phase='discard';S.last=null;S.pass=[];S.say=null}save();render()}
 const RK={hu:3,pong:2,kong:2,chi:1};
 function optRank(q){const o=opts(q);return o.win?3:(o.pong||o.kong)?2:(o.chi&&!S.seats[q].bot)?1:0}
-function canExec(q){return S.seats[q].bot?me()===drv():me()===q}
+// ── 結算畫面（滿版）＋大家都按「繼續」才開下一局 ──
+const humans=()=>[0,1,2,3].filter(q=>S.seats[q]&&!S.seats[q].bot),allRdy=()=>humans().every(q=>S.rdy&&S.rdy[q]);
+const RDY_MS=60000;// 有設秒數時，結算畫面 60 秒後自動開始（避免有人離開就卡住）；秒數「不限」時一定要等大家按
+function rdy(){const p=me();if(!S||S.phase!=='over'||p<0)return;S.rdy=Object.assign({},S.rdy,{[p]:1});save();render();rdyGo()}
+function rdyGo(){if(!S||S.phase!=='over'||me()<0)return;const el=performance.now()-(G.ovT||performance.now()),cd=$('#rdyCd');
+ const auto=tLim()>0&&el>RDY_MS;if(cd)cd.textContent=allRdy()?'大家都準備好了，開始下一局…':tLim()>0?`${Math.max(0,Math.ceil((RDY_MS-el)/1000))} 秒後自動開始下一局`:'';
+ if(!(allRdy()||auto))return;if(!(me()===drv()||stale()>3000+Math.max(0,hIdx())*1000))return;if(G.rdyK===S.v)return;G.rdyK=S.v;again()}
+function settleHTML(p,w,ovT,N){const B=S.cfg.base,T=S.cfg.tai,dl=S.dealer,hs=humans(),R=S.rdy||{},sg=v=>v>0?'+'+v:v<0?String(v):'0';
+ let o=`<div class="ov sx"><div class="sxw">`;
+ o+=w.draw?`<h2>流局</h2><p class="sxs">剩最後 7 墩沒人胡，莊家連莊</p>`:`<h2>🎉 ${mini(w.seat)} ${N(w.seat)} ${w.self?'自摸':'胡牌'}！</h2><p class="sxs">${w.self?'自摸：另外三家都要付':`${N(w.from)} 放槍：由 ${N(w.from)} 付`}${w.seat===dl?' · 胡牌的是莊家':''}</p>`;
+ if(!w.draw){const st=Math.max(0,Math.round((w.ex-1)/2));
+  o+=`<div class="ios"><div class="ioh">台數</div><div class="ioc">${(w.tai||[]).map(x=>`<div class="ior"><span>${x[0]}</span><b>${x[1]} 台</b></div>`).join('')||'<div class="ior"><span>無台（只算底）</span><b>0 台</b></div>'}<div class="ior iot"><span>合計</span><b>${w.n} 台</b></div></div>
+   <div class="iof">每台 ${T}、底 ${B}。莊家${st?`連${st}拉${st}`:''}另加 ${w.ex} 台（只算跟莊家之間那筆）</div></div>`}
+ o+=`<div class="ios iow"><div class="ioh">四家手牌</div><div class="ioc">${[0,1,2,3].map(s=>{const v=w.pay?w.pay[s]:0;return `<div class="ior iop${!w.draw&&s===w.seat?' win':''}"><span class="ion">${mini(s)}<em>${N(s)}</em></span><span class="iot2">${ovT(s)}${s===dl?'<i class="sxd sxd2">莊家</i>':''}</span><span class="iov"><b class="${v>0?'pos':v<0?'neg':''}">${sg(v)}</b><small>總分 ${sg(S.score[s])}</small></span></div>`}).join('')}</div></div>`;
+ if(matchEnds())o+=finBox();
+ o+=`<div class="sxr">${hs.map(q=>`<span class="${R[q]?'ok':''}">${mini(q)} ${N(q)}：${R[q]?'✓ 已按繼續':'等待中…'}</span>`).join('')}</div><div class="sxc" id="rdyCd"></div>`;
+ const lb=matchEnds()?'再來一'+(matchLen()===1?'圈':'將'):'繼續下一局';
+ if(p>=0)o+=`<div class="ovb">${R[p]?`<button disabled>已按繼續，等其他玩家…</button>`:`<button onclick="rdy()">${lb}</button>`}${G.ok?'<button class="g" onclick="peek()">看牌桌</button>':''}</div>`;
+ return o+'</div></div>'}
+// ── 連線不卡住 ──
+// 1) 動畫（發牌、洗牌）只在畫面有顯示時才會跑完；分頁在背景或手機鎖螢幕時直接當作播完，不然電腦玩家會一直等
+function animBusy(){if(G.dealA&&(document.hidden||dealStep()<0))G.dealA=null;if(G.tr&&(document.hidden||performance.now()-G.tr.t0>=TRC))endTrans();return !!(G.dealA||G.tr)}
+// 2) 牌桌多久沒動（ms）；主控玩家（第一位真人）手機睡著時，其他真人依序接手推進電腦和摸牌
+const hIdx=()=>[0,1,2,3].filter(q=>S.seats[q]&&!S.seats[q].bot).indexOf(me()),stale=()=>Date.now()-(G.vT||Date.now());
+function isDrv(){if(me()<0)return false;if(me()===drv())return true;const k=hIdx();return k>0&&stale()>4000+k*1500}
+function canExec(q){if(S.seats[q].bot)return isDrv();if(me()===q)return true;return me()>=0&&stale()>5000+Math.max(0,hIdx())*1500}
 function claim(a,k){const p=me();if(S.phase!=='claim'||p<0||S.pass.includes(p))return;const o=opts(p);if(a==='hu'&&!o.win||a==='pong'&&!o.pong||a==='kong'&&!o.kong||a==='chi'&&!(o.chi&&o.chi[k]))return;S.claims=S.claims||{};S.claims[p]={a,k:k||0};save();render()}
 const claimHu=()=>claim('hu'),claimPong=()=>claim('pong'),claimKong=()=>claim('kong'),claimChi=k=>claim('chi',k);
-function auto(){if(S.phase!=='claim'||busy===S.v||G.dealA)return;
+function auto(){if(S.phase!=='claim'||busy===S.v||animBusy())return;
  const key=S.pile.length+':'+S.last.from;if(G.clK!==key){G.clK=key;G.clT=performance.now()}const wt=650-(performance.now()-G.clT);if(wt>0){clearTimeout(G.clTm);G.clTm=setTimeout(()=>{if(S&&S.phase==='claim')auto()},wt+20);return}
  const from=S.last.from,C=S.claims||{},ord=[1,2,3].map(k=>(from+k)%4);let best=null;
  ord.forEach((q,i)=>{const c=C[q];if(c&&(!best||RK[c.a]>best.r))best={q,i,r:RK[c.a],c}});
@@ -556,7 +625,7 @@ function aiClaim(q){const o=opts(q);if(o.win)return{a:'hu',k:0};if(aiLv()===0)re
  if(o.pong){const a=after([t,t]);if(a<cur||(aiValT(t,q)&&a<=cur))return{a:'pong',k:0}}
  if(o.chi&&cur<=3){let bk=-1,ba=cur;o.chi.forEach((u,k)=>{const a=after(u);if(a<ba){ba=a;bk=k}});if(bk>=0)return{a:'chi',k:bk}}
  return null}
-function botGo(){clearTimeout(bt);if(G.dealA||G.tr){bt=setTimeout(botGo,250);return}if(!S||S.phase==='lobby'||S.phase==='over'||me()<0||me()!==drv())return;const v=S.v;
+function botGo(){clearTimeout(bt);if(S&&animBusy()){bt=setTimeout(botGo,250);return}if(!S||S.phase==='lobby'||S.phase==='over'||me()<0||!isDrv())return;const v=S.v;
  bt=setTimeout(()=>{if(S.v!==v)return;
   if(S.phase==='dice'){if(!S.dice){if(S.seats[S.dealer].bot)roll()}else deal();return}
   if(S.phase==='discard'&&S.seats[S.turn].bot){const p=S.turn,h=S.hands[p];if(wins(h))return hu(p);const m=5-S.melds[p].length,kg=kongs(p).filter(t=>aiLv()===0||h.filter(x=>x===t).length<4||shan(h.filter(x=>x!==t),m-1)<=aiBestAfter(h,m));if(kg.length)return kong(kg[0],p);return discard(aiDiscard(p,aiLv()),p)}
@@ -583,7 +652,7 @@ function render2d(){if(!S)return;
  const pile=S.pile.slice(0,n).map((q,i)=>tile(q.t,'r pl'+(i>=rc?' new':''),`left:${q.x}cqw;top:${q.y}cqw;transform:rotate(${q.r}deg);--fx:${47.5-q.x}cqw;--fy:${46.5-q.y}cqw`)).join('');rc=n;
  const cen=lob?`<div class="cen">${p<0?'選一個座位入座':(!S.seats.every(x=>x)?'<button onclick="fillBots()">電腦補滿空位</button>':'<button onclick="start()">開始遊戲</button>')+'<button class="g inv" onclick="copyInvite()">📋 複製邀請給朋友</button>'}<div class="cfg">${p>=0?`底 <input id="cb" type="number" min="0" inputmode="numeric" value="${S.cfg.base}" onchange="setCfg()"> 台 <input id="ct" type="number" min="0" inputmode="numeric" value="${S.cfg.tai}" onchange="setCfg()"> 電腦 <select id="cd" onchange="setCfg()">${AIL.map((n,i)=>`<option value="${i}"${aiLv()===i?' selected':''}>${n}</option>`).join('')}</select><br>秒數設定 <select id="cts" onchange="setCfg()">${[3,5,8,10,0].map(v=>`<option value="${v}"${tLim()===v?' selected':''}>${v?v+' 秒':'不限'}</option>`).join('')}</select>`:`底 ${S.cfg.base} · 台 ${S.cfg.tai} · 電腦${AIL[aiLv()]} · 秒數${tTxt()}`}</div><div class="hint">胡牌付：底 + 台數 × 台</div></div>`:S.phase==='dice'?diceH():cl?`<div class="cen">${tile(S.last.t,'big')}<span>${mini(S.last.from)} ${N(S.last.from)} 打出</span></div>`:'';
  const ovT=s=>{const h=S.hands[s].slice();let x='';if(!w.draw&&s===w.seat&&w.wt!=null){const i=h.indexOf(w.wt);if(i>=0){h.splice(i,1);x=tile(w.wt,'m win')}}return (S.melds[s]||[]).map(m=>`<span class="omg">${m.filter(t=>t>=0).map(t=>tile(t,'m')).join('')}</span>`).join('')+h.map(t=>tile(t,'m')).join('')+x};
- const ovl=ov?`<div class="ov"><h3>${w.draw?'剩最後 7 墩，流局（莊家連莊）':`🎉 ${mini(w.seat)} ${N(w.seat)} ${w.self?'自摸':'胡 · '+N(w.from)+' 放槍'}！`}</h3>${w.tai?`<div class="tl">${w.tai.map(x=>`<span>${x[0]} ${x[1]}台</span>`).join('')||'<span>無台</span>'}</div><div>共 ${w.n} 台（與莊家結算另加 ${w.ex} 台）· 底 ${S.cfg.base} / 台 ${S.cfg.tai}</div>`:''}<div class="ovg">${[0,1,2,3].map(s=>`<span class="ovm">${mini(s)}</span><div class="ovr">${ovT(s)}</div><b class="dl ${w.pay&&w.pay[s]<0?'neg':'pos'}">${w.pay&&w.pay[s]?(w.pay[s]>0?'+':'')+w.pay[s]:''}</b>`).join('')}</div>${matchEnds()?finBox():''}${p>=0?`<button onclick="again()">${matchEnds()?'再來一'+(matchLen()===1?'圈':'將'):'再來一局'}</button>`:''}</div>`:'';
+ const ovl=ov?settleHTML(p,w,ovT,N):'';
  let mine=`<div class="me"><div class="mt">${card(b,'b')}<div class="st">${st}</div></div>`;
  if(p>=0&&!lob){const my=S.hands[p],o=opts(p),ob=[],di=can&&S.drawn!=null?my.lastIndexOf(S.drawn):ov&&w.seat===p&&w.wt!=null?my.lastIndexOf(w.wt):-1,hw=i=>`<span class="hw${sel===i?' up':''}${i===di?' dr':''}${dm[my[i]]&&dm[my[i]].length?' tp':''}" onclick="pick(${i})">${tile(my[i],'h')}</span>`,ord=my.map((t,i)=>i).filter(i=>i!==di);if(di>=0)ord.push(di);
   const wt=h=>{const r=[];for(let x=0;x<34;x++)if(wins([...h,x]))r.push(x);return r},dm={};let tw=[],tl='聽';
@@ -621,43 +690,26 @@ function faceMat(t){if(!G.FM[t]){G.FT[t]=faceTex(t);G.FM[t]=new THREE.MeshStanda
 function warmFaces(t){t=t||0;if(t>33||!G.ok)return;faceMat(t);setTimeout(()=>warmFaces(t+1),70)}
 function aniDoc(i,col){return ani(i,col).replace('<svg viewBox="0 0 100 118" aria-hidden="true">',`<svg xmlns="http://www.w3.org/2000/svg" width="400" height="472" viewBox="0 0 100 118">${GSD}`)}
 function av3d(ai,col){const T=THREE,g=new T.Group(),inner=new T.Group();g.add(inner);
- const M=(c,o)=>new T.MeshStandardMaterial(Object.assign({color:c,roughness:.55,metalness:0},o||{})),SPH=r=>new T.SphereGeometry(r,32,22);
+ // 簡單版角色（手機也跑得動）：低面數，衣服只留最能認出來的一兩個重點
+ const M=(c,o)=>new T.MeshStandardMaterial(Object.assign({color:c,roughness:.6,metalness:0},o||{})),SPH=r=>new T.SphereGeometry(r,14,10),CYL=(a,b,h,n=14)=>new T.CylinderGeometry(a,b,h,n);
  const add=(geo,mat,x,y,z,sx=1,sy=1,sz=1,rx=0,ry=0,rz=0,par=inner)=>{const m=new T.Mesh(geo,mat);m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.rotation.set(rx,ry,rz);par.add(m);return m};
  const both=f=>[-1,1].forEach(f);
- const FUR=['#f2b33d','#fafafa','#f08a2c','#f5f0ee','#9aa3ad','#8b5a3c','#f6a6b8','#5cbf4a'][ai],fur=M(FUR),blk=M('#1d1d1f',{roughness:.25}),wht=M('#ffffff',{roughness:.3}),pink=M('#ff9fb0'),HY=4;
- // 人的身體＋衣服：每個角色一套（0 西裝、1 運動服、2 警察、3 瑜伽服、4 醫師袍、5 帽T、6 廚師服、7 夏威夷衫）
- const OF=[{b:'#262b36',s:'#262b36',c:'#ffffff',k:'#ffffff'},{b:'#d8343a',s:'#d8343a',c:'#ffffff',k:'#ffffff'},{b:'#9cc3ea',s:'#9cc3ea',c:'#9cc3ea',k:'#9cc3ea'},{b:'#22a99a',s:0,c:0,k:0},{b:'#f4f6f8',s:'#f4f6f8',c:'#f4f6f8',k:'#f4f6f8'},{b:'#4f8a5a',s:'#4f8a5a',c:0,k:'#3c6e46'},{b:'#fbfbf8',s:'#fbfbf8',c:'#fbfbf8',k:'#fbfbf8'},{b:'#ff8a3d',s:'#ff8a3d',c:'#ff8a3d',k:0}][ai];
- const top=M(OF.b),slv=OF.s?M(OF.s):fur,cuf=OF.k?M(OF.k):null,V=(x,y,z)=>new T.Vector3(x,y,z);
- const limb=(a,b,r,mat)=>{const d=b.clone().sub(a),m=new T.Mesh(new T.CylinderGeometry(r,r*.92,d.length(),18),mat);m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(V(0,1,0),d.normalize());inner.add(m);return m};
- const fz=y=>.72*(.98+(y+.055)/2.35*.24)+.015;
- const box=(w,h,d,c,x,y,z,rz=0)=>add(new T.BoxGeometry(w,h,d),typeof c==='string'?M(c):c,x,y,z,1,1,1,-.07,0,rz);
- const band=(y,h,c)=>add(new T.CylinderGeometry(.98+(y+h/2+.055)/2.35*.24+.02,.98+(y-h/2+.055)/2.35*.24+.02,h,32,1,true),M(c),0,y,0,1,1,.73);
- const btn=(x,y,c,r=.08)=>add(SPH(r),M(c),x,y,fz(y)+.02,1,1,.5);
- add(new T.CylinderGeometry(1.22,.98,2.35,32),top,0,1.12,0,1,1,.72);
- add(SPH(1),ai===3?fur:top,0,2.28,0,1.22,.32,.72);
- add(new T.CylinderGeometry(.4,.44,.6,20),fur,0,2.55,0);
- if(OF.c)add(new T.TorusGeometry(.5,.13,10,28),M(OF.c),0,2.42,0,1,1,.8,Math.PI/2);
- both(k=>{const sh=V(k*1.22,2.12,0),el=V(k*1.5,.92,.3),hd=V(k*.78,.62,1.2),half=ai===7;
-  add(SPH(.5),ai===3?fur:slv,sh.x,sh.y,sh.z,1,.9,.8);limb(sh,el,.32,ai===3?fur:slv);add(SPH(.3),half?fur:slv,el.x,el.y,el.z);
-  if(half)add(new T.CylinderGeometry(.36,.36,.22,18),top,k*1.38,1.45,.15,1,1,1,0,0,k*.25);
-  limb(el,hd,.28,half?fur:slv);if(cuf)add(new T.CylinderGeometry(.3,.3,.16,18),cuf,hd.x-k*.2,hd.y+.02,hd.z-.22,1,1,1,1.1,0,-k*.5);
-  add(SPH(.32),fur,hd.x,hd.y,hd.z,1.05,.8,1.15)});
- if(ai===0){box(.62,1.0,.04,'#ffffff',0,1.85,fz(1.85));box(.17,.78,.05,'#c0392b',0,1.72,fz(1.72)+.03);box(.22,.17,.06,'#a52d22',0,2.13,fz(2.13)+.04);
-  both(k=>box(.24,1.05,.05,'#343a48',k*.36,1.83,fz(1.83)+.035,k*.38));btn(0,1.05,'#111',.07);btn(0,.7,'#111',.07);box(.3,.08,.04,'#ffffff',-.62,1.78,fz(1.78))}
- else if(ai===1){band(1.55,.16,'#ffffff');band(1.33,.1,'#1f3a6b');band(.03,.24,'#1f3a6b');box(.06,2.0,.04,'#c9ccd2',0,1.1,fz(1.1));box(.12,.16,.05,'#c9ccd2',0,1.95,fz(1.95)+.02);
-  both(k=>limb(V(k*1.42,2.0,.08),V(k*1.62,1.0,.36),.08,M('#ffffff')))}
- else if(ai===2){box(.16,.75,.05,'#1b2c4f',0,1.78,fz(1.78)+.02);box(.2,.16,.06,'#16243f',0,2.15,fz(2.15)+.03);
-  both(k=>{box(.42,.36,.04,'#86afd8',k*.48,1.72,fz(1.72)+.01);box(.44,.12,.05,'#1b2c4f',k*.48,1.92,fz(1.92)+.02);box(.5,.12,.5,'#1b2c4f',k*1.12,2.42,0,k*-.25)});
-  add(new T.CylinderGeometry(.16,.16,.04,6),M('#e3b23c',{metalness:.6,roughness:.3}),-.48,2.05,fz(2.05)+.04,1,1,1,Math.PI/2-.07);band(.08,.26,'#1d1d1f');box(.26,.2,.04,'#c9a227',0,.08,fz(.08)+.03)}
- else if(ai===3){band(1.62,.12,'#ff7fa8');band(.05,.28,'#1f6f68')}
- else if(ai===4){box(.58,1.0,.04,'#8fc3ea',0,1.85,fz(1.85));both(k=>box(.24,1.15,.05,'#e4e8ee',k*.36,1.78,fz(1.78)+.035,k*.38));
-  box(.42,.36,.04,'#e9edf2',-.52,1.55,fz(1.55)+.01);box(.05,.32,.05,'#2f6fd0',-.42,1.68,fz(1.68)+.04);
-  add(new T.TorusGeometry(.55,.04,8,24,Math.PI),M('#33363d'),0,2.25,fz(2.25)-.05,1,1.3,1,0,0,Math.PI);add(new T.CylinderGeometry(.13,.13,.06,18),M('#b9bec7',{metalness:.6,roughness:.3}),.42,1.45,fz(1.45)+.05,1,1,1,Math.PI/2-.07);btn(0,1.05,'#c7ccd4');btn(0,.65,'#c7ccd4')}
- else if(ai===5){add(new T.TorusGeometry(.62,.25,12,28),M('#3c6e46'),0,2.45,-.3,1.1,1,.8,Math.PI/2+.5);box(1.1,.55,.05,'#3c6e46',0,.65,fz(.65)+.01);both(k=>limb(V(k*.18,2.32,fz(2.3)+.03),V(k*.2,1.7,fz(1.7)+.04),.035,M('#ffffff')));band(.03,.24,'#3c6e46')}
- else if(ai===6){both(k=>[1.85,1.4,.95].forEach(y=>btn(k*.32,y,'#1d1d1f',.07)));box(.04,1.9,.03,'#e2e2dc',.14,1.15,fz(1.15));add(new T.TorusGeometry(.48,.12,10,28),M('#d93a32'),0,2.42,0,1,1,.82,Math.PI/2);add(new T.ConeGeometry(.22,.4,3),M('#d93a32'),0,2.12,fz(2.12)+.03,1,1,.3,Math.PI);
-  add(new T.CylinderGeometry(.85,.8,.75,28),M('#fbfbf8'),0,5.55,-.1);add(SPH(1),M('#fbfbf8'),0,6.05,-.1,1.05,.6,1.05)}
- else{const fl=['#ffe066','#ffffff','#ff4f7b'];[[-.55,1.9],[.45,1.75],[-.15,1.35],[.6,1.1],[-.6,.85],[.2,.6],[-.25,2.05],[.05,.95]].forEach(([x,y],i)=>{const c=M(fl[i%3]);for(let j=0;j<5;j++){const a=j/5*Math.PI*2;add(SPH(.07),c,x+Math.cos(a)*.1,y+Math.sin(a)*.1,fz(y)+.02,1,1,.4)}btn(x,y,'#ff9e2c',.05)});
-  both(k=>box(.28,.45,.05,'#ffd9a0',k*.2,2.1,fz(2.1)+.03,k*.6))}
+ const FUR=['#f2b33d','#fafafa','#f08a2c','#f5f0ee','#9aa3ad','#8b5a3c','#f6a6b8','#5cbf4a'][ai],fur=M(FUR),blk=M('#1d1d1f',{roughness:.3}),wht=M('#ffffff',{roughness:.35}),pink=M('#ff9fb0'),HY=4;
+ // 衣服：0 西裝、1 運動服、2 警察、3 瑜伽服、4 醫師袍、5 帽T、6 廚師服、7 夏威夷衫（b＝衣服顏色，s＝袖子，0＝露出毛色手臂）
+ const OF=[{b:'#262b36',s:1},{b:'#d8343a',s:1},{b:'#9cc3ea',s:1},{b:'#22a99a',s:0},{b:'#f4f6f8',s:1},{b:'#4f8a5a',s:1},{b:'#fbfbf8',s:1},{b:'#ff8a3d',s:0}][ai];
+ const top=M(OF.b),slv=OF.s?top:fur,V=(x,y,z)=>new T.Vector3(x,y,z),fz=y=>.72*(.98+(y+.055)/2.35*.24)+.02;
+ const limb=(a,b,r,mat)=>{const d=b.clone().sub(a),m=new T.Mesh(CYL(r,r*.9,d.length(),10),mat);m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(V(0,1,0),d.normalize());inner.add(m)};
+ const box=(w,h,c,x,y)=>add(new T.BoxGeometry(w,h,.05),M(c),x,y,fz(y),1,1,1,-.07,0,0);
+ add(CYL(1.22,.98,2.35,16),top,0,1.12,0,1,1,.72);add(SPH(1),top,0,2.28,0,1.3,.34,.74);add(CYL(.4,.44,.6,10),fur,0,2.55,0);
+ both(k=>{const sh=V(k*1.25,2.1,0),hd=V(k*.85,.65,1.15);limb(sh,hd,.3,slv);add(SPH(.32),fur,hd.x,hd.y,hd.z,1.05,.8,1.15)});
+ if(ai===0){box(.6,1.0,'#ffffff',0,1.85);box(.17,.8,'#c0392b',0,1.75)}
+ else if(ai===1)add(CYL(1.21,1.18,.18,16,1,true),wht,0,1.55,0,1,1,.73);
+ else if(ai===2){box(.16,.75,'#1b2c4f',0,1.78);box(.24,.24,'#e3b23c',-.5,1.95)}
+ else if(ai===3)add(CYL(1.2,1.18,.14,16,1,true),pink,0,1.62,0,1,1,.73);
+ else if(ai===4)box(.55,1.0,'#8fc3ea',0,1.85);
+ else if(ai===5){add(new T.TorusGeometry(.62,.25,8,16),M('#3c6e46'),0,2.45,-.3,1.1,1,.8,Math.PI/2+.5);box(1.1,.55,'#3c6e46',0,.65)}
+ else if(ai===6){add(CYL(.85,.8,.75,16),wht,0,5.55,-.1);add(SPH(1),wht,0,6.05,-.1,1.05,.6,1.05);add(new T.TorusGeometry(.48,.12,8,16),M('#d93a32'),0,2.42,0,1,1,.82,Math.PI/2)}
+ else [[-.5,1.8,'#ffe066'],[.45,1.4,'#ffffff'],[-.2,.9,'#ff4f7b']].forEach(([x,y,c])=>add(SPH(.17),M(c),x,y,fz(y),1,1,.4));
  const head=new T.Group();head.position.set(0,HY,0);inner.add(head);const H=(geo,mat,x,y,z,sx,sy,sz,rx,ry,rz)=>add(geo,mat,x,y-HY,z,sx,sy,sz,rx,ry,rz,head);
  H(SPH(1.55),fur,0,HY,0,ai===7?1.25:1.05,ai===7?.85:.95,1);
  const eyes=(y=4.15,dx=.55)=>both(k=>{H(SPH(.2),blk,k*dx,y,1.36);H(SPH(.07),wht,k*dx-.06,y+.09,1.55)});
@@ -687,7 +739,11 @@ function av3Set(r,ai,col){const k=ai+col;let g=G.av3[r];if(g&&g.userData.k===k)r
  const T=THREE;g=av3d(ai,col);g.scale.setScalar(1.4);g.position.set(0,-.3,r===2?17.6:17.8).applyAxisAngle(new T.Vector3(0,1,0),SA[r]);g.rotation.y=SA[r]+Math.PI;
  g.userData.k=k;g.traverse(o=>{o.userData.r=r});G.sc.add(g);G.av3[r]=g;wake(500);return g}
 function avTex(s){const x=S.seats[s],src=avSrc(s),col=COL[s],ai=typeof x.av==='number'?x.av%8:s,key=src?'p'+x.id+':'+x.pv:'a'+ai+col;if(G.avT[key])return G.avT[key];
- const tx=canvasTex(256,302,()=>{});G.avT[key]=tx;const im=new Image();im.onload=()=>{const g=tx.image.getContext('2d');if(src){g.save();g.beginPath();g.arc(128,150,118,0,7);g.clip();g.drawImage(im,10,32,236,236);g.restore();g.lineWidth=12;g.strokeStyle=col;g.beginPath();g.arc(128,150,118,0,7);g.stroke()}else g.drawImage(im,0,0,256,302);tx.needsUpdate=true;wake()};im.src=src||svgURL(aniDoc(ai,col));return tx}
+ const tx=src?canvasTex(320,320,()=>{}):canvasTex(256,302,()=>{});G.avT[key]=tx;const im=new Image();im.onload=()=>{const g=tx.image.getContext('2d');if(src){const rr=(x,y,w,h,r)=>{g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()};
+  const gr=g.createLinearGradient(0,0,320,320);gr.addColorStop(0,'#f6d77e');gr.addColorStop(.5,'#b8862b');gr.addColorStop(1,'#f0c75e');g.fillStyle=gr;rr(4,4,312,312,22);g.fill();g.lineWidth=4;g.strokeStyle='#6b4a12';g.stroke();
+  g.fillStyle=col;rr(20,20,280,280,12);g.fill();g.fillStyle='#fffaf0';rr(26,26,268,268,10);g.fill();
+  g.save();rr(36,36,248,248,6);g.clip();const m=Math.min(im.width,im.height);g.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,36,36,248,248);g.restore();g.lineWidth=2;g.strokeStyle='#0003';rr(36,36,248,248,6);g.stroke()}
+  else g.drawImage(im,0,0,256,302);tx.needsUpdate=true;wake()};im.src=src||svgURL(aniDoc(ai,col));return tx}
 function init3d(){if(!window.THREE)return false;try{const T=THREE;
  $('#app').innerHTML='<div class="st3"><div id="gl"></div><div id="info"></div><div class="vb"><button type="button" id="setb" onclick="setMenu()" aria-label="設定" aria-expanded="false">⚙️</button><div class="smenu" id="smenu" hidden><div class="sh">設定</div><div class="srow"><span>縮放</span><button type="button" onclick="zoomBy(.88)" aria-label="放大">＋</button><button type="button" onclick="zoomBy(1.14)" aria-label="縮小">－</button></div><div class="srow"><span>視角</span><button type="button" onclick="tiltBy(-.08)" aria-label="視角往上">▲</button><button type="button" onclick="tiltBy(.08)" aria-label="視角往下">▼</button></div><button type="button" class="sit" onclick="resetView();setMenu(0)"><i>🎯</i>重設畫面</button><button type="button" class="sit" onclick="sndToggle()"><i id="sndb">🔊</i>聲音開關</button><div class="srow vrow"><span>音效</span><input type="range" min="0" max="100" step="5" id="svR" aria-label="音效音量" oninput="setVol(1,this.value)" onchange="volTest(1)"></div><div class="srow vrow"><span>語音</span><input type="range" min="0" max="100" step="5" id="vvR" aria-label="語音音量" oninput="setVol(2,this.value)" onchange="volTest(2)"></div><button type="button" class="sit" onclick="copyInvite();setMenu(0)"><i>📋</i>複製邀請</button><button type="button" class="sit" onclick="nextBg()"><i id="bgb">🏔</i>換背景</button><button type="button" class="sit" onclick="fsToggle()"><i>⛶</i>全螢幕</button><button type="button" class="sit" onclick="toggleBar();setMenu(0)"><i>☰</i>房間 / 暱稱</button><button type="button" class="sit" onclick="hallShow(1);setMenu(0)"><i>🏠</i>回大廳</button></div></div><div id="lab"></div><div id="cenH"></div><div id="ovH" hidden></div><div id="tgH"></div><div id="actH"></div><div id="sayH"></div><div id="trH"></div><div id="specH" hidden></div><div id="meH"></div><div class="port-hint">📱 手機橫放玩，牌會更大</div></div>';
  G.st=$('.st3');const MOB=G.mob=matchMedia('(pointer:coarse)').matches;G.pr=Math.min(MOB?1.5:2,devicePixelRatio||1);const R=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});G.R=R;R.setPixelRatio(G.pr);R.shadowMap.enabled=true;R.shadowMap.type=MOB?T.PCFShadowMap:T.PCFSoftShadowMap;R.shadowMap.autoUpdate=false;R.shadowMap.needsUpdate=true;$('#gl').appendChild(R.domElement);
@@ -908,10 +964,10 @@ function sync3d(c){wake();const T=THREE,Y=new T.Vector3(0,1,0),W=new Map(),{p,b,
  G.strip.forEach((g,r)=>{g.visible=!lob&&!ov&&S.phase!=='dice'&&rel(S.turn)===r});
  G.seatL.forEach((m,r)=>{m.emissiveIntensity=!lob&&!ov&&S.phase!=='dice'&&rel(S.turn)===r?1.8:.12});
  {const ls=lob?'-- --':`${WIND[S.rw]}${S.streak?'連'+S.streak:'風'} ${String(Math.max(0,(S.wall||[]).length-14)).padStart(2,'0')}`;if(ls!==G.ledS){G.ledS=ls;const g=G.led.image.getContext('2d');g.fillStyle='#120404';g.fillRect(0,0,256,64);g.fillStyle='#ff3b2f';g.shadowColor='#ff3b2f';g.shadowBlur=10;g.font='bold 40px monospace';g.textAlign='center';g.textBaseline='middle';g.fillText(ls,128,34);G.led.needsUpdate=true}}
- G.avS.forEach((sp,r)=>{const s=(b+r)%4,x=S.seats[s],a=G.av3[r];if(r===0||!x){sp.visible=false;if(a)a.visible=false;return}if(x.av==='p'){sp.material.map=avTex(s);sp.material.needsUpdate=true;sp.visible=true;if(a)a.visible=false;return}sp.visible=false;const g=av3Set(r,typeof x.av==='number'?x.av%8:s,COL[s]);g.visible=true;g.userData.on=!lob&&!ov&&S.turn===s});
+ G.avS.forEach((sp,r)=>{const s=(b+r)%4,x=S.seats[s],a=G.av3[r];if(r===0||!x){sp.visible=false;if(a)a.visible=false;return}if(a)a.visible=false;const ph=!!avSrc(s),tx=avTex(s);if(sp.material.map!==tx){sp.material.map=tx;sp.material.needsUpdate=true}sp.scale.set(ph?7.4:5.6,ph?7.4:6.6,1);sp.position.y=ph?4.1:3.2;sp.visible=true});// 角色一律用 2D 圖（不建 3D 模型，手機比較順）；有照片的顯示一大張相框
  // 骰子骰完後整局都留在桌子中間，下一局重新擲骰才換掉；中途進來的人直接看到骰好的樣子
  let dk=S.dice&&S.phase!=='lobby'?S.dice.join()+':'+S.dealer+':'+S.streak+':'+S.rw+':'+(S.gid||0):'';if(dk&&dk!==G.dk)startDice(rel(S.dealer),S.phase!=='dice');else if(!dk&&G.dk!=='idle'){startDice(0,1,[4,2,6]);dk='idle'}else if(!dk)dk='idle';G.dk=dk}
-function render(){if(!S)return;if(S.closedAt&&S.closedAt>(G.viewT||0)&&G.closedAck!==S.closedAt){G.closedAck=S.closedAt;hallShow(1);invMsg('牌桌已關閉')}homeShow();if(!G.ok)return render2d();
+function render(){if(!S)return;if(S.v!==G.lv){G.lv=S.v;G.vT=Date.now()}if(S.closedAt&&S.closedAt>(G.viewT||0)&&G.closedAck!==S.closedAt){G.closedAck=S.closedAt;hallShow(1);invMsg('牌桌已關閉')}homeShow();if(!G.ok)return render2d();
  const p=me(),b=p<0?0:p,lob=S.phase==='lobby',ov=S.phase==='over',cl=S.phase==='claim',w=S.win,N=i=>S.seats[i]?esc(S.seats[i].name):'空位';
  const can=S.phase==='discard'&&S.turn===p;if(!can)sel=-1;
  const st=G.dealA?'發牌中…':lob?'等待玩家入座':S.phase==='dice'?(S.dice?'開門發牌中…':`等莊家 ${N(S.dealer)} 擲骰子`):ov?(w.draw?'流局':`${N(w.seat)} ${w.self?'自摸':'胡牌'}`):can?'輪到你出牌：點一下桌上的牌選牌，再點一下打出':S.phase==='discard'?`輪到 ${N(S.turn)} 出牌`:`${N(S.last.from)} 打出「${nm(S.last.t)}${su(S.last.t)}」`;
@@ -927,7 +983,7 @@ function render(){if(!S)return;if(S.closedAt&&S.closedAt>(G.viewT||0)&&G.closedA
  else if(S.phase==='dice'){if(S.dice){cm='low';cen=`<div class="c3 dtx" style="animation-delay:${1800-del}ms">${dsum} 點：${N(dow)} 門前<br>從右邊數過 ${dsum} 墩開門</div>`}else{cm='low';cen=`<div class="c3">${p===S.dealer?'<button onclick="roll()">🎲 擲骰子開門</button>':`等莊家 ${N(S.dealer)} 擲骰子`}</div>`}}
  else if(cl){cm='claim';cen=`<div class="c3 sm3">${mini(S.last.from)} ${N(S.last.from)} 打出</div>`}
  const ovT=s=>{const h=S.hands[s].slice();let x='';if(!w.draw&&s===w.seat&&w.wt!=null){const i=h.indexOf(w.wt);if(i>=0){h.splice(i,1);x=tile(w.wt,'m win')}}return (S.melds[s]||[]).map(m=>`<span class="omg">${m.filter(t=>t>=0).map(t=>tile(t,'m')).join('')}</span>`).join('')+h.map(t=>tile(t,'m')).join('')+x};
- const ovl=ov?`<div class="ov"><h3>${w.draw?'剩最後 7 墩，流局（莊家連莊）':`🎉 ${mini(w.seat)} ${N(w.seat)} ${w.self?'自摸':'胡 · '+N(w.from)+' 放槍'}！`}</h3>${w.tai?`<div class="tl">${w.tai.map(x=>`<span>${x[0]} ${x[1]}台</span>`).join('')||'<span>無台</span>'}</div><div>共 ${w.n} 台（與莊家結算另加 ${w.ex} 台）· 底 ${S.cfg.base} / 台 ${S.cfg.tai}</div>`:''}<div class="ovg">${[0,1,2,3].map(s=>`<span class="ovm">${mini(s)}</span><div class="ovr">${ovT(s)}</div><b class="dl ${w.pay&&w.pay[s]<0?'neg':'pos'}">${w.pay&&w.pay[s]?(w.pay[s]>0?'+':'')+w.pay[s]:''}</b>`).join('')}</div>${matchEnds()?finBox():''}${p>=0?`<div class="ovb"><button onclick="again()">${matchEnds()?'再來一'+(matchLen()===1?'圈':'將'):'再來一局'}</button><button class="g" onclick="peek()">看牌桌</button></div>`:''}</div>`:'';
+ const ovl=ov?settleHTML(p,w,ovT,N):'';
  let act='',tgOut='';const tpI=new Set();
  if(p>=0&&!lob&&!ov){const my=S.hands[p],o=opts(p),ob=[];
   const wt=h=>{const r=[];for(let x=0;x<34;x++)if(wins([...h,x]))r.push(x);return r},dm={};let tw=[],tl='聽';
