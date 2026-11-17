@@ -1031,5 +1031,5 @@ function npToggle(s){npOff(s);G.npOff[s]=!G.npOff[s];render()}
 function peek(){G.peek=1;render()}
 (async()=>{init3d();try{db=await claude.use('db')}catch(e){db=null}
  if(!db){$('#app').innerHTML='<div style="padding:24px;font-size:16px;line-height:1.7"><b>還沒設定好連線</b><br>請把 Firebase 的設定貼到 firebase-config.js（照說明文件第 1 部分）。</div>';return}
- drawProf();chatInit();{let u='';try{u=(new URLSearchParams(location.search).get('room')||'').replace(/[^A-Za-z0-9]/g,'').slice(0,16)}catch(_){}$('#room').value=u||defRoom();if(!u){G.hallAuto=1;hallShow(1)}}join()})();
+ drawProf();{let u='';try{u=(new URLSearchParams(location.search).get('room')||'').replace(/[^A-Za-z0-9]/g,'').slice(0,16)}catch(_){}$('#room').value=u||defRoom();if(!u){G.hallAuto=1;hallShow(1)}}join()})();
 </script></body></html>
