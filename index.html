@@ -539,10 +539,10 @@ function join(){G.viewT=Date.now();room=($('#room').value||'').replace(/[^A-Za-z
  G.hadDoc=0;unsub=ref.onSnapshot(sn=>{const d=sn.data();if(sn.exists)G.hadDoc=1;else if(G.hadDoc&&!sn.metadata.hasPendingWrites){G.hadDoc=0;if(S&&me()>=0){S=fresh();hallShow(1);invMsg('牌桌 20 分鐘沒有動靜，已自動關閉');return}}S=d&&d.s?JSON.parse(d.s):fresh();if(!S.pile){S=Object.assign(fresh(),{seats:S.seats,v:S.v||0})}S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},S);render()},e=>note('連線錯誤：'+e.message))}
 let rstT=0;
 function reset(){if(!ref)return;if(!S||me()<0){note('只有入座的玩家可以重置牌桌');return}const b=$('#rst');if(Date.now()-rstT>4000){rstT=Date.now();b.textContent='再按一次確定重置';setTimeout(()=>{if(rstT&&Date.now()-rstT>=3900){rstT=0;b.textContent='重置牌桌'}},4000);return}
- rstT=0;b.textContent='重置牌桌';clearTimeout(bt);const v=S?S.v:0;S=fresh();S.v=v;sel=-1;rc=-1;busy=-1;save();render()}
+ rstT=0;b.textContent='重置牌桌';clearTimeout(bt);G.botV=-1;const v=S?S.v:0;S=fresh();S.v=v;sel=-1;rc=-1;busy=-1;save();render()}
 // 離開牌桌：自己回大廳；打到一半時先確認（位子改由電腦接手，其他人繼續打；桌上沒有其他真人就直接收桌）
 function leaveAsk(){document.body.classList.remove('showbar');if(!ref||!S||me()<0||S.phase==='lobby'){goHall();return}const p=me(),others=S.seats.some((x,i)=>x&&!x.bot&&i!==p),msg=others?'你會回到大廳，你的位子改由電腦接手，其他人可以繼續打。':'桌上沒有其他玩家，離開後這桌會收掉，進度和分數會清除。';let e=$('#lvB');if(!e){e=document.createElement('div');e.id='lvB';e.className='invb'}e.innerHTML='<div style="text-align:center;gap:12px"><b style="font-size:18px">你確定要離開牌桌嗎？</b><span style="font-size:14px;color:#7a6250">'+msg+'</span><div style="display:flex;gap:10px"><button type="button" style="flex:1;padding:11px;border-radius:12px;border:0;background:#f1e4c8;color:#6a4a30;font-weight:800;font-size:16px" onclick="document.getElementById(`lvB`).hidden=true">取消</button><button type="button" style="flex:1;padding:11px;border-radius:12px;border:0;background:#c0392b;color:#fff;font-weight:800;font-size:16px" onclick="document.getElementById(`lvB`).hidden=true;goHall()">確定離開</button></div></div>';($('#wrap')||document.body).append(e);e.hidden=false}
-function closeTable(){if(!ref||!S||me()<0)return;clearTimeout(bt);const v=S.v;S=Object.assign(fresh(),{v,closedAt:Date.now()});sel=-1;rc=-1;busy=-1;save();render()}
+function closeTable(){if(!ref||!S||me()<0)return;clearTimeout(bt);G.botV=-1;const v=S.v;S=Object.assign(fresh(),{v,closedAt:Date.now()});sel=-1;rc=-1;busy=-1;save();render()}
 function sit(i){if(me()>=0)return;lss('mj_name',$('#name').value);S.seats[i]={id:uid,name:($('#name').value||'玩家').slice(0,8),av:myAv,pv:myPv};save();render()}
 const okImg=u=>typeof u==='string'&&u.length<60000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(u);
 const AVN=10;// 可以選的角色數（0 獅子、1 熊貓、2 狐狸、3 兔子、4 貓、5 熊、6 豬、7 青蛙、8 老虎、9 無尾熊）
@@ -608,7 +608,7 @@ function opts(p){if(p<0||S.phase!=='claim'||p===S.last.from)return{};const h=S.h
   if(r>=2&&has(t-2)&&has(t-1))c.push([t-2,t-1]);if(r>=1&&r<=7&&has(t-1)&&has(t+1))c.push([t-1,t+1]);if(r<=6&&has(t+1)&&has(t+2))c.push([t+1,t+2]);if(c.length)o.chi=c}
  return o}
 function take(use,p=me()){const t=S.last.t,h=S.hands[p];use.forEach(x=>h.splice(h.indexOf(x),1));S.pile.pop();
- S.melds[p].push([...use,t].sort((a,b)=>a-b));S.say={s:p,t:use[0]===use[1]?'碰':'吃'};S.drawn=null;S.turn=p;S.phase='discard';S.last=null;S.pass=[];save();render()}
+ /* 吃：吃進來的那張放中間（例：吃三萬配一二萬 → 一三二）；碰照舊 */const u2=use.slice().sort((a,b)=>a-b);S.melds[p].push(u2[0]===u2[1]?[...u2,t]:[u2[0],t,u2[1]]);S.say={s:p,t:use[0]===use[1]?'碰':'吃'};S.drawn=null;S.turn=p;S.phase='discard';S.last=null;S.pass=[];save();render()}
 const pong=()=>take([S.last.t,S.last.t]),chi=k=>take(opts(me()).chi[k]);
 function kongs(p){const h=S.hands[p],c={},r=[];h.forEach(t=>c[t]=(c[t]||0)+1);for(const t in c)if(c[t]===4)r.push(+t);
  S.melds[p].forEach(m=>{if(m.length===3&&m[0]===m[1]&&h.includes(m[0]))r.push(m[0])});return r}
@@ -633,7 +633,7 @@ function score(p,self,wt){const h=S.hands[p],ml=S.melds[p],c=Array(34).fill(0);h
  if(!self&&h.length===2)com.push(['全求人',2]);
  const sts=new Set(all.filter(t=>t<27).map(t=>t/9|0)),hon=all.some(t=>t>=27);
  if(!sts.size)com.push(['字一色',16]);else if(sts.size===1)com.push(hon?['混一色',4]:['清一色',8]);
- const mset=ml.map(m=>m[0]===m[1]?['p',m[0],m[4]===-1]:['s',m[0]]),dw=27+(p-S.dealer+4)%4,rw=27+S.rw;
+ const mset=ml.map(m=>m[0]===m[1]?['p',m[0],m[4]===-1]:['s',Math.min(m[0],m[1],m[2])]),dw=27+(p-S.dealer+4)%4,rw=27+S.rw;
  let best=null,bn=-1;const tryL=l=>{const n=l.reduce((a,x)=>a+x[1],0);if(n>bn){bn=n;best=l}};
  if(h.length===17&&c.filter(x=>x%2).length===1&&c.includes(3))tryL([['嚦咕嚦咕',8]]);
  for(let pr=0;pr<34;pr++)if(c[pr]>=2){c[pr]-=2;
@@ -765,8 +765,11 @@ function aiClaim(q){const o=opts(q);if(o.win)return{a:'hu',k:0};if(aiLv()===0)re
  if(o.pong){const a=after([t,t]);if(a<cur||(aiValT(t,q)&&a<=cur))return{a:'pong',k:0}}
  if(o.chi&&cur<=3){let bk=-1,ba=cur;o.chi.forEach((u,k)=>{const a=after(u);if(a<ba){ba=a;bk=k}});if(bk>=0)return{a:'chi',k:bk}}
  return null}
-function botGo(){clearTimeout(bt);if(S&&animBusy()){bt=setTimeout(botGo,250);return}if(!S||S.phase==='lobby'||S.phase==='over'||me()<0||!isDrv())return;const v=S.v;
- bt=setTimeout(()=>{if(S.v!==v)return;
+// 電腦的動作：同一個牌桌狀態（S.v）已經排好計時就不要重排。以前每秒的「卡住檢查」會一直把計時清掉重來，
+// 電腦當莊要等 4.6 秒才擲骰子，結果永遠等不到 → 卡在擲骰子
+function botGo(){if(S&&animBusy()){clearTimeout(bt);G.botV=-1;bt=setTimeout(botGo,250);return}if(!S||S.phase==='lobby'||S.phase==='over'||me()<0||!isDrv()){clearTimeout(bt);G.botV=-1;return}const v=S.v;
+ if(G.botV===v&&G.botP===S.phase)return;clearTimeout(bt);G.botV=v;G.botP=S.phase;
+ bt=setTimeout(()=>{G.botV=-1;if(S.v!==v)return;
   if(S.phase==='dice'){if(!S.dice){if(S.seats[S.dealer].bot)roll()}else deal();return}
   if(S.phase==='discard'&&S.seats[S.turn].bot){const p=S.turn,h=S.hands[p];if(wins(h))return hu(p);const m=5-S.melds[p].length,kg=kongs(p).filter(t=>aiLv()===0||h.filter(x=>x===t).length<4||shan(h.filter(x=>x!==t),m-1)<=aiBestAfter(h,m));if(kg.length)return kong(kg[0],p);return discard(aiDiscard(p,aiLv()),p)}
   if(S.phase==='claim'){let ch=0;S.claims=S.claims||{};for(let q=0;q<4;q++){if(q===S.last.from||!S.seats[q].bot||S.claims[q]||S.pass.includes(q))continue;const c=aiClaim(q);if(c)S.claims[q]=c;else if(optRank(q)>0)S.pass.push(q);else continue;ch=1}
@@ -1400,7 +1403,7 @@ function helpShow(k){let e=$('#helpM');if(e)e.remove();e=document.createElement(
  e.innerHTML=`<div class="hpw"><div class="hpt"><b>${k==='tai'?'🀄 牌型台數表':'📖 麻將規則'}</b><button type="button" onclick="$('#helpM').remove()">✕ 關閉</button></div><div class="hpb">${body}</div></div>`;
  e.onclick=ev=>{if(ev.target===e)e.remove()};(document.getElementById('wrap')||document.body).append(e);const fit=()=>{const b=e.querySelector('.hpb'),g=b&&b.firstElementChild;if(!g||!e.isConnected)return;g.style.zoom=1;const z=Math.min(1,(b.clientHeight-4)/b.scrollHeight);g.style.zoom=Math.max(.62,z).toFixed(3)};requestAnimationFrame(fit);setTimeout(fit,120)}
 // 離開目前的牌桌：沒有其他真人就直接關桌；有朋友在就把自己的位子讓出來（打到一半改成電腦接手）
-function leaveCur(){if(!S||!ref||me()<0)return;const p=me(),others=S.seats.some((x,i)=>x&&!x.bot&&i!==p);clearTimeout(bt);
+function leaveCur(){if(!S||!ref||me()<0)return;const p=me(),others=S.seats.some((x,i)=>x&&!x.bot&&i!==p);clearTimeout(bt);G.botV=-1;
  if(!others){const v=S.v,c=Date.now();S=Object.assign(fresh(),{v,closedAt:c});G.closedAck=c;sel=-1;rc=-1;busy=-1;save();return}
  if(S.phase==='lobby')S.seats[p]=null;else{const x=S.seats[p],av=typeof x.av==='number'?x.av:p%AVN;S.seats[p]={id:'bot'+p,name:'電腦'+(ANN[av]||''),bot:1,av}}
  S.rdy&&delete S.rdy[p];save()}
