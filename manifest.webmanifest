@@ -1,6 +1,6 @@
 {
- "name": "麻將戰鬥邀請",
- "short_name": "麻將戰鬥",
+ "name": "瘋狂動物麻將樂園",
+ "short_name": "動物麻將樂園",
  "start_url": "./",
  "scope": "./",
  "display": "fullscreen",
