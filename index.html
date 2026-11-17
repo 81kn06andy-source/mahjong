@@ -667,12 +667,16 @@ function rdyGo(){if(!S||S.phase!=='over'||me()<0)return;const el=performance.now
  const auto=tLim()>0&&el>RDY_MS,cd0=cd?cd.textContent:'';if(cd)cd.textContent=allRdy()?'大家都準備好了，開始下一局…':tLim()>0?`${Math.max(0,Math.ceil((RDY_MS-el)/1000))} 秒後自動開始下一局`:'';
  /* 倒數那行出現或消失時重新縮放結算面板，避免按鈕被擠出螢幕 */if(cd&&!cd0!==!cd.textContent)fitSettle();
  if(!(allRdy()||auto))return;if(!(me()===drv()||stale()>3000+Math.max(0,hIdx())*1000))return;if(G.rdyK===S.v)return;G.rdyK=S.v;again()}
+// 胡牌的台數明細：牌型的台＋莊家 1 台＋連N拉N 2N 台（莊家、連莊只算跟莊家之間那筆）
+// dI：每一筆都跟莊家有關（莊家胡，或莊家放槍）；dA：至少有一筆（閒家自摸時莊家也要付）
+function winTai(w){const dl=S.dealer,st=Math.max(0,Math.round(((w.ex||1)-1)/2)),dI=w.seat===dl||(!w.self&&w.from===dl),dA=dI||!!w.self;
+ return{dI,dA,rows:(w.tai||[]).concat(dA?[['莊家',1]].concat(st?[[`連${st}拉${st}`,2*st]]:[]):[])}}
 function settleHTML(p,w,ovT,N){const B=S.cfg.base,T=S.cfg.tai,dl=S.dealer,hs=humans(),R=S.rdy||{},sg=v=>v>0?'+'+v:v<0?String(v):'0';
  let o=`<div class="ov sx"><div class="sxw">`;
  o+=w.draw?`<h2>流局</h2><p class="sxs">剩最後 7 墩沒人胡，莊家連莊</p>`:`<h2>🎉 ${mini(w.seat)} ${N(w.seat)} ${w.self?'自摸':'胡牌'}！</h2><p class="sxs">${w.self?'自摸：另外三家都要付':`${N(w.from)} 放槍：由 ${N(w.from)} 付`}${w.seat===dl?' · 胡牌的是莊家':''}</p>`;
- o+='<div class="sxm">';if(!w.draw){const st=Math.max(0,Math.round((w.ex-1)/2));
-  o+=`<div class="ios"><div class="ioh">台數</div><div class="ioc">${(w.tai||[]).map(x=>`<div class="ior"><span>${x[0]}</span><b>${x[1]} 台</b></div>`).join('')||'<div class="ior"><span>無台（只算底）</span><b>0 台</b></div>'}<div class="ior iot"><span>合計</span><b>${w.n} 台</b></div></div>
-   <div class="iof">每台 ${T}、底 ${B}。莊家${st?`連${st}拉${st}`:''}另加 ${w.ex} 台（只算跟莊家之間那筆）</div></div>`}
+ o+='<div class="sxm">';if(!w.draw){const {rows,dI,dA}=winTai(w),tot=dI?`${w.n+w.ex} 台`:dA?`${w.n} 台<small style="display:block;font-size:12px;font-weight:600;color:#8e8e93">莊家付 ${w.n+w.ex} 台</small>`:`${w.n} 台`;
+  o+=`<div class="ios"><div class="ioh">台數</div><div class="ioc">${rows.map(x=>`<div class="ior"><span>${x[0]}</span><b>${x[1]} 台</b></div>`).join('')||'<div class="ior"><span>無台（只算底）</span><b>0 台</b></div>'}<div class="ior iot"><span>合計</span><b>${tot}</b></div></div>
+   <div class="iof">每台 ${T}、底 ${B}。${dA&&!dI?'莊家、連莊的台只算莊家那筆':''}</div></div>`}
  o+=`<div class="ios iow"><div class="ioh">四家手牌</div><div class="ioc">${[0,1,2,3].map(s=>{const v=w.pay?w.pay[s]:0;return `<div class="ior iop${!w.draw&&s===w.seat?' win':''}"><span class="ion">${mini(s)}<em>${N(s)}</em></span><span class="iot2">${ovT(s)}${s===dl?'<i class="sxd sxd2">莊家</i>':''}</span><span class="iov"><b class="${v>0?'pos':v<0?'neg':''}">${sg(v)}</b></span></div>`}).join('')}</div></div></div>`;
  if(matchEnds()&&matchLen())o+=finBox();
  o+=`<div class="sxf"><div class="sxr">${hs.map(q=>`<span class="${R[q]?'ok':''}">${mini(q)} ${N(q)}：${R[q]?'✓ 已按繼續':'等待中…'}</span>`).join('')}</div><div class="sxc" id="rdyCd"></div>`;
@@ -1313,10 +1317,10 @@ function setMenu(v){const m=$('#smenu');if(!m)return;vlBtn();const sv=$('#svR'),
 document.addEventListener('pointerdown',e=>{const m=$('#smenu');if(m&&!m.hidden&&!e.target.closest('.vb'))setMenu(0)},true);
 function celebrate(w){const host=document.querySelector('.st3');if(!host||!w||w.draw)return;const o=$('#cel');if(o)o.remove();
  const big=w.n>=8,txt=w.self?'自摸':'胡',seat=S.seats[w.seat],d=document.createElement('div');d.id='cel';d.className='cel'+(big?' big':'');
- d.innerHTML=`<div class="cel-bg"></div><div class="cel-rays"></div><canvas class="cel-cv"></canvas><div class="cel-c"><div class="cel-t${txt.length>1?' two':''}">${txt}</div>${big?'<div class="cel-big">大 牌</div>':''}<div class="cel-n"></div><div class="cel-tai">${(w.tai||[]).map((x,i)=>`<span style="animation-delay:${(1.05+i*.16).toFixed(2)}s">${esc(String(x[0]))} ${+x[1]}台</span>`).join('')}</div><div class="cel-sum" style="animation-delay:${(1.15+(w.tai||[]).length*.16).toFixed(2)}s">共 ${+w.n} 台</div></div>`;
+ const wt=winTai(w),ctot=wt.dI?w.n+(w.ex||0):w.n;d.innerHTML=`<div class="cel-bg"></div><div class="cel-rays"></div><canvas class="cel-cv"></canvas><div class="cel-c"><div class="cel-t${txt.length>1?' two':''}">${txt}</div>${big?'<div class="cel-big">大 牌</div>':''}<div class="cel-n"></div><div class="cel-tai">${wt.rows.map((x,i)=>`<span style="animation-delay:${(1.05+i*.16).toFixed(2)}s">${esc(String(x[0]))} ${+x[1]}台</span>`).join('')}</div><div class="cel-sum" style="animation-delay:${(1.15+wt.rows.length*.16).toFixed(2)}s">共 ${+ctot} 台${wt.dA&&!wt.dI?`<small style="display:block;font-size:.45em">莊家付 ${+(w.n+w.ex)} 台</small>`:''}</div></div>`;
  d.querySelector('.cel-n').textContent=(seat?seat.name:'')+(w.seat===me()?'（你）':'')+(w.self?' 自摸！':' 胡牌！');
  host.append(d);host.classList.remove('shake');void host.offsetWidth;host.classList.add('shake');setTimeout(()=>host.classList.remove('shake'),900);
- celFx(d.querySelector('canvas'),big);fanfare(big);setTimeout(()=>d.classList.add('out'),3800);setTimeout(()=>d.remove(),4350)}
+ celFx(d.querySelector('canvas'),big);fanfare(big);/* 有人胡牌就震動（Android 才有；iPhone 的瀏覽器不支援震動，會直接略過） */try{navigator.vibrate&&navigator.vibrate(big?[250,120,250,120,500]:[200,100,300])}catch(_){}setTimeout(()=>d.classList.add('out'),3800);setTimeout(()=>d.remove(),4350)}
 function celFx(cv,big){const r=Math.min(2,devicePixelRatio||1),W=cv.clientWidth,H=cv.clientHeight;cv.width=W*r;cv.height=H*r;const g=cv.getContext('2d');g.scale(r,r);
  const P=[],C=['#ffd34d','#ff4d4d','#ffffff','#4dd2ff','#7dff6a','#ff9a1f','#ff5ec4'],U=Math.min(W,H);
  const burst=(x,y,n,col)=>{for(let i=0;i<n;i++){const a=Math.random()*6.283,v=U*(.25+Math.random()*.55);P.push({k:2,x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1.1+Math.random()*.5,c:col||C[i%C.length],s:1.5+Math.random()*2})}};
