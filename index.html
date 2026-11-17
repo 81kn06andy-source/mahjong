@@ -327,7 +327,7 @@ const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&'
 const lsg=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 let db,ref,S=null,room='',busy=-1,unsub,sel=-1,rc=-1,bt,uid=lsg('mj_id')||Math.random().toString(36).slice(2,10);lss('mj_id',uid);
 $('#name').value=lsg('mj_name')||'';
-const NUM=['一','二','三','四','五','六','七','八','九'],HON=['東','南','西','北','中','發','白'],WIND=['東','南','西','北'],ANI=['🦁','🐼','🦊','🐰','🐱','🐻','🐷','🐸'],ANN=['獅子','熊貓','狐狸','兔子','貓咪','小熊','小豬','青蛙'],COL=['#d9534f','#4a90d9','#e8a33d','#8e6bbf'];
+const NUM=['一','二','三','四','五','六','七','八','九'],HON=['東','南','西','北','中','發','白'],HONF=['東風','南風','西風','北風','紅中','發財','白板'],WIND=['東','南','西','北'],ANI=['🦁','🐼','🦊','🐰','🐱','🐻','🐷','🐸'],ANN=['獅子','熊貓','狐狸','兔子','貓咪','小熊','小豬','青蛙'],COL=['#d9534f','#4a90d9','#e8a33d','#8e6bbf'];
 const nm=t=>t<27?NUM[t%9]:HON[t-27],su=t=>t<9?'萬':t<18?'筒':t<27?'條':'';
 const PT=[0,[[1,1]],[[1,0],[1,2]],[[0,0],[1,1],[2,2]],[[0,0],[2,0],[0,2],[2,2]],[[0,0],[2,0],[1,1],[0,2],[2,2]],[[0,0],[2,0],[0,1],[2,1],[0,2],[2,2]],[[0,0],[1,0],[2,0],[0,1],[2,1],[0,2],[2,2]],[[0,0],[2,0],[0,.67],[2,.67],[0,1.33],[2,1.33],[0,2],[2,2]],[[0,0],[1,0],[2,0],[0,1],[1,1],[2,1],[0,2],[1,2],[2,2]]];
 function faceOld(t){if(t>=27){const k=t-27;return k===6?'<svg viewBox="0 0 30 40"><rect x="6" y="8" width="18" height="24" rx="2" fill="none" stroke="#1f5fa8" stroke-width="2.6"/></svg>':`<b class="hz" style="color:${k===4?'#c0392b':k===5?'#2a7d3f':'#1d1d1d'}">${HON[k]}</b>`}
@@ -449,8 +449,8 @@ function score(p,self,wt){const h=S.hands[p],ml=S.melds[p],c=Array(34).fill(0);h
  for(let pr=0;pr<34;pr++)if(c[pr]>=2){c[pr]-=2;
   for(const d of decs(c)){const l=[],st=[...mset,...d],ps=st.filter(x=>x[0]==='p').map(x=>x[1]);
    const nw=ps.filter(t=>t>=27&&t<31).length,nd=ps.filter(t=>t>=31).length;
-   if(nw===4)l.push(['大四喜',16]);else if(nw===3&&pr>=27&&pr<31)l.push(['小四喜',8]);else{ps.filter(t=>t>=27&&t<31).forEach(t=>l.push([HON[t-27],1]))}
-   if(nd===3)l.push(['大三元',8]);else if(nd===2&&pr>=31)l.push(['小三元',4]);else ps.filter(t=>t>=31).forEach(t=>l.push([HON[t-27],1]));
+   if(nw===4)l.push(['大四喜',16]);else if(nw===3&&pr>=27&&pr<31)l.push(['小四喜',8]);else{ps.filter(t=>t>=27&&t<31).forEach(t=>l.push([HONF[t-27],1]))}
+   if(nd===3)l.push(['大三元',8]);else if(nd===2&&pr>=31)l.push(['小三元',4]);else ps.filter(t=>t>=31).forEach(t=>l.push([HONF[t-27],1]));
    const inSeq=d.some(x=>x[0]==='s'&&wt>=x[1]&&wt<=x[1]+2);
    const an=d.filter(x=>x[0]==='p'&&(self||x[1]!==wt||inSeq)).length+mset.filter(x=>x[2]).length;
    if(an>=5)l.push(['五暗刻',8]);else if(an===4)l.push(['四暗刻',5]);else if(an===3)l.push(['三暗刻',2]);
