@@ -295,11 +295,11 @@ body.ingame #wrap{padding-top:6px;padding-bottom:6px}
 #hall .hgo{padding:13px;font-size:17px;background:linear-gradient(#e0483d,#b52a20);color:#fff;box-shadow:0 4px 0 #7a1810}
 #hall .hlr{display:flex;gap:8px;align-items:center;font-size:13px;color:#7a6250}#hall .hlr input{flex:1;min-width:0;box-sizing:border-box;padding:9px 12px;border:2px solid #d9bf8c;border-radius:12px;font-size:16px;font-weight:700;background:#fff;color:#2b1a12}#hall .hlr button{padding:10px 16px;background:#f1e4c8;color:#6a4a30;font-size:14px}
 @media (max-height:520px) and (orientation:landscape){#hall{padding:8px}#hall .hlc{width:min(760px,100%);padding:10px 14px;gap:7px}#hall h1{font-size:20px}#hall .hll{max-height:38vh}#hall .hlrow{padding:6px 10px}#hall .hgo{padding:9px;font-size:15px}#hall .hle{padding:12px}}
-.vb{z-index:25}.vb.mv{right:auto}#setb{touch-action:none;cursor:grab}#setb.drag{cursor:grabbing;opacity:.85;transform:scale(1.12)}
+.vb{z-index:25}.vb.mv{right:auto}.vb #setb{width:37px;height:37px;font-size:19px}@media(max-height:500px){.vb #setb{width:33px;height:33px;font-size:16.5px}}#setb{touch-action:none;cursor:grab}#setb.drag{cursor:grabbing;opacity:.85;transform:scale(1.12)}
 #home .hwho{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:#7a6250}#home .hwho button{padding:3px 10px;border-radius:9px;border:0;background:#f1e4c8;color:#6a4a30;font-size:12px;font-weight:700}
 #ovH .ov>*:not(.ovb){zoom:var(--ovz,1)}#ovH .ov{touch-action:pan-x pan-y}#ovH .ov{align-items:safe center}
 </style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="gs" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient></defs></svg><div id="wrap">
-<div class="bar"><input id="room" value="" aria-label="房號"><input id="name" placeholder="暱稱" aria-label="暱稱" maxlength="8" onchange="setMe()"><button onclick="join()">進入牌桌</button><button class="g" id="rst" onclick="reset()">重置牌桌</button><span id="msg" class="sm"></span></div>
+<div class="bar"><input id="room" value="" aria-label="房號"><input id="name" placeholder="暱稱" aria-label="暱稱" maxlength="8" onchange="setMe()"><button onclick="join()">進入牌桌</button><button class="g" id="rst" onclick="reset()">重置牌桌</button><button class="g" onclick="closeAsk()">關閉牌桌</button><span id="msg" class="sm"></span></div>
 <div id="prof" hidden><div class="ph0"><span>選你的角色（上面可以改暱稱）</span></div><div id="avs"></div></div>
 <div id="app">連線中…</div><div id="rot" role="alert"><div class="rph"></div><b>請把手機轉成橫的</b><span>麻將桌要橫著玩，牌才看得清楚<br>（如果轉不過來，請關掉手機的「螢幕方向鎖定」）</span></div><div id="home" hidden><span class="hdeco" style="left:4%;top:8%">🀄</span><span class="hdeco" style="right:6%;top:14%;transform:rotate(18deg)">🀅</span><span class="hdeco" style="left:8%;bottom:10%;transform:rotate(-14deg)">🀙</span><span class="hdeco" style="right:5%;bottom:8%">🀐</span><div class="hc"><h1>🀄 麻將戰鬥邀請</h1><div class="hsub">台灣十六張 · 朋友連線或和電腦打</div><div class="hcols"><div class="hcol"><div><label class="hl" for="hName">暱稱</label><input type="text" id="hName" maxlength="8" placeholder="輸入你的名字" oninput="homeName(this.value)"></div><div><label class="hl">角色或照片</label><div class="hav" id="hAv"></div></div><div class="h2c"><div><label class="hl" for="hBase">底</label><input type="number" id="hBase" min="0" inputmode="numeric" onchange="homeCfg()"></div><div><label class="hl" for="hTai">台</label><input type="number" id="hTai" min="0" inputmode="numeric" onchange="homeCfg()"></div></div></div><div class="hcol"><div><label class="hl">局數</label><div class="seg" id="hLen"><button type="button" data-v="1" onclick="homeCfg({len:1})">一圈</button><button type="button" data-v="4" onclick="homeCfg({len:4})">一將（四圈）</button></div></div><div><label class="hl">電腦難度</label><div class="seg" id="hAi"><button type="button" data-v="0" onclick="homeCfg({ai:0})">簡單</button><button type="button" data-v="1" onclick="homeCfg({ai:1})">普通</button><button type="button" data-v="2" onclick="homeCfg({ai:2})">困難</button></div></div><div class="hbtn"><button type="button" class="hgo" onclick="homeGo(1)">開始遊戲</button><button type="button" class="hwait" onclick="homeGo(0)">進入牌桌，等朋友加入</button></div><div class="hroom"><span>房號</span><input type="text" id="hRoom" maxlength="16" onchange="homeRoom(this.value)" aria-label="房號"><span>朋友輸入同一個房號就能同桌</span></div><div class="hnote" id="hNote"></div></div></div><div class="hwho"><button type="button" onclick="hallShow(1)">🏠 回大廳</button></div></div></div><div id="hall" hidden><div class="hlc"><div class="hlh"><h1>🀄 大廳</h1><button type="button" onclick="hallLoad()">↻ 重新整理</button></div><div class="hlt">現在的牌桌</div><div class="hll" id="hallL" onclick="const b=event.target.closest('[data-r]');if(b)hallJoin(b.dataset.r)"></div><button type="button" class="hgo" onclick="hallNew()">＋ 開新牌桌</button><div class="hlr"><span>或輸入房號</span><input type="text" id="hallR" maxlength="16" aria-label="房號" onkeydown="if(event.key==='Enter')hallJoin(this.value)"><button type="button" onclick="hallJoin($('#hallR').value)">進入</button></div></div></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -391,12 +391,14 @@ function wins(h){const c=Array(34).fill(0);h.forEach(t=>c[t]++);
 function spot(){let best=null,bd=-1;for(let k=0;k<8;k++){const x=23+Math.random()*49,y=23+Math.random()*47;let d=1e9;for(const q of S.pile)d=Math.min(d,(q.x-x)**2+(q.y-y)**2);if(d>bd){bd=d;best={x:+x.toFixed(1),y:+y.toFixed(1),r:Math.round(Math.random()*80-40)}}}return best}
 async function save(){S.v++;try{await ref.set({s:JSON.stringify(S),t:Date.now()})}catch(e){note('寫入失敗：需要有編輯（可互動）權限才能打牌')}}
 const defRoom=()=>{let r=lsg('mj_room');if(!r||!/^[A-Za-z0-9]{1,16}$/.test(r))r=String(10000+Math.floor(Math.random()*90000));return r};
-function join(){room=($('#room').value||'').replace(/[^A-Za-z0-9]/g,'').slice(0,16)||defRoom();$('#room').value=room;lss('mj_room',room);lss('mj_name',$('#name').value);
+function join(){G.viewT=Date.now();room=($('#room').value||'').replace(/[^A-Za-z0-9]/g,'').slice(0,16)||defRoom();$('#room').value=room;lss('mj_room',room);lss('mj_name',$('#name').value);
  if(unsub)unsub();ref=db.doc('mj/'+room);rc=-1;
  unsub=ref.onSnapshot(sn=>{const d=sn.data();S=d&&d.s?JSON.parse(d.s):fresh();if(!S.pile){S=Object.assign(fresh(),{seats:S.seats})}S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},S);render()},e=>note('連線錯誤：'+e.message))}
 let rstT=0;
 function reset(){if(!ref)return;const b=$('#rst');if(Date.now()-rstT>4000){rstT=Date.now();b.textContent='再按一次確定重置';setTimeout(()=>{if(rstT&&Date.now()-rstT>=3900){rstT=0;b.textContent='重置牌桌'}},4000);return}
  rstT=0;b.textContent='重置牌桌';clearTimeout(bt);const v=S?S.v:0;S=fresh();S.v=v;sel=-1;rc=-1;busy=-1;save();render()}
+function closeAsk(){if(!ref||!S)return;if(me()<0){note('只有入座的玩家可以關閉牌桌');return}let e=$('#clsB');if(!e){e=document.createElement('div');e.id='clsB';e.className='invb';e.innerHTML='<div style="text-align:center;gap:12px"><b style="font-size:18px">你確定要關閉牌桌嗎？</b><span style="font-size:14px;color:#7a6250">桌上所有人都會回到大廳，這桌的進度和分數會清除。</span><div style="display:flex;gap:10px"><button type="button" style="flex:1;padding:11px;border-radius:12px;border:0;background:#f1e4c8;color:#6a4a30;font-weight:800;font-size:16px" onclick="$(\'#clsB\').hidden=true">取消</button><button type="button" style="flex:1;padding:11px;border-radius:12px;border:0;background:#c0392b;color:#fff;font-weight:800;font-size:16px" onclick="$(\'#clsB\').hidden=true;closeTable()">確定關閉</button></div></div>'}($('#wrap')||document.body).append(e);e.hidden=false}
+function closeTable(){if(!ref||!S||me()<0)return;clearTimeout(bt);const v=S.v;S=Object.assign(fresh(),{v,closedAt:Date.now()});sel=-1;rc=-1;busy=-1;save();render()}
 function sit(i){if(me()>=0)return;lss('mj_name',$('#name').value);S.seats[i]={id:uid,name:($('#name').value||'玩家').slice(0,8),av:myAv,pv:myPv};save();render()}
 const okImg=u=>typeof u==='string'&&u.length<60000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(u);
 let myAv=lsg('mj_av'),myImg=lsg('mj_img'),myPv=+lsg('mj_pv')||0;const photos={},pend={};
@@ -589,6 +591,40 @@ function setMat(o,t,gold,hl,flat){o.t=t;o.gold=!!gold;o.hl=!!hl;o.flat=!!flat;if
 function faceMat(t){if(!G.FM[t]){G.FT[t]=faceTex(t);G.FM[t]=new THREE.MeshStandardMaterial({map:G.FT[t],roughness:.6});G.FMb[t]=new THREE.MeshBasicMaterial({map:G.FT[t]})}}
 function warmFaces(t){t=t||0;if(t>33||!G.ok)return;faceMat(t);setTimeout(()=>warmFaces(t+1),70)}
 function aniDoc(i,col){return ani(i,col).replace('<svg viewBox="0 0 100 118" aria-hidden="true">',`<svg xmlns="http://www.w3.org/2000/svg" width="400" height="472" viewBox="0 0 100 118">${GSD}`)}
+function av3d(ai,col){const T=THREE,g=new T.Group(),inner=new T.Group();g.add(inner);
+ const M=(c,o)=>new T.MeshStandardMaterial(Object.assign({color:c,roughness:.55,metalness:0},o||{})),SPH=r=>new T.SphereGeometry(r,32,22);
+ const add=(geo,mat,x,y,z,sx=1,sy=1,sz=1,rx=0,ry=0,rz=0,par=inner)=>{const m=new T.Mesh(geo,mat);m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.rotation.set(rx,ry,rz);par.add(m);return m};
+ const both=f=>[-1,1].forEach(f);
+ const FUR=['#f2b33d','#fafafa','#f08a2c','#f5f0ee','#9aa3ad','#8b5a3c','#f6a6b8','#5cbf4a'][ai],fur=M(FUR),blk=M('#1d1d1f',{roughness:.25}),wht=M('#ffffff',{roughness:.3}),pink=M('#ff9fb0'),HY=4;
+ add(SPH(1.75),M(col),0,1.3,0,1,.95,.85);add(new T.TorusGeometry(1.05,.16,10,28),M('#fff3d6'),0,2.55,0,1,1,1,Math.PI/2);
+ const head=new T.Group();head.position.set(0,HY,0);inner.add(head);const H=(geo,mat,x,y,z,sx,sy,sz,rx,ry,rz)=>add(geo,mat,x,y-HY,z,sx,sy,sz,rx,ry,rz,head);
+ H(SPH(1.55),fur,0,HY,0,ai===7?1.25:1.05,ai===7?.85:.95,1);
+ const eyes=(y=4.15,dx=.55)=>both(k=>{H(SPH(.2),blk,k*dx,y,1.36);H(SPH(.07),wht,k*dx-.06,y+.09,1.55)});
+ const cheeks=(c='#ff9aa2')=>both(k=>H(SPH(.26),M(c,{transparent:true,opacity:.75}),k*.98,3.68,1.18,1,.6,.35));
+ const nose=(c,y,z,r=.17)=>H(SPH(r),M(c,{roughness:.3}),0,y,z,1.3,.85,.85);
+ const muz=(c,y,z,r,sx,sy,sz)=>H(SPH(r),M(c),0,y,z,sx,sy,sz);
+ const cone=(r,h,c,x,y,z,rx,rz)=>H(new T.ConeGeometry(r,h,24),M(c),x,y,z,1,1,.55,rx,0,rz);
+ if(ai===0){const mane=M('#c46a1c');for(let i=0;i<14;i++){const a=i/14*Math.PI*2;H(SPH(.62),mane,Math.cos(a)*1.6,HY+Math.sin(a)*1.55,-.35)}H(SPH(1.5),mane,0,HY,-.55,1.25,1.2,.6);
+  both(k=>H(SPH(.38),fur,k*1.05,5.25,.1));muz('#ffe0a0',3.6,1.22,.6,1.25,.8,.7);nose('#5a2e14',3.88,1.7);eyes();cheeks()}
+ else if(ai===1){both(k=>{H(SPH(.5),blk,k*1.15,5.25,-.1);H(SPH(.42),blk,k*.56,4.12,1.2,.85,1.15,.5,0,0,-k*.5);H(SPH(.15),wht,k*.56,4.17,1.42);H(SPH(.08),blk,k*.54,4.17,1.55)});
+  muz('#ffffff',3.58,1.25,.52,1.25,.8,.6);nose('#1d1d1f',3.82,1.7);cheeks()}
+ else if(ai===2){both(k=>{cone(.55,1.25,FUR,k*.92,5.35,0,0,-k*.35);cone(.32,.8,'#3b2414',k*.9,5.25,.16,0,-k*.35);H(SPH(.55),wht,k*.62,3.45,1.0,1.1,.8,.8)});
+  muz('#ffffff',3.55,1.15,.68,1.1,.75,1.05);nose('#1d1d1f',3.72,1.9);eyes(4.2,.58)}
+ else if(ai===3){both(k=>{H(SPH(.38),fur,k*.55,6.35,-.1,1,3.1,.6,0,0,-k*.12);H(SPH(.24),pink,k*.55,6.3,.06,1,2.6,.4,0,0,-k*.12)});
+  muz('#ffffff',3.6,1.25,.48,1.3,.8,.6);nose('#ff7f9a',3.82,1.6,.14);eyes();cheeks()}
+ else if(ai===4){both(k=>{cone(.52,.95,FUR,k*.95,5.25,0,0,-k*.3);cone(.3,.6,'#ffb3c1',k*.93,5.2,.14,0,-k*.3);[-.1,.12].forEach(dy=>H(new T.CylinderGeometry(.018,.018,1.1,6),blk,k*1.1,3.62+dy,1.32,1,1,1,0,0,Math.PI/2+k*dy))});
+  muz('#dfe3e8',3.6,1.28,.5,1.3,.75,.6);nose('#ff8fa3',3.85,1.62,.13);eyes();cheeks()}
+ else if(ai===5){both(k=>{H(SPH(.5),fur,k*1.15,5.2,0);H(SPH(.28),M('#d9a877'),k*1.13,5.18,.3,1,1,.5)});
+  muz('#d9a877',3.6,1.2,.65,1.2,.85,.75);nose('#1d1d1f',3.88,1.72,.2);eyes();cheeks()}
+ else if(ai===6){both(k=>cone(.45,.75,'#f28aa0',k*.95,5.2,.15,.5,-k*.35));
+  H(new T.CylinderGeometry(.55,.55,.42,28),M('#f28aa0'),0,3.62,1.5,1,1,1,Math.PI/2);both(k=>H(SPH(.1),M('#9c4258'),k*.2,3.62,1.72,1,1.4,.5));eyes(4.25,.6);cheeks('#ff7f9a')}
+ else{both(k=>{H(SPH(.55),wht,k*.72,4.95,.55);H(SPH(.28),blk,k*.72,5.0,1.02);H(SPH(.09),wht,k*.66,5.1,1.27)});
+  H(new T.TorusGeometry(.8,.06,8,28,Math.PI),M('#2c6e25'),0,3.75,1.25,1,1,1,0,0,Math.PI);cheeks('#ff8fa3')}
+ g.userData.inner=inner;g.userData.head=head;return g}
+function av3Set(r,ai,col){const k=ai+col;let g=G.av3[r];if(g&&g.userData.k===k)return g;
+ if(g){G.sc.remove(g);g.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose()})}
+ const T=THREE;g=av3d(ai,col);g.scale.setScalar(1.4);g.position.set(0,-.3,r===2?17.6:17.8).applyAxisAngle(new T.Vector3(0,1,0),SA[r]);g.rotation.y=SA[r]+Math.PI;
+ g.userData.k=k;g.traverse(o=>{o.userData.r=r});G.sc.add(g);G.av3[r]=g;wake(500);return g}
 function avTex(s){const x=S.seats[s],src=avSrc(s),col=COL[s],ai=typeof x.av==='number'?x.av%8:s,key=src?'p'+x.id+':'+x.pv:'a'+ai+col;if(G.avT[key])return G.avT[key];
  const tx=canvasTex(256,302,()=>{});G.avT[key]=tx;const im=new Image();im.onload=()=>{const g=tx.image.getContext('2d');if(src){g.save();g.beginPath();g.arc(128,150,118,0,7);g.clip();g.drawImage(im,10,32,236,236);g.restore();g.lineWidth=12;g.strokeStyle=col;g.beginPath();g.arc(128,150,118,0,7);g.stroke()}else g.drawImage(im,0,0,256,302);tx.needsUpdate=true;wake()};im.src=src||svgURL(aniDoc(ai,col));return tx}
 function init3d(){if(!window.THREE)return false;try{const T=THREE;
@@ -636,7 +672,7 @@ function init3d(){if(!window.THREE)return false;try{const T=THREE;
   sc.add(con);
   const slotM=new T.MeshBasicMaterial({color:0x06140f}),lidM=new T.MeshStandardMaterial({color:0x0f5a44,roughness:.97});G.ramps=SA.map(a=>{const g=new T.Group();g.rotation.y=a;const sl=new T.Mesh(new T.PlaneGeometry(XS1-XS0+.1,1.42),slotM);sl.rotation.x=-Math.PI/2;sl.position.set((XS0+XS1)/2,-.39,WZ);g.add(sl);const pv=new T.Group();pv.position.set(XS0,-.03,WZ);const lid=new T.Mesh(new T.BoxGeometry(XS1-XS0-.06,.05,1.34),lidM);lid.position.set((XS1-XS0)/2,0,0);lid.receiveShadow=true;pv.add(lid);g.add(pv);sc.add(g);return pv})}
  G.strip=SA.map(a=>{const m=new T.Mesh(new T.PlaneGeometry(18,.42),new T.MeshBasicMaterial({color:0xffd34d,transparent:true,opacity:.7}));m.rotation.set(-Math.PI/2,0,0);const g=new T.Group();g.rotation.y=a;m.position.set(0,.02,13.75);g.add(m);g.visible=false;sc.add(g);return g});
- G.avS=[0,1,2,3].map(r=>{const m=new T.Sprite(new T.SpriteMaterial({transparent:true}));m.scale.set(5.6,6.6,1);m.position.set(0,3.2,r===2?17.6:17.8).applyAxisAngle(new T.Vector3(0,1,0),SA[r]);m.visible=false;sc.add(m);return m});
+ G.av3=[null,null,null,null];G.avS=[0,1,2,3].map(r=>{const m=new T.Sprite(new T.SpriteMaterial({transparent:true}));m.userData.r=r;m.scale.set(5.6,6.6,1);m.position.set(0,3.2,r===2?17.6:17.8).applyAxisAngle(new T.Vector3(0,1,0),SA[r]);m.visible=false;sc.add(m);return m});
  G.tpTex=canvasTex(64,64,g=>{g.fillStyle='#ffd34d';g.beginPath();g.arc(32,32,30,0,7);g.fill();g.fillStyle='#3b2a00';g.font='bold 38px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('聽',32,34)});
  const cv=R.domElement;let pd=null;
  cv.addEventListener('pointerdown',e=>{pd={x:e.clientX,y:e.clientY,th:G.th,ph:G.ph,mv:false,id:e.pointerId,m:e.pointerType==='mouse'}});
@@ -665,7 +701,7 @@ function init3d(){if(!window.THREE)return false;try{const T=THREE;
   const rr=G.fr*G.zoom,tz=G.ftz+(1-G.zoom)*6;panClamp();const px=G.px||0,pz=G.pz||0;cp.copy(cam.position);cam.position.set(px+rr*Math.sin(ph)*Math.sin(G.th),rr*Math.cos(ph),pz+tz+rr*Math.sin(ph)*Math.cos(G.th));cam.lookAt(px,0,tz+pz);if(cp.distanceToSquared(cam.position)>1e-7)cmv=1;
   for(const o of G.objs.values()){if(TR&&o.wr){const P=barPose(tt-TRA-o.wr.d,o.wr.j,o.wr.l),a=SA[o.wr.r];o.g.visible=P.vis!==false;o.g.position.set(P.x,P.y,P.z).applyAxisAngle(Y,a);o.g.quaternion.setFromEuler(new T.Euler(Math.PI/2,a,P.th,'YZX'));continue}{const P=o.g.position,dp=o.bill?(P.x-o.tp.x)**2+(P.z-o.tp.z)**2:P.distanceToSquared(o.tp);if(o.bill)bob=1;if(dp>2e-5||Math.abs(o.g.scale.x-o.sc)>2e-3||(!o.bill&&1-Math.abs(o.g.quaternion.dot(o.tq))>1e-6))mv=1}o.g.position.lerp(o.tp,o.spd?1-Math.exp(-dt*o.spd):k);if(o.bill){o.g.quaternion.copy(cam.quaternion);o.g.position.y=o.tp.y+Math.sin(now/380)*.14}else o.g.quaternion.slerp(o.tq,k);o.g.scale.setScalar(o.g.scale.x+(o.sc-o.g.scale.x)*k)}
   for(const o of G.hobjs.values()){if(o.g.position.distanceToSquared(o.tp)>2e-5)hmv=1;o.g.position.lerp(o.tp,k);o.g.quaternion.slerp(o.tq,k)}G.tpS.forEach(([sp,o])=>{sp.position.copy(o.g.position);sp.position.y+=1.0;sp.position.z+=.5});
-  G.strip.forEach(g=>{if(g.visible){bob=bob||2;g.children[0].material.opacity=.45+.35*Math.sin(now/260)}});
+  G.strip.forEach(g=>{if(g.visible){bob=bob||2;g.children[0].material.opacity=.45+.35*Math.sin(now/260)}});(G.av3||[]).forEach(a=>{if(!a||!a.visible)return;const u=a.userData,hd=u.head;a.rotation.y=Math.atan2(cam.position.x-a.position.x,cam.position.z-a.position.z);if(u.on){bob=bob||2;u.inner.position.y=Math.abs(Math.sin(now/280))*.28;hd.rotation.z=Math.sin(now/560)*.12}else if(u.inner.position.y||hd.rotation.z){u.inner.position.y=0;hd.rotation.z=0;mv=1}});
   const D=G.dA;if(D&&D.sim){if(now-D.t0<2600)mv=1;const n=Math.floor((now-D.t0)/1000*D.hz);D.d.forEach((d,i)=>{const m=G.dice[i],F=D.sim[i],f=F[Math.max(0,Math.min(F.length-1,n))],u=n/F.length;m.position.set(f[0],f[1],f[2]);if(u>=1)m.quaternion.copy(d.qf);else{m.quaternion.copy(f[3]);if(u>.62){const w=Math.min(1,(u-.62)/.36);m.quaternion.slerp(d.qf,w*w*(3-2*w))}}})}
   const wk=now<(G.wakeT||0),act=mv||hmv||cmv||wk;if(mv||wk)R.shadowMap.needsUpdate=true;
   if(!act&&now-(G.lastR||0)<(bob===1?30:bob?48:480))return;G.lastR=now;
@@ -752,7 +788,7 @@ function panClamp(){const L=panLim();G.px=Math.max(-14*L,Math.min(14*L,G.px||0))
 function panBy(dx,dy){const H=($('#gl')&&$('#gl').clientHeight)||400,k=2*(G.fr||30)*G.zoom*Math.tan(G.cam.fov*Math.PI/360)/H;G.px=(G.px||0)-dx*k;G.pz=(G.pz||0)-dy*k*1.35;panClamp()}
 function fsToggle(){try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen().catch(()=>note('這裡無法全螢幕'))}catch(_){note('這裡無法全螢幕')}}
 function pickAt(e){const r=G.R.domElement.getBoundingClientRect(),v=new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1),rc=new THREE.Raycaster();rc.setFromCamera(v,G.hcam);
- const hit=rc.intersectObjects(G.hand,true)[0];if(!hit){rc.setFromCamera(v,G.cam);const av=G.avS.filter(m=>m.visible),ah=rc.intersectObjects(av,false)[0];if(ah){const k=G.avS.indexOf(ah.object),b=Math.max(0,me()),st=(b+k)%4;npToggle(st)}return}let o=hit.object;while(o&&o.userData.hi==null)o=o.parent;if(o)pick(o.userData.hi)}
+ const hit=rc.intersectObjects(G.hand,true)[0];if(!hit){rc.setFromCamera(v,G.cam);const av=G.avS.filter(m=>m.visible).concat((G.av3||[]).filter(a=>a&&a.visible)),ah=rc.intersectObjects(av,true)[0];if(ah){const k=ah.object.userData.r||0,b=Math.max(0,me()),st=(b+k)%4;npToggle(st)}return}let o=hit.object;while(o&&o.userData.hi==null)o=o.parent;if(o)pick(o.userData.hi)}
 function proj(x,y,z,r){const v=new THREE.Vector3(x,y,z).applyAxisAngle(new THREE.Vector3(0,1,0),SA[r]).project(G.cam),el=$('#gl');return [(v.x+1)/2*el.clientWidth,(1-v.y)/2*el.clientHeight,v.z]}
 function placeLabels(){if(!S||!G.labs)return;const el=$('#gl'),W=el.clientWidth,H=el.clientHeight,b=Math.max(0,me());
  G.labs.forEach(n=>{const s=+n.dataset.s,r=(s-b+4)%4,[x,y]=r===2?proj(-9.2,.9,16.2,r):proj(0,-.3,17.8,r);n.style.left=Math.max(64,Math.min(W-64,x))+'px';n.style.top=(r===2?Math.max(4,y-50):Math.max(40,Math.min(H-70,y)))+'px'});
@@ -811,9 +847,9 @@ function sync3d(c){wake();const T=THREE,Y=new T.Vector3(0,1,0),W=new Map(),{p,b,
  G.strip.forEach((g,r)=>{g.visible=!lob&&!ov&&S.phase!=='dice'&&rel(S.turn)===r});
  G.seatL.forEach((m,r)=>{m.emissiveIntensity=!lob&&!ov&&S.phase!=='dice'&&rel(S.turn)===r?1.8:.12});
  {const ls=lob?'-- --':`${WIND[S.rw]}${S.streak?'連'+S.streak:'風'} ${String(Math.max(0,(S.wall||[]).length-14)).padStart(2,'0')}`;if(ls!==G.ledS){G.ledS=ls;const g=G.led.image.getContext('2d');g.fillStyle='#120404';g.fillRect(0,0,256,64);g.fillStyle='#ff3b2f';g.shadowColor='#ff3b2f';g.shadowBlur=10;g.font='bold 40px monospace';g.textAlign='center';g.textBaseline='middle';g.fillText(ls,128,34);G.led.needsUpdate=true}}
- G.avS.forEach((sp,r)=>{const s=(b+r)%4;if(r===0||!S.seats[s]){sp.visible=false;return}sp.material.map=avTex(s);sp.material.needsUpdate=true;sp.visible=true});
+ G.avS.forEach((sp,r)=>{const s=(b+r)%4,x=S.seats[s],a=G.av3[r];if(r===0||!x){sp.visible=false;if(a)a.visible=false;return}if(x.av==='p'){sp.material.map=avTex(s);sp.material.needsUpdate=true;sp.visible=true;if(a)a.visible=false;return}sp.visible=false;const g=av3Set(r,typeof x.av==='number'?x.av%8:s,COL[s]);g.visible=true;g.userData.on=!lob&&!ov&&S.turn===s});
  const dk=S.dice&&S.phase==='dice'?S.dice.join()+':'+S.dealer+':'+S.streak+':'+S.rw:'';if(dk&&dk!==G.dk)startDice(rel(S.dealer));G.dk=dk;if(!dk){G.dA=null;G.dice.forEach(m=>m.visible=false)}}
-function render(){if(!S)return;homeShow();if(!G.ok)return render2d();
+function render(){if(!S)return;if(S.closedAt&&S.closedAt>(G.viewT||0)&&G.closedAck!==S.closedAt){G.closedAck=S.closedAt;hallShow(1);invMsg('牌桌已關閉')}homeShow();if(!G.ok)return render2d();
  const p=me(),b=p<0?0:p,lob=S.phase==='lobby',ov=S.phase==='over',cl=S.phase==='claim',w=S.win,N=i=>S.seats[i]?esc(S.seats[i].name):'空位';
  const can=S.phase==='discard'&&S.turn===p;if(!can)sel=-1;
  const st=G.dealA?'發牌中…':lob?'等待玩家入座':S.phase==='dice'?(S.dice?'開門發牌中…':`等莊家 ${N(S.dealer)} 擲骰子`):ov?(w.draw?'流局':`${N(w.seat)} ${w.self?'自摸':'胡牌'}`):can?'輪到你出牌：點一下桌上的牌選牌，再點一下打出':S.phase==='discard'?`輪到 ${N(S.turn)} 出牌`:`${N(S.last.from)} 打出「${nm(S.last.t)}${su(S.last.t)}」`;
