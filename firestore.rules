@@ -12,5 +12,11 @@ service cloud.firestore {
                       && request.resource.size() < 250000;
       }
     }
+    // 玩家頭貼（自己上傳的照片或 LINE 大頭貼）：每人一張縮圖
+    match /mjav/{uid} {
+      allow read: if true;
+      allow write: if request.resource.data.keys().hasOnly(['img'])
+                   && request.resource.size() < 60000;
+    }
   }
 }
