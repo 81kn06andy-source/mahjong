@@ -1630,7 +1630,9 @@ function leaveCur(){if(!S||!ref||me()<0)return;const p=me(),others=S.seats.some(
  if(!others){const v=S.v,c=Date.now();S=Object.assign(fresh(),{v,closedAt:c});G.closedAck=c;sel=-1;rc=-1;busy=-1;save();return}
  if(S.phase==='lobby')S.seats[p]=null;else{const x=S.seats[p],av=typeof x.av==='number'?x.av:p%AVN;S.seats[p]={id:'bot'+p,name:'電腦'+(ANN[av]||''),bot:1,av}}
  S.rdy&&delete S.rdy[p];save()}
-function goHall(){leaveCur();hallShow(1)}
+function goHall(){leaveCur();detachRoom();hallShow(1)}
+/* 徹底離開房間：停止接收那一桌的牌局和聊天更新，正在播的報牌語音也停掉，不然離開後還會聽到那桌的聲音 */
+function detachRoom(){try{if(unsub){unsub();unsub=null}}catch(_){}try{if(chatUn){chatUn();chatUn=null}}catch(_){}ref=null;room='';clearTimeout(bt);G.botV=-1;try{speechSynthesis.cancel()}catch(_){}try{if(chatAud)chatAud.pause()}catch(_){}try{if(typeof twA==='object')Object.values(twA).forEach(a=>{try{a.pause()}catch(_){}})}catch(_){}if(typeof chatOpen!=='undefined'&&chatOpen)try{chatToggle()}catch(_){}const t=$('#tmr');if(t)t.hidden=true}
 /* 回大廳查看：不離開房間，座位保留（暫離期間電腦代打），大廳上方有「回到牌桌」 */
 function hallPeek(){if(!S||me()<0){goHall();return}document.body.classList.remove('showbar');hallShow(1)}
 function hallBack(){hallShow(0);render()}function hallJoin(v){v=String(v||'').replace(/[^A-Za-z0-9]/g,'').slice(0,16);if(!v)return;if(v!==room)leaveCur();G.hallAuto=0;hallShow(0);homeRoom(v)}
