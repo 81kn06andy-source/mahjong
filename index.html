@@ -569,13 +569,16 @@ function wins(h){const c=Array(34).fill(0);h.forEach(t=>c[t]++);
 function spot(){let best=null,bd=-1;for(let k=0;k<8;k++){const x=23+Math.random()*49,y=23+Math.random()*47;let d=1e9;for(const q of S.pile)d=Math.min(d,(q.x-x)**2+(q.y-y)**2);if(d>bd){bd=d;best={x:+x.toFixed(1),y:+y.toFixed(1),r:Math.round(Math.random()*80-40)}}}return best}
 // 3) 存檔用「交易」：只有在雲端版本還是我手上這一版時才寫入，避免兩個人同時動作時互相蓋掉（以前會造成某人的「過」或出牌消失而卡住）
 //    同一台裝置的連續存檔依序排隊；被別人搶先時放棄這次寫入，重新讀取最新牌桌
-function save(){const base=S.v;S.v++;const js=JSON.stringify(S),r=ref,nv=S.v;if(!r)return Promise.resolve();G.myV=nv;G.myT=Date.now();
+/* Firebase 免費方案每天的讀寫次數用完時（錯誤碼 resource-exhausted），給玩家看得懂的說明，而不是像卡住一樣沒反應 */
+const quotaMsg=e=>e&&(e.code==='resource-exhausted'||/quota|resource.exhausted/i.test(e.message||''))?'今天的免費連線額度已經用完了，台灣時間下午 4 點左右會自動恢復':'';
+/* re：被別人同時寫入擋掉時，讀到最新牌局後要重做的動作（過、吃碰胡、準備下一局），避免按了卻沒反應 */
+function save(re){const base=S.v;S.v++;const js=JSON.stringify(S),r=ref,nv=S.v;if(!r)return Promise.resolve();G.myV=nv;G.myT=Date.now();
  G.sq=(G.sq||Promise.resolve()).then(()=>db.runTransaction(async tx=>{const sn=await tx.get(r),d=sn.exists?sn.data():null;let cur=0;if(d){if(typeof d.v==='number')cur=d.v;else{try{cur=JSON.parse(d.s).v||0}catch(_){cur=0}}}
-  if(d&&cur!==base)throw{stale:1};tx.set(r,{s:js,t:Date.now(),v:nv})})).catch(e=>{G.myV=0;if(e&&e.stale){if(r===ref)r.get().then(sn=>{if(r!==ref)return;const d=sn.data();if(d&&d.s){S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},JSON.parse(d.s));busy=-1;render()}}).catch(()=>{})}else note('寫入失敗：需要有編輯（可互動）權限才能打牌')});return G.sq}
+  if(d&&cur!==base)throw{stale:1};tx.set(r,{s:js,t:Date.now(),v:nv})})).catch(e=>{G.myV=0;if(e&&e.stale){if(r===ref)r.get().then(sn=>{if(r!==ref)return;const d=sn.data();if(d&&d.s){S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},JSON.parse(d.s));busy=-1;if(re&&(re.n=(re.n||0)+1)<=5){try{re()}catch(_){}}render()}}).catch(()=>{})}else note(quotaMsg(e)||'寫入失敗：需要有編輯（可互動）權限才能打牌')});return G.sq}
 const defRoom=()=>{let r=lsg('mj_room');if(!r||!/^[A-Za-z0-9]{1,16}$/.test(r))r=String(10000+Math.floor(Math.random()*90000));return r};
 function join(){G.viewT=Date.now();room=($('#room').value||'').replace(/[^A-Za-z0-9]/g,'').slice(0,16)||defRoom();$('#room').value=room;lss('mj_room',room);lss('mj_name',$('#name').value);
  if(unsub)unsub();ref=db.doc('mj/'+room);rc=-1;
- G.hadDoc=0;unsub=ref.onSnapshot(sn=>{const d=sn.data();/* 雲端傳回的版本比自己剛存出去的還舊（手機網路慢時常見）就先忽略，不然畫面會倒退一步、看起來像牌又出了一次 */{const iv=d&&typeof d.v==='number'?d.v:null;if(iv!=null&&G.myV&&iv<G.myV)return;if(iv!=null&&iv>=(G.myV||0))G.myV=0}if(sn.exists)G.hadDoc=1;else if(G.hadDoc&&!sn.metadata.hasPendingWrites){G.hadDoc=0;if(S&&me()>=0){S=fresh();hallShow(1);invMsg('牌桌 20 分鐘沒有動靜，已自動關閉');return}}S=d&&d.s?JSON.parse(d.s):fresh();if(!S.pile){S=Object.assign(fresh(),{seats:S.seats,v:S.v||0})}S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},S);render()},e=>note('連線錯誤：'+e.message))}
+ G.hadDoc=0;unsub=ref.onSnapshot(sn=>{const d=sn.data();/* 雲端傳回的版本比自己剛存出去的還舊（手機網路慢時常見）就先忽略，不然畫面會倒退一步、看起來像牌又出了一次 */{const iv=d&&typeof d.v==='number'?d.v:null;if(iv!=null&&G.myV&&iv<G.myV)return;if(iv!=null&&iv>=(G.myV||0))G.myV=0}if(sn.exists)G.hadDoc=1;else if(G.hadDoc&&!sn.metadata.hasPendingWrites){G.hadDoc=0;if(S&&me()>=0){S=fresh();hallShow(1);invMsg('牌桌 20 分鐘沒有動靜，已自動關閉');return}}S=d&&d.s?JSON.parse(d.s):fresh();if(!S.pile){S=Object.assign(fresh(),{seats:S.seats,v:S.v||0})}S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},S);render()},e=>note(quotaMsg(e)||'連線錯誤：'+e.message))}
 let rstT=0;
 // 重置牌桌（⚙️ 設定裡）：入座的人才能按，先跳確認
 function resetAsk(){if(!ref||!S)return;if(me()<0){note('只有入座的玩家可以重置牌桌');return}let e=$('#rsB');if(!e){e=document.createElement('div');e.id='rsB';e.className='invb'}const B='flex:1;padding:11px;border-radius:12px;border:0;font-weight:800;font-size:16px';
@@ -734,14 +737,15 @@ function hu(p=me()){if(S.phase==='discard'&&S.mk===p)return;const z=S.phase==='d
  (z?[0,1,2,3].filter(i=>i!==p):[from]).forEach(q=>{const a=S.cfg.base+(r.n+(p===S.dealer||q===S.dealer?ex:0))*S.cfg.tai;pay[q]-=a;pay[p]+=a});
  pay.forEach((a,i)=>S.score[i]+=a);h.sort((a,b)=>a-b);
  S.win={seat:p,self:z,from,wt,tai:r.list,n:r.n,ex,pay};S.say={s:p,t:z?'自摸':'胡'};S.phase='over';save();render()}
-function pass(){S.pass.push(me());save();render()}
+const claimKey=()=>S.phase==='claim'&&S.last?S.last.from+':'+S.last.t+':'+S.wall.length:'';
+function pass(){const p=me(),ck=claimKey();if(!ck||p<0)return;const f=()=>{if(claimKey()!==ck||S.pass.includes(p)||(S.claims&&S.claims[p]))return;S.pass.push(p);save(f)};f();render()}
 function draw(p){if(S.wall.length<=14){S.phase='over';S.win={draw:1}}else{S.drawn=S.wall.pop();S.hands[p].push(S.drawn);if(S.dc)S.dc[p]++;S.hands[p].sort((a,b)=>a-b);S.turn=p;S.phase='discard';S.last=null;S.pass=[];S.say=null}save();render()}
 const RK={hu:3,pong:2,kong:2,chi:1};
 function optRank(q){const o=opts(q);return o.win?3:(o.pong||o.kong)?2:(o.chi&&!S.seats[q].bot)?1:0}
 // ── 結算畫面（滿版）＋大家都按「繼續」才開下一局 ──
 const humans=()=>[0,1,2,3].filter(q=>S.seats[q]&&!S.seats[q].bot),allRdy=()=>humans().every(q=>S.rdy&&S.rdy[q]);
 const RDY_MS=60000;// 有設秒數時，結算畫面 60 秒後自動開始（避免有人離開就卡住）；秒數「不限」時一定要等大家按
-function rdy(){const p=me();if(!S||S.phase!=='over'||p<0)return;S.rdy=Object.assign({},S.rdy,{[p]:1});save();render();rdyGo()}
+function rdy(){const p=me();if(!S||S.phase!=='over'||p<0)return;const g=S.gid,f=()=>{if(S.phase!=='over'||S.gid!==g||(S.rdy&&S.rdy[p]))return;S.rdy=Object.assign({},S.rdy,{[p]:1});save(f);render();rdyGo()};f()}
 function rdyGo(){if(!S||S.phase!=='over'||me()<0)return;const el=performance.now()-(G.ovT||performance.now()),cd=$('#rdyCd');
  const auto=tLim()>0&&el>RDY_MS,cd0=cd?cd.textContent:'';if(cd)cd.textContent=allRdy()?'大家都準備好了，開始下一局…':tLim()>0?`${Math.max(0,Math.ceil((RDY_MS-el)/1000))} 秒後自動開始下一局`:'';
  /* 倒數那行出現或消失時重新縮放結算面板，避免按鈕被擠出螢幕 */if(cd&&!cd0!==!cd.textContent)fitSettle();
@@ -787,7 +791,7 @@ function animBusy(){if(G.dealA&&(document.hidden||dealStep()<0))G.dealA=null;if(
 const hIdx=()=>[0,1,2,3].filter(q=>S.seats[q]&&!S.seats[q].bot).indexOf(me()),stale=()=>Date.now()-(G.vT||Date.now());
 function isDrv(){if(me()<0)return false;if(me()===drv())return true;const k=hIdx();return k>0&&stale()>4000+k*1500}
 function canExec(q){if(S.seats[q].bot)return isDrv();if(me()===q)return true;return me()>=0&&stale()>5000+Math.max(0,hIdx())*1500}
-function claim(a,k){const p=me();if(S.phase!=='claim'||p<0||S.pass.includes(p))return;const o=opts(p);if(a==='hu'&&!o.win||a==='pong'&&!o.pong||a==='kong'&&!o.kong||a==='chi'&&!(o.chi&&o.chi[k]))return;S.claims=S.claims||{};S.claims[p]={a,k:k||0};save();render()}
+function claim(a,k){const p=me();if(S.phase!=='claim'||p<0||S.pass.includes(p))return;const o=opts(p);if(a==='hu'&&!o.win||a==='pong'&&!o.pong||a==='kong'&&!o.kong||a==='chi'&&!(o.chi&&o.chi[k]))return;const ck=claimKey(),f=()=>{if(claimKey()!==ck||S.pass.includes(p)||(S.claims&&S.claims[p]))return;const o=opts(p);if(a==='hu'&&!o.win||a==='pong'&&!o.pong||a==='kong'&&!o.kong||a==='chi'&&!(o.chi&&o.chi[k]))return;S.claims=S.claims||{};S.claims[p]={a,k:k||0};save(f)};f();render()}
 const claimHu=()=>claim('hu'),claimPong=()=>claim('pong'),claimKong=()=>claim('kong'),claimChi=k=>claim('chi',k);
 function auto(){if(S.phase!=='claim'||busy===S.v||animBusy())return;
  const key=S.pile.length+':'+S.last.from;if(G.clK!==key){G.clK=key;G.clT=performance.now()}const wt=650-(performance.now()-G.clT);if(wt>0){clearTimeout(G.clTm);G.clTm=setTimeout(()=>{if(S&&S.phase==='claim')auto()},wt+20);return}
