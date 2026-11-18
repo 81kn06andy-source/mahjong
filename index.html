@@ -358,6 +358,7 @@ html.r90 #helpM{padding:8px}html.r90 #helpM .hpt{padding:7px 12px}html.r90 #help
 #splash .spg{margin-top:12px;padding:14px 64px;border:0;border-radius:999px;font-size:clamp(18px,3vw,24px);font-weight:900;letter-spacing:.3em;color:#fff;background:linear-gradient(#ef5a4c,#b52a20);box-shadow:0 6px 0 #7a1810,0 12px 24px #0007;cursor:pointer;animation:spbtn 1.6s ease-in-out infinite}
 #splash .spg:active{transform:translateY(4px);box-shadow:0 2px 0 #7a1810}
 @keyframes spbtn{0%,100%{box-shadow:0 6px 0 #7a1810,0 0 0 0 #ffd34d88}50%{box-shadow:0 6px 0 #7a1810,0 0 0 12px #ffd34d00}}
+#splash .spmu{position:absolute;z-index:2;left:calc(12px + env(safe-area-inset-left,0px));bottom:10px;padding:8px 14px;border:0;border-radius:999px;font-size:14px;font-weight:800;color:#fff;background:#0008;box-shadow:0 3px 10px #0005;cursor:pointer;animation:spmuP 1.6s ease-in-out infinite}#splash .spmu.on{background:#1e8a4acc;animation:none}@keyframes spmuP{50%{transform:scale(1.07)}}
 #splash .spm{position:absolute;right:16px;bottom:12px;font-size:13px;font-weight:700;color:#ffffffcc;letter-spacing:.08em;text-shadow:0 1px 2px #0008}
 html.r90 #splash .spn{width:clamp(48px,9vh,84px)}html.r90 #splash .sph{font-size:clamp(26px,5.4vh,52px)}
 @media (max-height:520px){#splash .spc{gap:6px}#splash .spg{padding:10px 52px}#splash .spa{margin-bottom:2px}}
@@ -458,6 +459,30 @@ html.r90 #home{overflow:hidden;align-items:center}html.r90 #home .hc{margin:auto
 #home .hwho{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:#7a6250}#home .hwho button{width:100%;padding:12px 16px;border-radius:14px;border:2px solid #dcc79f;background:#fffaf0;color:#6a4a30;font-size:18px;font-weight:800}
 @media (max-height:520px) and (orientation:landscape){#home .hwho button{padding:7px 12px;font-size:15px}}
 #ovH .ov>*:not(.ovb){zoom:var(--ovz,1)}#ovH .ov{touch-action:pan-x pan-y}#ovH .ov{align-items:safe center}
+
+/* 結算畫面（第二版）：手牌放大、台數欄窄一點、莊家徽章清楚、牌角不要圓 */
+:root .sx .sxw h2{gap:6px}
+.sx .ion{position:relative}
+.sx .sxz{font-style:normal;flex:none;display:inline-grid;place-items:center;width:22px;height:22px;border-radius:5px;background:linear-gradient(#e8473b,#a9221a);color:#fff;font-size:14px;font-weight:900;line-height:1;box-shadow:inset 0 0 0 1.5px #ffd34d,0 1px 2px #0004;font-family:"PingFang TC","Noto Sans TC",system-ui,sans-serif}
+.sx .iot2 .t{border-radius:3px!important;--e:.5px;background:#fffef8;box-shadow:inset 0 0 0 1px #a99c78,0 2px 0 #2a8c63,0 3px 2px #0003}
+.sx .iot2 .t::after{display:none}
+.sx .iot2 .t .fc svg{filter:contrast(1.15) saturate(1.15)}
+.sx .iot2 .t.win{outline:2px solid #f0b400;outline-offset:1px}
+.sx .iot2 .omg{border-radius:3px;padding:2px;background:#ddd5bf}
+@container (min-width:620px){
+ :root .sx .sxw.sxw{grid-template-columns:minmax(0,1fr) minmax(108px,128px)}
+ :root .sx .sxw .iow .iot2 .t.m{width:26px;height:36px;font-size:17px}
+ :root .sx .sxw .iow .iop{padding:6px 8px 6px 10px;gap:8px}
+ :root .sx .sxw .ion{width:64px;flex-direction:column;gap:2px;font-size:12px;text-align:center}
+ :root .sx .sxw .ion em{max-width:64px}
+ :root .sx .sxw .iov{min-width:44px}
+ :root .sx .sxw .ios.ios:not(.iow) .ior{font-size:15px;padding-left:8px;padding-right:8px}
+ :root .sx .sxw .iot b{font-size:17px}
+}
+@media (max-width:640px),(max-height:520px){.sx .iot2 .t.m{width:22px;height:31px;font-size:15px}.sx .ion{gap:2px}}
+.sx .ovb .sxlv{background:#5a3a2a}
+:root .vb #setb{width:52px;height:52px;font-size:29px;border-radius:14px}
+@media(max-height:500px){:root .vb #setb{width:48px;height:48px;font-size:26px}}
 </style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="gs" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient></defs></svg><div id="wrap">
 <div class="bar"><input id="room" value="" aria-label="房號"><input id="name" placeholder="暱稱" aria-label="暱稱" maxlength="8" onchange="setMe()"><button class="bj" onclick="join()">進入牌桌</button><button class="g" id="rst" onclick="reset()">重置牌桌</button><button class="g blv" onclick="leaveAsk()">離開牌桌</button><button class="g bclose" onclick="toggleBar()">✓ 完成</button><span id="msg" class="sm"></span></div>
 <div id="prof" hidden><div class="ph0"><span>選你的角色（上面可以改暱稱）</span></div><div id="avs"></div></div>
@@ -756,22 +781,26 @@ function winTai(w){const dl=S.dealer,st=Math.max(0,Math.round(((w.ex||1)-1)/2)),
  return{dI,dA,rows:(w.tai||[]).concat(dA?[['莊家',1]].concat(st?[[`連${st}拉${st}`,2*st]]:[]):[])}}
 function settleHTML(p,w,ovT,N){const B=S.cfg.base,T=S.cfg.tai,dl=S.dealer,hs=humans(),R=S.rdy||{},sg=v=>v>0?'+'+v:v<0?String(v):'0';
  let o=`<div class="ov sx"><div class="sxw">`;
- o+=w.draw?`<h2>流局</h2><p class="sxs">剩最後 7 墩沒人胡，莊家連莊</p>`:`<h2>🎉 ${mini(w.seat)} ${N(w.seat)} ${w.self?'自摸':'胡牌'}！</h2><p class="sxs">${w.self?'自摸：另外三家都要付':`${N(w.from)} 放槍：由 ${N(w.from)} 付`}${w.seat===dl?' · 胡牌的是莊家':''}</p>`;
+ o+=w.draw?`<h2>流局</h2><p class="sxs">剩最後 7 墩沒人胡，莊家連莊</p>`:`<h2>${mini(w.seat)} ${N(w.seat)} ${w.self?'自摸':'胡牌'}！🎉</h2>`;
  o+='<div class="sxm">';if(!w.draw){const {rows,dI,dA}=winTai(w),tot=dI?`${w.n+w.ex} 台`:dA?`${w.n} 台<small style="display:block;font-size:12px;font-weight:600;color:#8e8e93">莊家付 ${w.n+w.ex} 台</small>`:`${w.n} 台`;
   o+=`<div class="ios"><div class="ioh">台數</div><div class="ioc">${rows.map(x=>`<div class="ior"><span>${x[0]}</span><b>${x[1]} 台</b></div>`).join('')||'<div class="ior"><span>無台（只算底）</span><b>0 台</b></div>'}<div class="ior iot"><span>合計</span><b>${tot}</b></div></div>
-   <div class="iof">每台 ${T}、底 ${B}。${dA&&!dI?'莊家、連莊的台只算莊家那筆':''}</div></div>`}
- o+=`<div class="ios iow"><div class="ioh">四家手牌</div><div class="ioc">${[0,1,2,3].map(s=>{const v=w.pay?w.pay[s]:0;return `<div class="ior iop${!w.draw&&s===w.seat?' win':''}"><span class="ion">${mini(s)}<em>${N(s)}</em></span><span class="iot2">${ovT(s)}${s===dl?'<i class="sxd sxd2">莊家</i>':''}</span><span class="iov"><b class="${v>0?'pos':v<0?'neg':''}">${sg(v)}</b></span></div>`}).join('')}</div></div></div>`;
+   <div class="iof">底 ${B}、每台 ${T}。${dA&&!dI?'莊家、連莊的台只算莊家那筆':''}</div></div>`}
+ o+=`<div class="ios iow"><div class="ioh">四家手牌</div><div class="ioc">${[0,1,2,3].map(s=>{const v=w.pay?w.pay[s]:0;return `<div class="ior iop${!w.draw&&s===w.seat?' win':''}"><span class="ion">${mini(s)}<em>${N(s)}</em>${s===dl?'<i class="sxz">莊</i>':''}</span><span class="iot2">${ovT(s)}</span><span class="iov"><b class="${v>0?'pos':v<0?'neg':''}">${sg(v)}</b></span></div>`}).join('')}</div></div></div>`;
  if(matchEnds()&&matchLen())o+=finBox();
- o+=`<div class="sxf"><div class="sxr">${hs.map(q=>`<span class="${R[q]?'ok':''}">${mini(q)} ${N(q)}：${R[q]?'✓ 已按繼續':'等待中…'}</span>`).join('')}</div><div class="sxc" id="rdyCd"></div>`;
+ o+=`<div class="sxf"><div class="sxr">${[0,1,2,3].filter(q=>S.seats[q]).map(q=>{const bot=S.seats[q].bot,ok=bot||R[q];return `<span class="${ok?'ok':''}">${mini(q)} ${N(q)}：${bot?'✓ 電腦':R[q]?'✓ 已按繼續':'等待中…'}</span>`}).join('')}</div><div class="sxc" id="rdyCd"></div>`;
  const lb=matchEnds()?'再來'+LENTXT():'繼續下一局';
- if(p>=0)o+=`<div class="ovb">${R[p]?`<button disabled>已按繼續，等其他玩家…</button>`:`<button onclick="rdy()">${lb}</button>`}${G.ok?'<button class="g" onclick="peek()">看牌桌</button>':''}${matchEnds()?'<button class="g" onclick="goHall()">🏠 回大廳</button>':''}</div>`;
+ if(p>=0)o+=`<div class="ovb">${R[p]?`<button disabled>已按繼續，等其他玩家…</button>`:`<button onclick="rdy()">${lb}</button>`}${G.ok?'<button class="g" onclick="peek()">看牌桌</button>':''}<button class="g sxlv" onclick="leaveAsk()">離開牌桌</button></div>`;
  return o+'</div></div></div>'}
 // 起始畫面：動物動畫＋歡迎文字＋「進入」，右下角製作者
 function splashShow(){if($('#splash'))return;const e=document.createElement('div');e.id='splash';
  const tiles=['🀄','🀅','🀙','🀐','🀇','🀀'].map((t,i)=>`<span class="spt" style="left:${8+i*16}%;animation-delay:-${i*1.7}s;animation-duration:${9+i%3*2}s">${t}</span>`).join('');
  e.innerHTML=`${ZOO_SVG}<div class="spc"><div class="spa">${[...Array(AVN).keys()].map(i=>`<span class="spn" style="animation-delay:${(i*.18).toFixed(2)}s">${ani(i,COL[i%4])}</span>`).join('')}</div>
-  <div class="spw">歡迎加入</div><h1 class="sph">瘋狂動物麻將樂園</h1><button type="button" class="spg" onclick="splashGo()">進入</button></div><div class="spm">遊戲製作者：王楓</div>`;
- (document.getElementById('wrap')||document.body).append(e);r90Upd()}
+  <div class="spw">歡迎加入</div><h1 class="sph">瘋狂動物麻將樂園</h1><button type="button" class="spg" onclick="splashGo()">進入</button></div><div class="spm">遊戲製作者：王楓</div><button type="button" class="spmu" id="spmu" onclick="splashMusic()" aria-label="音樂開關">🔇 點我開音樂</button>`;
+ (document.getElementById('wrap')||document.body).append(e);r90Upd();
+ try{if(sndOn)sndUnlock()}catch(_){}clearInterval(G.spmT);G.spmT=setInterval(spmUpd,400);spmUpd()}
+function bgmOn(){return !!(sndOn&&bgmVol>0&&actx&&actx.state==='running'&&BGM.g)}
+function spmUpd(){const b=$('#spmu');if(!b){clearInterval(G.spmT);return}const on=bgmOn();b.textContent=on?'🎵 音樂開':'🔇 點我開音樂';b.classList.toggle('on',on)}
+function splashMusic(){if(bgmOn()){sndToggle()}else{if(!sndOn)sndToggle();if(bgmVol<=0)setBgm(35);sndUnlock();bgmStart();bgmApply()}setTimeout(spmUpd,60);setTimeout(spmUpd,400)}
 function splashGo(){const e=$('#splash');if(!e)return;e.classList.add('out');setTimeout(()=>{e.remove();r90Upd()},350)}
 if(document.readyState==='complete')setTimeout(splashShow,0);else addEventListener('load',()=>setTimeout(splashShow,0));
 // 開房設定畫面：手機橫向時自動縮放到剛好一頁（不用滑動）
@@ -1054,8 +1083,8 @@ function init3d(){if(!window.THREE)return false;try{const T=THREE;
   for(const o of G.hobjs.values()){if(o.g.position.distanceToSquared(o.tp)>2e-5)hmv=1;o.g.position.lerp(o.tp,k);o.g.quaternion.slerp(o.tq,k)}G.tpS.forEach(([sp,o])=>{sp.position.copy(o.g.position);sp.position.y+=1.0;sp.position.z+=.5});
   G.strip.forEach(g=>{if(g.visible){bob=bob||2;g.children[0].material.opacity=.45+.35*Math.sin(now/260)}});(G.av3||[]).forEach(a=>{if(!a||!a.visible)return;const u=a.userData,hd=u.head;let ry=Math.atan2(cam.position.x-a.position.x,cam.position.z-a.position.z);if(u.r===1||u.r===3){const tc=Math.atan2(-a.position.x,-a.position.z);let df=tc-ry;df=Math.atan2(Math.sin(df),Math.cos(df));ry+=df*.55}a.rotation.y=ry;if(u.on){bob=bob||2;u.inner.position.y=Math.abs(Math.sin(now/280))*.28;hd.rotation.z=Math.sin(now/560)*.12}else if(u.inner.position.y||hd.rotation.z){u.inner.position.y=0;hd.rotation.z=0;mv=1}});
   const D=G.dA;if(D&&D.sim){if(now-D.t0<2600)mv=1;const n=Math.floor((now-D.t0)/1000*D.hz);D.d.forEach((d,i)=>{const m=G.dice[i],F=D.sim[i],f=F[Math.max(0,Math.min(F.length-1,n))],u=n/F.length;m.position.set(f[0],f[1]+(G.lift?G.lift.position.y:0),f[2]);if(u>=1)m.quaternion.copy(d.qf);else{m.quaternion.copy(f[3]);if(u>.62){const w=Math.min(1,(u-.62)/.36);m.quaternion.slerp(d.qf,w*w*(3-2*w))}}})}
-  const wk=now<(G.wakeT||0),act=mv||hmv||cmv||wk;if(mv||wk){if(!G.mob||!mv||(G.shN=(G.shN||0)+1)%3===0){R.shadowMap.needsUpdate=true;G.shD=0}else G.shD=1}else if(G.shD){R.shadowMap.needsUpdate=true;G.shD=0};
-  if(!act&&now-(G.lastR||0)<(bob===1?30:bob?48:480))return;G.lastR=now;
+  const wk=now<(G.wakeT||0),act=mv||hmv||cmv||wk;if(mv||wk){if(!G.mob||(G.shN=(G.shN||0)+1)%3===0){R.shadowMap.needsUpdate=true;G.shD=0}else G.shD=1}else if(G.shD){R.shadowMap.needsUpdate=true;G.shD=0};
+  {const iv=act?0:bob?33.3:480;if(iv&&now-(G.lastR||0)<iv-5)return}G.lastR=now;
   if(act&&rdt<250){G.slow=rdt>42?(G.slow||0)+1:Math.max(0,(G.slow||0)-.5);if(G.slow>90){G.slow=0;if(dl.castShadow)dl.castShadow=false;else if(G.pr>(G.mob?1.5:1)){G.pr=Math.max(G.mob?1.5:1,G.pr-.25);R.setPixelRatio(G.pr)};wake(500)}}
   placeLabels();R.clear();R.render(sc,cam);if(G.hobjs.size){R.clearDepth();R.render(G.hs,G.hcam)}})(last);
  G.ok=true;setTimeout(warmFaces,1200);return true}catch(e){console.error(e);G.ok=false;return false}}
@@ -1450,7 +1479,7 @@ try{if(window.speechSynthesis)speechSynthesis.onvoiceschanged=()=>{zhV=null}}cat
 const tileSay=t=>t>=27?SPK[t-27]:nm(t)+su(t);
 function sndTick(){if(!S||!S.pile)return;const n=S.pile.length,sk=S.say?(S.gid||0)+':'+JSON.stringify(S.say)+':'+(S.melds||[]).flat(2).length+':'+(S.wall||[]).length:'';
  if(G.sndN==null){G.sndN=n;G.sndK=sk;sndBtn();return}
- if(n>G.sndN&&S.last&&S.phase==='claim'){clack();speak(tileSay(S.last.t),S.last.from)}G.sndN=n;
+ if(n>G.sndN&&S.last&&S.phase==='claim'){const lt=S.last.t,lf=S.last.from;setTimeout(()=>{clack();speak(tileSay(lt),lf)},16)}G.sndN=n;
  if(sk&&sk!==G.sndK){const t=S.say.t;if(t!=='胡'&&t!=='自摸')ding(false);const ss=S.say.s;setTimeout(()=>speak(t,ss),t==='胡'||t==='自摸'?700:450)}G.sndK=sk;G.booted=1}
 function setMenu(v){const m=$('#smenu');if(!m)return;vlBtn();{const a=$('#smAv'),r=$('#smRst'),sd=!!S&&me()>=0;if(a)a.hidden=!(sd&&S.phase==='lobby'&&!S.pk);if(r)r.hidden=!sd}const sv=$('#svR'),vv=$('#vvR');{const mv=$('#mvR');if(mv)mv.value=Math.round(bgmVol*100)}if(sv)sv.value=Math.round(sfxVol*100);if(vv)vv.value=Math.round(voiceVol*100);const o=v==null?m.hidden:!!v;m.hidden=!o;const b=$('#setb');if(b)b.setAttribute('aria-expanded',o)}
 document.addEventListener('pointerdown',e=>{const m=$('#smenu');if(m&&!m.hidden&&!e.target.closest('.vb'))setMenu(0)},true);
