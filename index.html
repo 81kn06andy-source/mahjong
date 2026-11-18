@@ -126,7 +126,7 @@ img.mi{width:1.5em;height:1.5em;border-radius:50%;object-fit:cover;vertical-alig
 .ov .t.m{width:3.3cqw;height:4.6cqw;font-size:2.1cqw}.ov .t.win{margin-left:2cqw}
 .st3{position:relative;width:100%;height:min(76vh,800px);min-height:440px;border-radius:20px;overflow:hidden;background:radial-gradient(ellipse at 50% 35%,#6b4430,#2a160d 70%,#170a05);box-shadow:0 14px 30px rgba(0,0,0,.35)}
 #gl{position:absolute;inset:0}#gl canvas{display:block;width:100%;height:100%;touch-action:pan-y}
-#info{position:absolute;left:10px;top:10px;z-index:2;color:#fff;background:#0007;border-radius:10px;padding:3px 10px;font-size:12px;pointer-events:none}#info:empty{display:none}
+#info{position:absolute;left:10px;top:10px;z-index:2;color:#fff;background:#0007;border-radius:10px;padding:3px 10px;font-size:14px;pointer-events:none}#info:empty{display:none}
 .vb{position:absolute;right:8px;top:8px;z-index:4;display:flex;gap:4px}.vb button{width:34px;height:34px;padding:0;border-radius:10px;background:#0008;color:#fff;font-size:17px}
 #lab{position:absolute;inset:0;pointer-events:none;z-index:2}
 .np{position:absolute;transform:translate(-50%,0);display:flex;flex-direction:column;align-items:center;gap:1px;background:var(--card);color:var(--fg);border:2px solid var(--c);border-radius:12px;padding:3px 10px;font-size:12px;white-space:nowrap;pointer-events:auto;box-shadow:0 4px 10px rgba(0,0,0,.4)}
@@ -202,7 +202,7 @@ body.ingame #wrap{padding-top:6px;padding-bottom:6px}
 .ctoast{position:absolute;left:70px;top:calc(71% - 64px);z-index:20;max-width:min(320px,70vw);background:#000c;color:#fff;border-radius:12px;padding:6px 12px;font-size:14px;pointer-events:none;animation:pop .3s}.ctoast[hidden]{display:none}.cbtn.fx,.chat.fx,.ctoast.fx{position:fixed}.ctoast b{color:#ffd34d;margin-right:6px}
 @media (max-height:520px){body.ingame{padding:0}body.ingame #wrap{padding:0;max-width:none}body.ingame .st3{height:100vh;height:100dvh;min-height:0;max-height:none;border-radius:0;box-shadow:none}
 .vb{gap:3px;right:calc(6px + env(safe-area-inset-right,0px));top:6px}.vb button{width:30px;height:30px;font-size:14px;border-radius:8px}
-#info{font-size:11px;top:6px;left:calc(6px + env(safe-area-inset-left,0px));padding:2px 8px}
+#info{font-size:13px;top:6px;left:calc(6px + env(safe-area-inset-left,0px));padding:2px 8px}
 .np{transform:translate(-50%,0) scale(.78);transform-origin:50% 0}
 .cbtn{width:40px;height:40px;font-size:19px;left:calc(10px + env(safe-area-inset-left,0px))}.chat,.ctoast{left:calc(58px + env(safe-area-inset-left,0px))}.chat{height:86%}}
 .vb .smenu{position:absolute;right:0;top:calc(100% + 6px);width:190px;background:#15100cf2;color:#fff;border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:6px;box-shadow:0 10px 26px #000a;font-size:14px}.vb .smenu[hidden]{display:none}
@@ -241,6 +241,12 @@ html.r90 .vb .smenu{width:min(380px,calc(var(--r9w) - 30px))!important;max-heigh
 #home{position:fixed;inset:0;z-index:60;overflow:auto;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(ellipse at 50% 0%,#1d8a68 0%,#0c5a43 45%,#05281e 100%);font-family:inherit}
 #home[hidden]{display:none}
 #home,#hall{background:var(--zoo,none) center/cover no-repeat,#7fd0ff!important}#home::before{display:none!important}
+/* 手機：大廳和設定開房畫面改成滿版，不露出背景 */
+@media (pointer:coarse) and (max-width:520px),(pointer:coarse) and (max-height:520px){:root #home#home,:root #hall#hall{padding:0!important;background:#fffaf0!important;align-items:stretch!important;justify-content:stretch!important}
+ :root #home .hc.hc,:root #hall .hlc.hlc{width:100%!important;max-width:none!important;max-height:none!important;min-height:100%!important;margin:0!important;border-radius:0!important;box-shadow:none!important;box-sizing:border-box!important;padding-left:calc(14px + env(safe-area-inset-left,0px))!important;padding-right:calc(14px + env(safe-area-inset-right,0px))!important}
+ :root #home .hdeco{display:none!important}}
+/* 平板（iPad）玩牌時也滿版：牌桌佔滿整個畫面，不留邊框和圓角 */
+@media (pointer:coarse){body.ingame{padding:0}body.ingame #wrap{padding:0;max-width:none}body.ingame .st3{height:100vh;height:100dvh;min-height:0;max-height:none;border-radius:0;box-shadow:none}}
 #home::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.10;background-image:repeating-linear-gradient(45deg,#fff 0 2px,transparent 2px 46px),repeating-linear-gradient(-45deg,#fff 0 2px,transparent 2px 46px)}
 #home .hdeco{position:fixed;font-size:64px;opacity:.16;pointer-events:none;filter:drop-shadow(0 6px 10px #0008)}
 #home .hc{position:relative;width:min(460px,100%);background:#fffaf0;color:#2b1a12;border-radius:22px;padding:18px 18px 16px;box-shadow:0 20px 50px #0009;display:flex;flex-direction:column;gap:12px}
@@ -377,7 +383,7 @@ html.r90 #splash .spn{width:clamp(48px,9vh,84px)}html.r90 #splash .sph{font-size
 .sx .ior+.ior::before{content:"";position:absolute;top:0;left:16px;right:0;height:1px;background:#3c3c4329}
 /* 台數清單：每一項之間不畫分隔線，只在「合計」上面分隔 */.sx .ios:not(.iow) .ior+.ior:not(.iot)::before{display:none}.sx .ios:not(.iow) .ior:not(.iot){padding-top:7px;padding-bottom:7px}.sx .ios:not(.iow) .iot::before{left:12px;right:12px;height:1.5px;background:#3c3c4340}
 /* 寬的畫面：四家手牌放左邊，台數／總分放右邊 */
-@container (min-width:620px){:root .sx .sxw.sxw{grid-template-columns:minmax(0,1fr) minmax(200px,260px)}:root .sx .sxw .ios.ios:not(.iow){grid-column:2}:root .sx .sxw .iow.iow{grid-column:1}:root .sxw.sxw>.fin.fin{grid-column:2}}
+@container (min-width:620px){:root .sx .sxw.sxw{grid-template-columns:minmax(0,1fr) minmax(200px,260px);grid-auto-flow:row dense}:root .sx .sxw .iow .iop{padding-top:5px;padding-bottom:5px}:root .sx .sxw .ios.ios:not(.iow){grid-column:2}:root .sx .sxw .iow.iow{grid-column:1}:root .sxw.sxw>.fin.fin{grid-column:2}}
 .sx .ior b{font-weight:600;color:#3a3a3c;white-space:nowrap}
 /* 結算手牌：牌裡的字不要吃到表格的深灰粗體（萬要紅色），牌也不要被擠扁；太長就整個面板一起縮小 */.ior .t b{font-weight:inherit;white-space:normal}.ior .t b.wn{color:#1d1d1d}.ior .t b.wc{color:#c0392b}.ior .t b.hz{color:inherit}.sx .iot2 .t,.sx .iot2 .omg{flex:none}.sx .iow .ioc{overflow:visible}.sx .iot span,.sx .iot b{font-weight:700;color:#000}.sx .iot b{color:#d0342c;font-size:19px}
 .sx .iof{font-size:13px;color:#ffffffa6;padding:6px 16px 0;line-height:1.4}
@@ -614,7 +620,7 @@ function swqUI(){let e=$('#swqB');const q=swqLive(),nm=id=>{const x=S.seats.find
   :`<div style="text-align:center;gap:12px"><b style="font-size:17px">已請 ${nm(q.b)} 換位置，等對方同意…</b><div style="display:flex;gap:10px"><button type="button" style="${B};background:#f1e4c8;color:#6a4a30" onclick="swqCancel()">取消</button></div></div>`}
  if(e.parentNode!==($('#wrap')||document.body))($('#wrap')||document.body).append(e);e.hidden=false}
 // ===== 決定莊家：整場開始時房長先擲骰子，從房長數起（1、5、9…房長；2、6、10…下家；3、7、11…對家；4、8、12…上家）=====
-function pickStart(){if(!S)return;S.score=[0,0,0,0];S.rw=0;S.rc=0;S.streak=0;S.dealer=0;S.win=null;S.swq=null;S.phase='lobby';S.pk={t:Date.now()};save();render()}
+function pickStart(){if(!S)return;S.score=[0,0,0,0];S.rw=0;S.rc=0;S.streak=0;S.dealer=Math.max(0,hostSeat());S.win=null;S.swq=null;S.pk=null;S.dfrom=null;start()}/* 房長就是第一局的莊家，由莊家自己擲骰子開門 */
 function pickRoll(){if(!S||S.phase!=='lobby'||!S.pk||S.pk.dice)return;const d=()=>1+(Math.random()*6|0),D=[d(),d(),d()],h=hostSeat(),sum=D[0]+D[1]+D[2];
  S.pk=Object.assign({},S.pk,{dice:D,from:h,d:(h+sum-1)%4,t2:Date.now()});save();render();setTimeout(pickGo,3800)}
 function pickGo(){if(!S||S.phase!=='lobby'||!S.pk||!S.pk.dice)return;S.dealer=S.pk.d;S.dfrom=S.pk.from;const D=S.pk.dice.slice();S.pk=null;start(D)}/* 房主骰到哪家就是莊家，而且直接用這次的點數開門，不用再骰一次 */
@@ -1384,24 +1390,33 @@ function sndUnlock(){try{if(!actx){actx=new(window.AudioContext||window.webkitAu
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&actx)sndUnlock()});
 function sndPre(){if(G.sPre||!actx||!window.clatter)return;G.sPre=1;setTimeout(()=>{try{tick(-1e4,0);dealBufs()}catch(_){}},800)}
 function sndBtn(){const b=$('#sndb');if(b)b.textContent=sndOn?'🔊':'🔇'}
-// ===== 背景音樂：用程式即時合成的輕鬆五聲音階小曲（古箏般的撥弦＋柔和和弦＋低音），重複播放 =====
+// ===== 背景音樂：用程式即時合成的動物園風格小曲，重複播放 =====
 let bgmVol=+(lsg('mj_mv')??35)/100;if(!isFinite(bgmVol))bgmVol=.35;
 const BGM={g:null,t:0,step:0,tm:0};
-const BGM_MEL=[4,null,7,null,9,7,4,null, 2,null,4,null,0,null,-5,null, 0,null,2,4,7,null,4,null, 2,null,null,null,-5,null,null,null,
- 7,null,9,null,12,9,7,null, 9,null,7,4,2,null,4,null, 0,null,2,null,4,null,2,0, 0,null,null,null,null,null,null,null];
-const BGM_CH=[[48,[60,64,67]],[45,[57,60,64]],[41,[53,57,60]],[43,[55,59,62]],[48,[60,64,67]],[45,[57,60,64]],[41,[53,57,60]],[48,[55,60,64]]];
+/* 動物園風格：輕快的大調、木琴旋律＋「蹦—恰」低音和弦＋木魚、沙鈴；每隔一輪改用陶笛吹旋律，一輪結束時來個滑笛 */
+const BGM_MEL=[0,4,7,4,12,null,7,null, 9,null,5,9,12,null,9,null, 7,null,11,null,14,12,11,7, 12,null,7,null,4,null,null,null,
+ 4,4,7,null,4,4,9,null, 9,7,5,null,9,7,5,null, 2,null,5,7,11,null,14,null, 12,null,7,4,0,null,null,null];
+const BGM_CH=[[48,[60,64,67]],[41,[60,65,69]],[43,[59,62,67]],[48,[60,64,67]],[48,[60,64,67]],[41,[60,65,69]],[43,[59,62,65]],[48,[60,64,67]]];
 const mtf=m=>440*Math.pow(2,(m-69)/12);
 function bgmLvl(){return sndOn&&!document.hidden?bgmVol*.22:0}
 function bgmApply(){try{if(BGM.g&&actx)BGM.g.gain.setTargetAtTime(bgmLvl(),actx.currentTime,.4)}catch(_){}}
 function setBgm(v){v=Math.max(0,Math.min(100,+v||0));bgmVol=v/100;lss('mj_mv',v);sndUnlock();bgmStart();bgmApply()}
-function bgmStart(){if(!actx||BGM.g)return;try{BGM.g=actx.createGain();BGM.g.gain.value=0;const lp=actx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=3200;BGM.g.connect(lp);lp.connect(actx['desti'+'nation']);
- BGM.t=actx.currentTime+.4;BGM.step=0;BGM.tm=setInterval(bgmTick,150);bgmApply()}catch(_){BGM.g=null}}
+function bgmStart(){if(!actx||BGM.g)return;try{BGM.g=actx.createGain();BGM.g.gain.value=0;const lp=actx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=5200;BGM.g.connect(lp);lp.connect(actx['desti'+'nation']);
+ const n=actx.createBuffer(1,actx.sampleRate*.2|0,actx.sampleRate),d=n.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;BGM.nb=n;
+ BGM.t=actx.currentTime+.4;BGM.step=0;BGM.tm=setInterval(bgmTick,120);bgmApply()}catch(_){BGM.g=null}}
 function bgmNote(f,t,d,type,vol,att){const o=actx.createOscillator(),g=actx.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+att);g.gain.exponentialRampToValueAtTime(.0008,t+d);o.connect(g).connect(BGM.g);o.start(t);o.stop(t+d+.05)}
-function bgmTick(){if(!BGM.g||!actx||actx.state!=='running'||bgmLvl()<=0)return;const now=actx.currentTime,E=60/84/2;if(BGM.t<now-.2)BGM.t=now+.1;
- while(BGM.t<now+.6){const i=BGM.step%64,bar=i>>3,e=i&7,t=BGM.t,[root,ch]=BGM_CH[bar],lo=Math.floor(BGM.step/64)%2;
-  if(e===0)ch.forEach(m=>{bgmNote(mtf(m),t,E*8.4,'sine',.05,.5);bgmNote(mtf(m)*1.003,t,E*8.4,'sine',.03,.6)});
-  if(e===0||e===4)bgmNote(mtf(root),t,E*3.6,'sine',.32,.01);
-  const n=BGM_MEL[i];if(n!=null){const f=mtf((lo?60:72)+n);bgmNote(f,t,1.3,'triangle',.42,.004);bgmNote(f*2,t,.45,'sine',.08,.004)}
+function bgmMarimba(f,t){bgmNote(f,t,.55,'sine',.36,.003);bgmNote(f*3.95,t,.09,'sine',.07,.002)}
+function bgmOcarina(f,t,d){const o=actx.createOscillator(),g=actx.createGain(),l=actx.createOscillator(),lg=actx.createGain();o.type='sine';o.frequency.value=f;l.frequency.value=5.5;lg.gain.value=f*.006;l.connect(lg).connect(o.frequency);
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.2,t+.04);g.gain.setValueAtTime(.2,t+d*.7);g.gain.exponentialRampToValueAtTime(.0008,t+d);o.connect(g).connect(BGM.g);o.start(t);l.start(t);o.stop(t+d+.05);l.stop(t+d+.05)}
+function bgmHit(t,f,q,d,vol,type){if(!BGM.nb)return;const s=actx.createBufferSource(),bp=actx.createBiquadFilter(),g=actx.createGain();s.buffer=BGM.nb;bp.type=type||'bandpass';bp.frequency.value=f;bp.Q.value=q;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0008,t+d);s.connect(bp).connect(g).connect(BGM.g);s.start(t);s.stop(t+d+.02)}
+function bgmWhistle(t){const o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.setValueAtTime(700,t);o.frequency.exponentialRampToValueAtTime(1600,t+.28);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.07,t+.03);g.gain.exponentialRampToValueAtTime(.0008,t+.34);o.connect(g).connect(BGM.g);o.start(t);o.stop(t+.36)}
+function bgmTick(){if(!BGM.g||!actx||actx.state!=='running'||bgmLvl()<=0)return;const now=actx.currentTime,E=60/112/2;if(BGM.t<now-.2)BGM.t=now+.1;
+ while(BGM.t<now+.6){const i=BGM.step%64,bar=i>>3,e=i&7,t=BGM.t,[root,ch]=BGM_CH[bar],oc=Math.floor(BGM.step/64)%2;
+  if(e===0||e===4)bgmNote(mtf(root+(e?7:0)),t,.34,'triangle',.3,.004);
+  if(e===2||e===6){ch.forEach(m=>bgmNote(mtf(m),t,.2,'triangle',.06,.003));bgmHit(t,1900,9,.07,.22)}
+  if(e&1)bgmHit(t,7000,.8,.04,.05,'highpass');
+  const n=BGM_MEL[i];if(n!=null){if(oc){let d=E;for(let k=i+1;k<64&&BGM_MEL[k]==null&&d<E*3;k++)d+=E;bgmOcarina(mtf(72+n),t,d*.95)}else bgmMarimba(mtf(84+n),t)}
+  if(i===62&&!oc)bgmWhistle(t);
   BGM.t+=E;BGM.step++}}
 document.addEventListener('visibilitychange',bgmApply);
 function sndToggle(){sndOn=!sndOn;lss('mj_snd',sndOn?'1':'0');sndBtn();bgmApply();if(!sndOn){try{speechSynthesis.cancel()}catch(_){}}else{sndUnlock();clack()}}
