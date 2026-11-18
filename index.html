@@ -520,6 +520,7 @@ html.r90:root #hall .hlm button{font-size:15px}
 #hall .htb.hz:disabled .hta{background:#cbb98f}
 html.r90 #hall .hz .hzv{width:32px;height:32px}html.r90 #hall .hz .hzr{height:26px}html.r90 #hall .hz .hzs{font-size:11px}html.r90 #hall .hz .hta{font-size:12px;padding:4px 12px}
 #hall .htb.hz{padding:8px 8px 10px!important}#hall .hz .hzr{height:24px}#hall .hz .hzb{margin:0 6px;padding:14px 4px 8px;gap:5px}#hall .hz .hzp{gap:2px}#hall .hz .hzv{width:30px;height:30px;border-width:1.5px}#hall .hz .hzc em{font-size:9.5px}#hall .hz .hta{white-space:nowrap;padding:5px 12px;font-size:13px}#hall .hz .hzg{height:7px;margin:0 -4px}#hall .hll:has(.hz){grid-template-columns:repeat(auto-fill,minmax(176px,1fr))!important}html.r90 #hall .hz .hzv{width:28px;height:28px}html.r90 #hall .hz .hta{font-size:12px;padding:4px 10px}
+#hall .hll{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 </style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="gs" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient></defs></svg><div id="wrap">
 <div class="bar"><input id="room" value="" aria-label="房號"><input id="name" placeholder="暱稱" aria-label="暱稱" maxlength="8" onchange="setMe()"><button class="bj" onclick="join()">進入牌桌</button><button class="g" id="rst" onclick="reset()">重置牌桌</button><button class="g blv" onclick="leaveAsk()">離開牌桌</button><button class="g bclose" onclick="toggleBar()">✓ 完成</button><span id="msg" class="sm"></span></div>
 <div id="prof" hidden><div class="ph0"><span>選你的角色（上面可以改暱稱）</span></div><div id="avs"></div></div>
@@ -1607,8 +1608,14 @@ async function sweepIdle(){if(!db||G.sweeping||Date.now()-(G.sweptAt||0)<60000)r
   for(const d of sn.docs){try{const ch=await d.ref.collection('chat').limit(200).get();await Promise.all(ch.docs.map(c=>c.ref.delete()));await d.ref.delete()}catch(_){}}}catch(_){}
  G.sweeping=0}
 /* 大廳牌桌列表：即時監聽，有人開新桌、入座、開打或關桌，列表自己就會更新，不用按重新整理 */
-function hallLoad(){const l=$('#hallL');if(!db||!l)return;if(!l.dataset.ok)l.innerHTML='<div class="hle">讀取中…</div>';sweepIdle();if(G.hallUn){G.hallUn();G.hallUn=null}
- try{G.hallUn=db.collection('mj').where('t','>',Date.now()-IDLE_MS).orderBy('t','desc').limit(15).onSnapshot(sn=>{G.hallDocs=sn.docs;hallRender()},()=>{l.dataset.ok='';l.innerHTML='<div class="hle">讀不到牌桌列表，請按「重新整理」再試一次</div>'})}catch(_){l.dataset.ok='';l.innerHTML='<div class="hle">讀不到牌桌列表，請按「重新整理」再試一次</div>'}}
+/* 手機直拿（畫面轉 90 度）時，瀏覽器原生的上下滑動方向會錯，所以自己處理手指拖曳＋慣性；拖曳過就不算點到桌子 */
+function rotScroll(el){if(!el||el.dataset.rs)return;el.dataset.rs=1;let lx=null,sx=0,mv=0,vel=0,lt=0,raf=0;const on=()=>document.documentElement.classList.contains('r90');
+ el.addEventListener('touchstart',e=>{if(!on()||e.touches.length!==1)return;cancelAnimationFrame(raf);lx=sx=e.touches[0].clientX;mv=0;vel=0;lt=performance.now()},{passive:true});
+ el.addEventListener('touchmove',e=>{if(lx==null||!on())return;const x=e.touches[0].clientX,d=x-lx,now=performance.now();if(Math.abs(x-sx)>8)mv=1;if(mv){e.preventDefault();el.scrollTop+=d;vel=d/Math.max(1,now-lt)}lx=x;lt=now},{passive:false});
+ el.addEventListener('touchend',()=>{if(lx==null)return;lx=null;if(mv){el.dataset.dragT=Date.now();let v=vel*16;const step=()=>{if(Math.abs(v)<.4)return;el.scrollTop+=v;v*=.94;raf=requestAnimationFrame(step)};raf=requestAnimationFrame(step)}});
+ el.addEventListener('click',e=>{if(Date.now()-(+el.dataset.dragT||0)<350){e.stopPropagation();e.preventDefault()}},true)}
+function hallLoad(){rotScroll($('#hallL'));const l=$('#hallL');if(!db||!l)return;if(!l.dataset.ok)l.innerHTML='<div class="hle">讀取中…</div>';sweepIdle();if(G.hallUn){G.hallUn();G.hallUn=null}
+ try{G.hallUn=db.collection('mj').where('t','>',Date.now()-IDLE_MS).orderBy('t','desc').limit(40).onSnapshot(sn=>{G.hallDocs=sn.docs;hallRender()},()=>{l.dataset.ok='';l.innerHTML='<div class="hle">讀不到牌桌列表，請按「重新整理」再試一次</div>'})}catch(_){l.dataset.ok='';l.innerHTML='<div class="hle">讀不到牌桌列表，請按「重新整理」再試一次</div>'}}
 function hallRender(){const l=$('#hallL');if(!l||!G.hallDocs)return;const rows=[],lim=Date.now()-IDLE_MS;
  G.hallDocs.forEach(d=>{try{if(!/^[A-Za-z0-9]{1,16}$/.test(d.id))return;const x=d.data();if((+x.t||0)<lim)return;const s=JSON.parse(x.s),hs=(s.seats||[]).filter(x=>x&&!x.bot);if(hs.length)rows.push({id:d.id,s,hs})}catch(_){}});
  l.dataset.ok=1;const html=rows.length?rows.map(({id,s,hs})=>{const full=s.seats.filter(x=>x).length,bots=full-hs.length,lob=s.phase==='lobby',mine=hs.some(x=>x.id===uid),st=lob?`等人中 ${full}/4`:s.phase==='over'?'結算中':'進行中',bt=mine?'回到牌桌':lob?(full<4?'加入':'已滿'):bots?'觀戰／接手電腦':'觀戰';
