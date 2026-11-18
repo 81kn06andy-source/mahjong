@@ -244,7 +244,10 @@ html.r90 .vb .smenu{width:min(380px,calc(var(--r9w) - 30px))!important;max-heigh
 /* 手機：大廳和設定開房畫面改成滿版，不露出背景 */
 @media (pointer:coarse) and (max-width:520px),(pointer:coarse) and (max-height:520px){:root #home#home,:root #hall#hall{padding:0!important;background:#fffaf0!important;align-items:stretch!important;justify-content:stretch!important}
  :root #home .hc.hc,:root #hall .hlc.hlc{width:100%!important;max-width:none!important;max-height:none!important;min-height:100%!important;margin:0!important;border-radius:0!important;box-shadow:none!important;box-sizing:border-box!important;padding-left:calc(14px + env(safe-area-inset-left,0px))!important;padding-right:calc(14px + env(safe-area-inset-right,0px))!important}
- :root #home .hdeco{display:none!important}}
+ :root #home .hdeco{display:none!important}
+ /* 設定開房畫面：左右兩欄各佔一半（角色列太長就左右滑），右邊局數、難度、秒數的字和按鈕放大 */
+ :root #home .hcols.hcols{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}:root #home .hcol{min-width:0}:root #home .hav.hav{flex-wrap:nowrap;overflow-x:auto;min-width:0}
+ :root #home .hcol .seg button{padding-top:9px!important;padding-bottom:9px!important;font-size:15px!important}:root #home .hbtn button{font-size:17px!important}}
 /* 平板（iPad）玩牌時也滿版：牌桌佔滿整個畫面，不留邊框和圓角 */
 @media (pointer:coarse){body.ingame{padding:0}body.ingame #wrap{padding:0;max-width:none}body.ingame .st3{height:100vh;height:100dvh;min-height:0;max-height:none;border-radius:0;box-shadow:none}}
 #home::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.10;background-image:repeating-linear-gradient(45deg,#fff 0 2px,transparent 2px 46px),repeating-linear-gradient(-45deg,#fff 0 2px,transparent 2px 46px)}
@@ -383,7 +386,7 @@ html.r90 #splash .spn{width:clamp(48px,9vh,84px)}html.r90 #splash .sph{font-size
 .sx .ior+.ior::before{content:"";position:absolute;top:0;left:16px;right:0;height:1px;background:#3c3c4329}
 /* 台數清單：每一項之間不畫分隔線，只在「合計」上面分隔 */.sx .ios:not(.iow) .ior+.ior:not(.iot)::before{display:none}.sx .ios:not(.iow) .ior:not(.iot){padding-top:7px;padding-bottom:7px}.sx .ios:not(.iow) .iot::before{left:12px;right:12px;height:1.5px;background:#3c3c4340}
 /* 寬的畫面：四家手牌放左邊，台數／總分放右邊 */
-@container (min-width:620px){:root .sx .sxw.sxw{grid-template-columns:minmax(0,1fr) minmax(200px,260px);grid-auto-flow:row dense}:root .sx .sxw .iow .iop{padding-top:5px;padding-bottom:5px}:root .sx .sxw .ios.ios:not(.iow){grid-column:2}:root .sx .sxw .iow.iow{grid-column:1}:root .sxw.sxw>.fin.fin{grid-column:2}}
+@container (min-width:620px){:root .sx .sxw.sxw{grid-template-columns:minmax(0,1fr) minmax(140px,180px);grid-auto-flow:row dense}:root .sx .sxw .iow .iop{padding-top:8px;padding-bottom:8px}:root .sx .sxw .iow .iot2 .t.m{width:21px;height:30px;font-size:14px}:root .sx .sxw .ios.ios:not(.iow) .ior{padding-left:10px;padding-right:10px;gap:6px}:root .sx .sxw .ios.ios:not(.iow) .ioh,:root .sx .sxw .ios.ios:not(.iow) .iof{padding-left:8px;padding-right:4px}:root .sx .sxw .ios.ios:not(.iow){grid-column:2}:root .sx .sxw .iow.iow{grid-column:1}:root .sxw.sxw>.fin.fin{grid-column:2}}
 .sx .ior b{font-weight:600;color:#3a3a3c;white-space:nowrap}
 /* 結算手牌：牌裡的字不要吃到表格的深灰粗體（萬要紅色），牌也不要被擠扁；太長就整個面板一起縮小 */.ior .t b{font-weight:inherit;white-space:normal}.ior .t b.wn{color:#1d1d1d}.ior .t b.wc{color:#c0392b}.ior .t b.hz{color:inherit}.sx .iot2 .t,.sx .iot2 .omg{flex:none}.sx .iow .ioc{overflow:visible}.sx .iot span,.sx .iot b{font-weight:700;color:#000}.sx .iot b{color:#d0342c;font-size:19px}
 .sx .iof{font-size:13px;color:#ffffffa6;padding:6px 16px 0;line-height:1.4}
@@ -1047,7 +1050,7 @@ function init3d(){if(!window.THREE)return false;try{const T=THREE;
   for(const o of G.hobjs.values()){if(o.g.position.distanceToSquared(o.tp)>2e-5)hmv=1;o.g.position.lerp(o.tp,k);o.g.quaternion.slerp(o.tq,k)}G.tpS.forEach(([sp,o])=>{sp.position.copy(o.g.position);sp.position.y+=1.0;sp.position.z+=.5});
   G.strip.forEach(g=>{if(g.visible){bob=bob||2;g.children[0].material.opacity=.45+.35*Math.sin(now/260)}});(G.av3||[]).forEach(a=>{if(!a||!a.visible)return;const u=a.userData,hd=u.head;let ry=Math.atan2(cam.position.x-a.position.x,cam.position.z-a.position.z);if(u.r===1||u.r===3){const tc=Math.atan2(-a.position.x,-a.position.z);let df=tc-ry;df=Math.atan2(Math.sin(df),Math.cos(df));ry+=df*.55}a.rotation.y=ry;if(u.on){bob=bob||2;u.inner.position.y=Math.abs(Math.sin(now/280))*.28;hd.rotation.z=Math.sin(now/560)*.12}else if(u.inner.position.y||hd.rotation.z){u.inner.position.y=0;hd.rotation.z=0;mv=1}});
   const D=G.dA;if(D&&D.sim){if(now-D.t0<2600)mv=1;const n=Math.floor((now-D.t0)/1000*D.hz);D.d.forEach((d,i)=>{const m=G.dice[i],F=D.sim[i],f=F[Math.max(0,Math.min(F.length-1,n))],u=n/F.length;m.position.set(f[0],f[1]+(G.lift?G.lift.position.y:0),f[2]);if(u>=1)m.quaternion.copy(d.qf);else{m.quaternion.copy(f[3]);if(u>.62){const w=Math.min(1,(u-.62)/.36);m.quaternion.slerp(d.qf,w*w*(3-2*w))}}})}
-  const wk=now<(G.wakeT||0),act=mv||hmv||cmv||wk;if(mv||wk)R.shadowMap.needsUpdate=true;
+  const wk=now<(G.wakeT||0),act=mv||hmv||cmv||wk;if(mv||wk){if(!G.mob||!mv||(G.shN=(G.shN||0)+1)%3===0){R.shadowMap.needsUpdate=true;G.shD=0}else G.shD=1}else if(G.shD){R.shadowMap.needsUpdate=true;G.shD=0};
   if(!act&&now-(G.lastR||0)<(bob===1?30:bob?48:480))return;G.lastR=now;
   if(act&&rdt<250){G.slow=rdt>42?(G.slow||0)+1:Math.max(0,(G.slow||0)-.5);if(G.slow>90){G.slow=0;if(dl.castShadow)dl.castShadow=false;else if(G.pr>(G.mob?1.5:1)){G.pr=Math.max(G.mob?1.5:1,G.pr-.25);R.setPixelRatio(G.pr)};wake(500)}}
   placeLabels();R.clear();R.render(sc,cam);if(G.hobjs.size){R.clearDepth();R.render(G.hs,G.hcam)}})(last);
@@ -1438,13 +1441,13 @@ function setVL(v){voiceLang=v==='tw'?'tw':'zh';lss('mj_vl',voiceLang);vlBtn();sn
 function vlBtn(){document.querySelectorAll('.vlb').forEach(b=>b.classList.toggle('on',b.dataset.v===voiceLang))}
 function playTw(txt){try{let a=twA[txt];if(!a){a=twA[txt]=new Audio('voice-tw/'+encodeURIComponent(txt)+'.m4a');a.preload='auto'}a.pause();a.currentTime=0;a.volume=voiceVol;a.play().catch(()=>{})}catch(_){}}
 function speak(txt,seat){if(!sndOn)return;if(voiceLang==='tw')return playTw(txt);if(!window.speechSynthesis)return;try{const vs=zhVoices(),sd=seat==null?0:((seat%4)+4)%4,pf=VPF[sd],tw=vs.filter(v=>/TW/i.test(v.lang)),pool=tw.length>=2?tw:vs,v=pool.length?pool[sd%pool.length]:null;
- speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang=v?v.lang:'zh-TW';if(v)u.voice=v;const same=pool.length<4&&pool.length?Math.floor(sd/pool.length):1;u.pitch=pool.length>=4?1:pf.p;u.rate=pf.r;u.volume=voiceVol;speechSynthesis.speak(u)}catch(_){}}
+ if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang=v?v.lang:'zh-TW';if(v)u.voice=v;const same=pool.length<4&&pool.length?Math.floor(sd/pool.length):1;u.pitch=pool.length>=4?1:pf.p;u.rate=pf.r;u.volume=voiceVol;speechSynthesis.speak(u)}catch(_){}}
 try{if(window.speechSynthesis)speechSynthesis.onvoiceschanged=()=>{zhV=null}}catch(_){}
 const tileSay=t=>t>=27?SPK[t-27]:nm(t)+su(t);
 function sndTick(){if(!S||!S.pile)return;const n=S.pile.length,sk=S.say?(S.gid||0)+':'+JSON.stringify(S.say)+':'+(S.melds||[]).flat(2).length+':'+(S.wall||[]).length:'';
  if(G.sndN==null){G.sndN=n;G.sndK=sk;sndBtn();return}
  if(n>G.sndN&&S.last&&S.phase==='claim'){clack();speak(tileSay(S.last.t),S.last.from)}G.sndN=n;
- if(sk&&sk!==G.sndK){const t=S.say.t;if(t!=='胡'&&t!=='自摸')ding(false);const ss=S.say.s;setTimeout(()=>speak(t,ss),t==='胡'||t==='自摸'?700:120)}G.sndK=sk;G.booted=1}
+ if(sk&&sk!==G.sndK){const t=S.say.t;if(t!=='胡'&&t!=='自摸')ding(false);const ss=S.say.s;setTimeout(()=>speak(t,ss),t==='胡'||t==='自摸'?700:450)}G.sndK=sk;G.booted=1}
 function setMenu(v){const m=$('#smenu');if(!m)return;vlBtn();{const a=$('#smAv'),r=$('#smRst'),sd=!!S&&me()>=0;if(a)a.hidden=!(sd&&S.phase==='lobby'&&!S.pk);if(r)r.hidden=!sd}const sv=$('#svR'),vv=$('#vvR');{const mv=$('#mvR');if(mv)mv.value=Math.round(bgmVol*100)}if(sv)sv.value=Math.round(sfxVol*100);if(vv)vv.value=Math.round(voiceVol*100);const o=v==null?m.hidden:!!v;m.hidden=!o;const b=$('#setb');if(b)b.setAttribute('aria-expanded',o)}
 document.addEventListener('pointerdown',e=>{const m=$('#smenu');if(m&&!m.hidden&&!e.target.closest('.vb'))setMenu(0)},true);
 function celebrate(w){const host=document.querySelector('.st3');if(!host||!w||w.draw)return;const o=$('#cel');if(o)o.remove();
