@@ -858,14 +858,14 @@ function settleHTML(p,w,ovT,N){const B=S.cfg.base,T=S.cfg.tai,dl=S.dealer,hs=hum
 function splashShow(){if($('#splash'))return;if(!sndOn){sndOn=true;lss('mj_snd','1')}if(!(bgmVol>0)){bgmVol=.35;lss('mj_mv',35)}const e=document.createElement('div');e.id='splash';
  const tiles=['🀄','🀅','🀙','🀐','🀇','🀀'].map((t,i)=>`<span class="spt" style="left:${8+i*16}%;animation-delay:-${i*1.7}s;animation-duration:${9+i%3*2}s">${t}</span>`).join('');
  e.innerHTML=`${ZOO_SVG}<div class="spc"><div class="spa">${[...Array(AVN).keys()].map(i=>`<span class="spn" style="animation-delay:${(i*.18).toFixed(2)}s">${ani(i,COL[i%4])}</span>`).join('')}</div>
-  <div class="spw">歡迎加入</div><h1 class="sph">瘋狂動物麻將樂園</h1><button type="button" class="spg" onclick="splashGo()">進入</button></div><div class="spm">遊戲製作者：王楓</div><button type="button" class="spmu" id="spmu" onclick="splashMusic()" aria-label="音樂開關">🎵 音樂開</button>`;
+  <div class="spw">歡迎加入</div><h1 class="sph">瘋狂動物麻將樂園</h1><button type="button" class="spg" onclick="splashGo()">進入</button></div><div class="spm">遊戲製作者：王楓</div><button type="button" class="spmu" id="spmu" onclick="splashMusic()" aria-label="音樂開關">🎵 點一下畫面就有音樂</button>`;
  (document.getElementById('wrap')||document.body).append(e);r90Upd();
  try{if(sndOn)sndUnlock()}catch(_){}clearInterval(G.spmT);G.spmT=setInterval(spmUpd,400);spmUpd()}
 function bgmOn(){return !!(sndOn&&bgmVol>0&&actx&&actx.state==='running'&&BGM.g)}
 function bgmWant(){return sndOn&&bgmVol>0}
 /* 音樂預設開：設定是開的就顯示「音樂開」；瀏覽器規定要先碰一下畫面才會出聲，所以還沒出聲時提示點一下 */
-function spmUpd(){const b=$('#spmu');if(!b){clearInterval(G.spmT);return}const w=bgmWant(),on=bgmOn();b.textContent=w?'🎵 音樂開':'🔇 音樂關';b.classList.toggle('on',w);b.classList.toggle('wait',false);/* 一打開就一直試著播放（瀏覽器允許的話馬上有聲音；手機要等手指碰到畫面任何地方） */if(w&&!on){try{sndUnlock()}catch(_){}}}
-function splashMusic(){/* 按鈕寫「音樂開」就關掉、寫「音樂關」就打開 */if(bgmWant()){sndToggle()}else{if(!sndOn)sndToggle();if(bgmVol<=0)setBgm(35);sndUnlock();bgmStart();bgmApply()}setTimeout(spmUpd,60);setTimeout(spmUpd,400)}
+function spmUpd(){const b=$('#spmu');if(!b){clearInterval(G.spmT);return}const w=bgmWant(),on=bgmOn();b.textContent=!w?'🔇 音樂關':on?'🎵 音樂開':'🎵 點一下畫面就有音樂';b.classList.toggle('on',on);b.classList.toggle('wait',w&&!on);/* 一打開就一直試著播放（瀏覽器允許的話馬上有聲音；手機要等手指碰到畫面任何地方） */if(w&&!on){try{sndUnlock()}catch(_){}}}
+function splashMusic(){/* 按下去那一刻音樂已經在播才關掉；還沒出聲（點一下畫面就有音樂）就是打開 */const was=G.spmWas!=null?G.spmWas:bgmOn();G.spmWas=null;if(bgmWant()&&was){sndToggle()}else{if(!sndOn)sndToggle();if(bgmVol<=0)setBgm(35);sndUnlock();bgmStart();bgmApply()}setTimeout(spmUpd,60);setTimeout(spmUpd,400)}
 /* 記住按下去那一刻音樂是不是已經在播（同一下觸碰會先把音樂叫起來，不能因此又被關掉） */
 document.addEventListener('pointerdown',e=>{if(e.target&&e.target.closest&&e.target.closest('#spmu'))G.spmWas=bgmOn()},true);
 function splashGo(){const e=$('#splash');if(!e)return;e.classList.add('out');setTimeout(()=>{e.remove();r90Upd()},350)}
