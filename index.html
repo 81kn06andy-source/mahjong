@@ -438,7 +438,7 @@ html.r90 #splash .spn{width:clamp(48px,9vh,84px)}html.r90 #splash .sph{font-size
  .vb .srow button{width:34px;height:30px;font-size:15px}.vb .vrow input{flex:1 1 auto;width:auto;min-width:60px;height:22px}.vb .vrow span{flex:0 0 auto;white-space:nowrap}
  .vb .sit{height:32px;padding:0 8px;gap:6px;font-size:13px}.vb .sit i{width:18px}}
 .mb3:not(.lb){display:inline-flex;height:22px;padding:0 10px 0 8px;gap:5px;font-size:11px;border-top-width:2px;border-top-right-radius:12px;border-top-left-radius:12px;background:#120a06d9}#meH{text-align:center}
-.mb3:not(.lb) .st{display:none}.mb3:not(.lb) .ma{font-size:14px}.mb3:not(.lb) .ma img.mi{width:18px;height:18px}.mb3:not(.lb) .wd2{font-size:10px;padding:0 5px}.mb3:not(.lb) .zj{font-size:10px;padding:0 5px}.mb3:not(.lb) .sc{font-size:11px}
+.mb3:not(.lb) .st{display:none}.mb3:not(.lb) .ma{font-size:14px}.mb3:not(.lb) .ma img.mi{width:18px;height:18px}.mb3:not(.lb) .wd2{font-size:10px;padding:0 5px}.mb3:not(.lb) .zj{font-size:10px;padding:0 5px}.mb3:not(.lb) .sc{font-size:11px}/* 電腦版：底下自己的名字列放大 */@media (pointer:fine) and (min-height:521px){.mb3.mb3:not(.lb){height:34px;padding:0 16px 0 12px;gap:8px;font-size:17px;border-top-width:3px;border-top-left-radius:16px;border-top-right-radius:16px}.mb3.mb3:not(.lb) .ma{font-size:22px}.mb3.mb3:not(.lb) .ma img.mi{width:26px;height:26px}.mb3.mb3:not(.lb) .wd2,.mb3.mb3:not(.lb) .zj{font-size:14px;padding:1px 8px}.mb3.mb3:not(.lb) .sc{font-size:17px}.mb3.mb3:not(.lb) .tgx{width:30px;height:30px;line-height:30px;font-size:18px}}
 #ovH .ov{-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}
 #ovH .ovb{position:sticky;bottom:0;z-index:2;padding:4px 0}
 @media (max-height:520px){#ovH{inset:1%}#ovH .ov{padding:6px 10px;gap:4px;justify-content:flex-start}#ovH .ov h3{font-size:15px}
@@ -518,7 +518,7 @@ html.r90:root #hall .hlm button{font-size:15px}
 #hall .hz .hzv.me{border-color:#c0392b;box-shadow:0 0 0 2px #c0392b}
 #hall .hz .hzv.bot{background:#e8eef6}
 #hall .hz .hzv.emp{background:#f3ead6;color:#9c8a6a;border:2px dashed #cdb98d;box-shadow:none;font-size:13px;font-weight:800}
-#hall .hz .hzg{display:block;align-self:stretch;height:9px;margin:2px -8px 2px;background:#5aa64a;border-radius:6px}
+#hall .hz .hzg{display:block;align-self:stretch;height:9px;margin:2px -8px 2px;background:#5aa64a;border-radius:6px}.hz .hzg.hzg{height:3px!important;border-radius:0!important}/* 綠線粗細跟房子外框（3px）一樣 */
 #hall .hz .hta{align-self:center;background:#2f9e6a;padding:6px 16px;font-size:14px}
 #hall .hz.mine .hta{background:#c0392b}
 #hall .htb.hz:disabled .hta{background:#cbb98f}
@@ -671,7 +671,7 @@ const quotaMsg=e=>e&&(e.code==='resource-exhausted'||/quota|resource.exhausted/i
 /* re：被別人同時寫入擋掉時，讀到最新牌局後要重做的動作（過、吃碰胡、準備下一局），避免按了卻沒反應 */
 function save(re){const base=S.v;S.v++;const js=JSON.stringify(S),r=ref,nv=S.v;if(!r)return Promise.resolve();G.myV=nv;G.myT=Date.now();
  G.sq=(G.sq||Promise.resolve()).then(()=>db.runTransaction(async tx=>{const sn=await tx.get(r),d=sn.exists?sn.data():null;let cur=0;if(d){if(typeof d.v==='number')cur=d.v;else{try{cur=JSON.parse(d.s).v||0}catch(_){cur=0}}}
-  if(d&&cur!==base)throw{stale:1};tx.set(r,{s:js,t:Date.now(),v:nv})})).catch(e=>{G.myV=0;if(e&&e.stale){if(r===ref)r.get().then(sn=>{if(r!==ref)return;const d=sn.data();if(d&&d.s){S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},JSON.parse(d.s));busy=-1;if(re&&(re.n=(re.n||0)+1)<=5){try{re()}catch(_){}}render()}}).catch(()=>{})}else note(quotaMsg(e)||'寫入失敗：需要有編輯（可互動）權限才能打牌')});return G.sq}
+  if(d&&cur!==base)throw{stale:1};tx.set(r,{s:js,t:Date.now(),v:nv,h:(S.seats||[]).filter(x=>x&&!x.bot).length})/* h＝桌上真人數，給規則判斷「全是電腦」的房間 5 分鐘可刪 */})).catch(e=>{G.myV=0;if(e&&e.stale){if(r===ref)r.get().then(sn=>{if(r!==ref)return;const d=sn.data();if(d&&d.s){S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},JSON.parse(d.s));busy=-1;if(re&&(re.n=(re.n||0)+1)<=5){try{re()}catch(_){}}render()}}).catch(()=>{})}else note(quotaMsg(e)||'寫入失敗：需要有編輯（可互動）權限才能打牌')});return G.sq}
 const defRoom=()=>{let r=lsg('mj_room');if(!r||!/^[A-Za-z0-9]{1,16}$/.test(r))r=String(10000+Math.floor(Math.random()*90000));return r};
 function join(){G.viewT=Date.now();room=($('#room').value||'').replace(/[^A-Za-z0-9]/g,'').slice(0,16)||defRoom();$('#room').value=room;lss('mj_room',room);lss('mj_name',$('#name').value);
  if(unsub)unsub();ref=db.doc('mj/'+room);rc=-1;
@@ -1366,7 +1366,7 @@ function pickAt(e){const r=G.R.domElement.getBoundingClientRect(),v=new THREE.Ve
 function proj(x,y,z,r){const v=new THREE.Vector3(x,y,z).applyAxisAngle(new THREE.Vector3(0,1,0),SA[r]).project(G.cam),el=$('#gl');return [(v.x+1)/2*el.clientWidth,(1-v.y)/2*el.clientHeight,v.z]}
 function placeLabels(){if(!S||!G.labs)return;const el=$('#gl'),W=el.clientWidth,H=el.clientHeight,b=viewB();
  G.labs.forEach(n=>{const s=+n.dataset.s,r=(s-b+4)%4;n.classList.toggle('tgd',r===1||r===3);let [x,y]=r===2?proj(-6,.9,16.2,r):proj(0,-2.3,17.8,r);/* 左右兩家：名牌對齊動物正下方（用動物圖片的中心點算左右位置） */if(r===1||r===3){const sp=G.avS&&G.avS[r];if(sp&&sp.visible){const v=sp.position.clone().project(G.cam);x=(v.x+1)/2*W}}n.style.left=Math.max(64,Math.min(W-64,x))+'px';n.style.top=(r===2?Math.max(4,y-50):Math.max(40,Math.min(H-70,y)))+'px'});
- const ht=Math.max(60,(G.htop||300)+4)+'px';['#tgH','#actH','#sayH'].forEach(q=>{const e=$(q);if(e)e.style.top=q==='#actH'&&G.peek&&S.phase==='over'?'112px':ht});
+ const ht=Math.max(60,(G.htop||300)+4)+'px';{/* 「輪到你出牌」計時放在自己手牌正上方；有吃碰槓按鈕時放在按鈕上面 */const tm=$('#tmr'),st=document.querySelector('.st3');if(tm&&st&&tm.parentNode===st&&!tm.hidden){const sr=st.getBoundingClientRect(),ab=[...document.querySelectorAll('#actH .act,#actH .rbs,#actH button')].filter(x=>x.offsetParent).map(x=>x.getBoundingClientRect().top-sr.top);let y=(G.htop||st.clientHeight*.7)-8;if(ab.length)y=Math.min(y,Math.min(...ab)-8);tm.style.top=Math.max(40,y-tm.offsetHeight)+'px';tm.style.right='auto';tm.style.left='50%';tm.style.transform='translateX(-50%)'}}['#tgH','#actH','#sayH'].forEach(q=>{const e=$(q);if(e)e.style.top=q==='#actH'&&G.peek&&S.phase==='over'?'112px':ht});
  const c=$('#cenH');if(c&&c.classList.contains('cm-claim')){const[,y]=proj(0,2.7,2.5,0);c.style.top=Math.max(60,y)+'px'}else if(c&&c.classList.contains('cm-low')){/* 擲骰子提示：放在中間黑框外緣和自己這邊牌墩的正中間（用鏡頭實際投影算，電腦手機都準） */const[,y1]=proj(0,0,2.95,0),[,y2]=proj(0,.35,7.75,0);c.style.top=Math.round((y1+y2)/2)+'px';const s=Math.max(.45,Math.min(1,(y2-y1)*.86/(c.offsetHeight||1)));c.style.transform=s<1?`translate(-50%,-50%) scale(${s.toFixed(3)})`:''}else if(c){c.style.top='';c.style.transform=''}}
 function startDice(r,still,vals){const T=THREE,Y=new T.Vector3(0,1,0);G.dA={t0:performance.now()-(still?1e5:0),d:(vals||S.dice).map((v,i)=>{const ag=i*2.094+Math.random()*.6,s=new T.Vector3((i-1)*.45,-.3,(Math.random()-.5)*.5),e=new T.Vector3(Math.cos(ag)*.62,-.79,Math.sin(ag)*.62),
  qf=new T.Quaternion().setFromUnitVectors(new T.Vector3(...FN[v]),Y).premultiply(new T.Quaternion().setFromAxisAngle(Y,Math.random()*6.28)),ax=new T.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize();return{s,e,qf,ax}})};diceSim(G.dA);G.dice.forEach(m=>m.visible=true);if(still){if(typeof wake==='function')wake(300)}else diceSnd()}
@@ -1645,11 +1645,11 @@ function tryLock(){try{if(!G.lockTried&&screen.orientation&&screen.orientation.l
 document.addEventListener('pointerdown',()=>{if(document.body.classList.contains('intable'))tryLock()},true);
 function homeName(v){$('#name').value=v;lss('mj_name',v)}
 function hallShow(on){const e=$('#hall');if(!e)return;e.hidden=!on;{const b=$('#hallBk');if(b){const sat=!!(S&&ref&&me()>=0);b.hidden=!(on&&sat);if(sat)b.textContent='↩ 回到牌桌 '+room}}try{awayChk()}catch(_){}r90Upd();clearInterval(G.hallTm);G.hallTm=0;if(G.hallUn){G.hallUn();G.hallUn=null}if(on){hallLoad();G.hallTm=setInterval(()=>{if(!document.hidden)hallLoad()},300000)}}
-// 房間 20 分鐘沒有動靜（沒有任何寫入）就自動刪掉：大廳每次讀取時順手清掉過期的房間和它的聊天
-const IDLE_MS=20*60*1000;
+// 房間 20 分鐘沒有動靜（沒有任何寫入）就自動刪掉；桌上沒有真人（全是電腦或空位）的房間 5 分鐘就刪掉。大廳每次讀取時順手清掉過期的房間和它的聊天
+const IDLE_MS=20*60*1000,BOT_MS=5*60*1000;
 async function sweepIdle(){if(!db||G.sweeping||Date.now()-(G.sweptAt||0)<60000)return;G.sweeping=1;G.sweptAt=Date.now();
- try{const sn=await db.collection('mj').where('t','<',Date.now()-IDLE_MS).limit(20).get();
-  for(const d of sn.docs){try{const ch=await d.ref.collection('chat').limit(200).get();await Promise.all(ch.docs.map(c=>c.ref.delete()));await d.ref.delete()}catch(_){}}}catch(_){}
+ try{const now=Date.now(),sn=await db.collection('mj').where('t','<',now-BOT_MS).limit(40).get();
+  for(const d of sn.docs){try{const x=d.data()||{};let hum=true;try{hum=(JSON.parse(x.s).seats||[]).some(z=>z&&!z.bot)}catch(_){hum=false}if(hum&&(+x.t||0)>=now-IDLE_MS)continue;const ch=await d.ref.collection('chat').limit(200).get();await Promise.all(ch.docs.map(c=>c.ref.delete()));await d.ref.delete()}catch(_){}}}catch(_){}
  G.sweeping=0}
 /* 大廳牌桌列表：即時監聽，有人開新桌、入座、開打或關桌，列表自己就會更新，不用按重新整理 */
 /* 手機直拿（畫面轉 90 度）時，瀏覽器原生的上下滑動方向會錯，所以自己處理手指拖曳＋慣性；拖曳過就不算點到桌子 */
@@ -1671,7 +1671,7 @@ function hallRender(){const l=$('#hallL');if(!l||!G.hallDocs)return;const rows=[
  l.dataset.ok=1;const html=rows.length?rows.map(({id,s,hs})=>{const full=s.seats.filter(x=>x).length,bots=full-hs.length,lob=s.phase==='lobby',mine=hs.some(x=>x.id===uid),st=lob?`等人中 ${full}/4`:s.phase==='over'?'結算中':'進行中',bt=mine?'回到牌桌':lob?(full<4?'加入':'已滿'):bots?'觀戰／接手電腦':'觀戰';
   const nm=k=>{const x=s.seats[k];return x?(x.bot?'電腦':esc(String(x.name||'玩家'))):'空位'},cl=k=>{const x=s.seats[k];return x?(x.bot?'bot':x.id===uid?'me':'hum'):'emp'};
   const av=k=>{const x=s.seats[k];if(!x)return '<i class="hzv emp">空</i>';const a=typeof x.av==='number'?x.av%AVN:k%AVN;return `<i class="hzv ${cl(k)}">${x.av==='p'&&!x.bot?`<b>${esc(String(x.name||'玩')).slice(0,1)}</b>`:ani(a,COL[k%4])}</i>`};
-  return `<button type="button" class="htb hz${mine?' mine':''}${lob?'':' run'}" data-r="${id}"${!mine&&lob&&full>=4?' disabled':''}><span class="hzr"></span><span class="hzb"><span class="hzs">ZOO 桌 ${id}</span><span class="hzst">${st}</span><span class="hzp">${[0,1,2,3].map(k=>`<span class="hzc">${av(k)}<em>${nm(k)}</em></span>`).join('')}</span><span class="hzg"></span><span class="hta">${bt}</span></span></button>`}).join(''):'<div class="hle">目前沒有人在打，按上面「＋ 開新牌桌」開一桌吧！</div>';if(l.dataset.h!==html){l.dataset.h=html;l.innerHTML=html}}
+  return `<button type="button" class="htb hz${mine?' mine':''}${lob?'':' run'}" data-r="${id}"${!mine&&lob&&full>=4?' disabled':''}><span class="hzr"></span><span class="hzb"><span class="hzs">房號 ${id}</span><span class="hzst">${st}</span><span class="hzp">${[0,1,2,3].map(k=>`<span class="hzc">${av(k)}<em>${nm(k)}</em></span>`).join('')}</span><span class="hzg"></span><span class="hta">${bt}</span></span></button>`}).join(''):'<div class="hle">目前沒有人在打，按上面「＋ 開新牌桌」開一桌吧！</div>';if(l.dataset.h!==html){l.dataset.h=html;l.innerHTML=html}}
 // 大廳的「麻將規則」「台數表」說明視窗（內容依照本遊戲實際的算台方式）
 const TAI_LIST=[['基本',[['莊家','1','莊家胡、或跟莊家之間的那筆'],['連莊／拉莊','每連一次 +2','連 1 拉 1 共 +2，以此類推'],['門清','1','沒有吃、碰、明槓'],['自摸','1','自己摸到胡牌'],['門清一摸三','3','門清又自摸（取代門清＋自摸）'],['全求人','2','手上只剩一張，靠別人放槍胡'],['平胡','2','沒刻子、沒字牌、聽兩面以上、不是自摸'],['獨聽（單釣／中洞／邊張）','1','只聽一張牌']]],
  ['特殊時機',[['槓上開花','1','槓完補牌就自摸'],['海底撈月','1','摸最後一張牌自摸'],['咪幾','8','開局前兩巡內、還沒人吃碰時按「聽」宣告聽牌'],['天胡','16','莊家一拿到牌就胡']]],

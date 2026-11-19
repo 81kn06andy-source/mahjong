@@ -5,15 +5,19 @@ service cloud.firestore {
     match /mj/{room} {
       allow read: if true;
       allow create, update: if request.resource.size() < 900000;
-      // 20 分鐘沒有動靜（t 是最後一次寫入的時間）的牌桌，任何人都可以刪
-      allow delete: if resource.data.t < request.time.toMillis() - 1200000;
+      // 20 分鐘沒有動靜（t 是最後一次寫入的時間）的牌桌，任何人都可以刪；
+      // 桌上沒有真人（h＝0，全是電腦或空位）的牌桌，5 分鐘沒動靜就可以刪
+      allow delete: if resource.data.t < request.time.toMillis() - 1200000
+                    || (resource.data.get('h', 1) == 0 && resource.data.t < request.time.toMillis() - 300000);
       // 聊天訊息：只能新增，不能改或刪別人的
       match /chat/{msg} {
         allow read: if true;
         allow create: if request.resource.data.keys().hasOnly(['u','n','ts','t','a','d'])
                       && request.resource.size() < 250000;
         // 牌桌閒置 20 分鐘要被刪掉時，連同聊天一起清掉
-        allow delete: if get(/databases/$(database)/documents/mj/$(room)).data.t < request.time.toMillis() - 1200000;
+        allow delete: if get(/databases/$(database)/documents/mj/$(room)).data.t < request.time.toMillis() - 1200000
+                      || (get(/databases/$(database)/documents/mj/$(room)).data.get('h', 1) == 0
+                          && get(/databases/$(database)/documents/mj/$(room)).data.t < request.time.toMillis() - 300000);
       }
     }
     // 玩家頭貼（自己上傳的照片或 LINE 大頭貼）：每人一張縮圖
