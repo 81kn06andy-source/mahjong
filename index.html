@@ -680,7 +680,7 @@ function newRoomNo(){const used=new Set((G.hallDocs||[]).map(d=>d.id));let r;for
 const defRoom=()=>{let r=lsg('mj_room');if(!r||!/^\d{1,4}$/.test(r))r=newRoomNo();return r};
 function join(){G.viewT=Date.now();room=rmNum($('#room').value)||defRoom();$('#room').value=room;lss('mj_room',room);lss('mj_name',$('#name').value);
  if(unsub)unsub();ref=db.doc('mj/'+room);rc=-1;
- G.hadDoc=0;unsub=ref.onSnapshot(sn=>{const d=sn.data();/* 雲端傳回的版本比自己剛存出去的還舊（手機網路慢時常見）就先忽略，不然畫面會倒退一步、看起來像牌又出了一次 */{const iv=d&&typeof d.v==='number'?d.v:null;if(iv!=null&&G.myV&&iv<G.myV)return;if(iv!=null&&iv>=(G.myV||0))G.myV=0}if(sn.exists)G.hadDoc=1;else if(G.hadDoc&&!sn.metadata.hasPendingWrites){G.hadDoc=0;if(S&&me()>=0){S=fresh();hallShow(1);invMsg('牌桌 20 分鐘沒有動靜，已自動關閉');return}}S=d&&d.s?JSON.parse(d.s):fresh();if(!S.pile){S=Object.assign(fresh(),{seats:S.seats,v:S.v||0})}S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},S);render()},e=>note(quotaMsg(e)||'連線錯誤：'+e.message))}
+ G.hadDoc=0;G.docT=0;unsub=ref.onSnapshot(sn=>{const d=sn.data();/* 雲端傳回的版本比自己剛存出去的還舊（手機網路慢時常見）就先忽略，不然畫面會倒退一步、看起來像牌又出了一次 */{const iv=d&&typeof d.v==='number'?d.v:null;if(iv!=null&&G.myV&&iv<G.myV)return;if(iv!=null&&iv>=(G.myV||0))G.myV=0}G.docT=d?(+d.t||0):0;if(sn.exists)G.hadDoc=1;else if(G.hadDoc&&!sn.metadata.hasPendingWrites){G.hadDoc=0;if(S&&me()>=0){S=fresh();hallShow(1);invMsg('牌桌已關閉（10 分鐘沒有人動作，或最後一位玩家已離開）');return}}S=d&&d.s?JSON.parse(d.s):fresh();if(!S.pile){S=Object.assign(fresh(),{seats:S.seats,v:S.v||0})}S=Object.assign({cfg:{base:100,tai:20},score:[0,0,0,0],streak:0,rw:0},S);render()},e=>note(quotaMsg(e)||'連線錯誤：'+e.message))}
 let rstT=0;
 // 重置牌桌（⚙️ 設定裡）：入座的人才能按，先跳確認
 function resetAsk(){if(!ref||!S)return;if(me()<0){note('只有入座的玩家可以重置牌桌');return}let e=$('#rsB');if(!e){e=document.createElement('div');e.id='rsB';e.className='invb'}const B='flex:1;padding:11px;border-radius:12px;border:0;font-weight:800;font-size:16px';
@@ -1653,8 +1653,12 @@ function tryLock(){try{if(!G.lockTried&&screen.orientation&&screen.orientation.l
 document.addEventListener('pointerdown',()=>{if(document.body.classList.contains('intable'))tryLock()},true);
 function homeName(v){$('#name').value=v;lss('mj_name',v)}
 function hallShow(on){const e=$('#hall');if(!e)return;e.hidden=!on;{const b=$('#hallBk');if(b){const sat=!!(S&&ref&&me()>=0);b.hidden=!(on&&sat);if(sat)b.textContent='↩ 回到牌桌 '+room}}try{awayChk()}catch(_){}r90Upd();clearInterval(G.hallTm);G.hallTm=0;if(G.hallUn){G.hallUn();G.hallUn=null}if(on){hallLoad();G.hallTm=setInterval(()=>{if(!document.hidden)hallLoad()},300000)}}
-// 房間 20 分鐘沒有動靜（沒有任何寫入）就自動刪掉；桌上沒有真人（全是電腦或空位）的房間 5 分鐘就刪掉。大廳每次讀取時順手清掉過期的房間和它的聊天
-const IDLE_MS=20*60*1000,BOT_MS=5*60*1000;
+// 房間 10 分鐘沒有動靜（沒有任何寫入）就自動刪掉；桌上沒有真人（全是電腦或空位）的房間 5 分鐘就刪掉。大廳每次讀取時順手清掉過期的房間和它的聊天
+const IDLE_MS=10*60*1000,BOT_MS=5*60*1000;
+/* 關閉房間：先清聊天再刪牌桌（Firestore 規則只允許刪「10 分鐘沒動靜」或「桌上沒有真人」的房間） */
+async function closeRoom(r){if(!r)return;try{const ch=await r.collection('chat').limit(200).get();await Promise.all(ch.docs.map(c=>c.ref.delete()))}catch(_){}try{await r.delete()}catch(_){}}
+/* 坐在牌桌上的人也會檢查：房間 10 分鐘都沒有人動作就直接關閉，不用等有人開大廳 */
+setInterval(()=>{if(ref&&G.docT&&Date.now()-G.docT>IDLE_MS+20000&&!G.idleDel){G.idleDel=1;closeRoom(ref).finally(()=>{G.idleDel=0})}},30000);
 async function sweepIdle(){if(!db||G.sweeping||Date.now()-(G.sweptAt||0)<60000)return;G.sweeping=1;G.sweptAt=Date.now();
  try{const now=Date.now(),sn=await db.collection('mj').where('t','<',now-BOT_MS).limit(40).get();
   for(const d of sn.docs){try{const x=d.data()||{};let hum=true;try{hum=(JSON.parse(x.s).seats||[]).some(z=>z&&!z.bot)}catch(_){hum=false}if(hum&&(+x.t||0)>=now-IDLE_MS)continue;const ch=await d.ref.collection('chat').limit(200).get();await Promise.all(ch.docs.map(c=>c.ref.delete()));await d.ref.delete()}catch(_){}}}catch(_){}
@@ -1692,7 +1696,7 @@ function helpShow(k){let e=$('#helpM');if(e)e.remove();e=document.createElement(
  e.onclick=ev=>{if(ev.target===e)e.remove()};(document.getElementById('wrap')||document.body).append(e);const fit=()=>{const b=e.querySelector('.hpb'),g=b&&b.firstElementChild;if(!g||!e.isConnected)return;g.style.zoom=1;/* 電腦版：視窗撐滿畫面，內容先用固定寬度排好再整個放大填滿 */const big=matchMedia('(pointer:fine)').matches&&innerHeight>520&&innerWidth>1000;e.classList.toggle('hpbig',big);if(big){g.style.width='960px';g.style.margin='0 auto';const hd=e.querySelector('.hpt'),avH=e.clientHeight-44-(hd?hd.offsetHeight:0)-30;/* 視窗高度跟著內容，不留大片空白 */const z=Math.min(2.2,avH/g.scrollHeight,(b.clientWidth-28)/960);g.style.zoom=Math.max(.62,z).toFixed(3);return}g.style.width='';g.style.margin='';const z=Math.min(1,(b.clientHeight-4)/b.scrollHeight);g.style.zoom=Math.max(.62,z).toFixed(3)};addEventListener('resize',fit);requestAnimationFrame(fit);setTimeout(fit,120)}
 // 離開目前的牌桌：沒有其他真人就直接關桌；有朋友在就把自己的位子讓出來（打到一半改成電腦接手）
 function leaveCur(){if(!S||!ref||me()<0)return;const p=me(),others=S.seats.some((x,i)=>x&&!x.bot&&i!==p);clearTimeout(bt);G.botV=-1;
- if(!others){const v=S.v,c=Date.now();S=Object.assign(fresh(),{v,closedAt:c});G.closedAck=c;sel=-1;rc=-1;busy=-1;save();return}
+ /* 桌上只剩自己一位真人：離開就直接關閉房間（先存成空桌，再刪掉） */if(!others){const v=S.v,c=Date.now(),r=ref;S=Object.assign(fresh(),{v,closedAt:c});G.closedAck=c;sel=-1;rc=-1;busy=-1;save().then(()=>closeRoom(r));return}
  if(S.phase==='lobby')S.seats[p]=null;else{const x=S.seats[p],av=typeof x.av==='number'?x.av:p%AVN;S.seats[p]={id:'bot'+p,name:'電腦'+(ANN[av]||''),bot:1,av}}
  S.rdy&&delete S.rdy[p];save()}
 function goHall(){leaveCur();detachRoom();hallShow(1)}
