@@ -19,6 +19,13 @@ service cloud.firestore {
                       || get(/databases/$(database)/documents/mj/$(room)).data.get('h', 1) == 0;
       }
     }
+    // LINE 玩家的戰績（排行榜用）：文件名是 L＋LINE 使用者 ID，只能有這些欄位，不能刪
+    match /mjst/{id} {
+      allow read: if true;
+      allow create, update: if id.matches('L[A-Za-z0-9]{8,64}')
+                            && request.resource.data.keys().hasOnly(['n','p','h','w','z','d','dr','ts','sc','u'])
+                            && request.resource.size() < 4000;
+    }
     // 玩家頭貼（自己上傳的照片或 LINE 大頭貼）：每人一張縮圖
     match /mjav/{uid} {
       allow read: if true;
