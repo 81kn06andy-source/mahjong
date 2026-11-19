@@ -1479,7 +1479,7 @@ function sayInfo(){if(!S||!S.say)return null;const sk=(S.gid||0)+':'+JSON.string
 let chatUn=null,chatT0=0,chatSeen=new Set(),chatOpen=false,chatUnread=0,rec=null,recTm=0,recT0=0,dict=null,ctTm=0,chatAud=null;
 function myName(){const e=$('#name');return(e&&e.value.trim())||lsg('mj_name')||'玩家'}
 // 快捷短句：點一下就送出；文字訊息會在說話的人名牌上冒泡泡幾秒
-const QPH=['快一點啦～','好牌！','等我一下','不好意思','恭喜！','哈哈哈','再來一局！','謝謝'];
+const QPH=['洗勒考','快一點啦～','好牌！','等我一下','不好意思','恭喜！','哈哈哈','再來一局！','謝謝'];
 function chatQuick(t){chatSend({t:String(t).slice(0,60)})}
 function chatBub(u,t){if(!S)return;const s=S.seats.findIndex(x=>x&&x.id===u);if(s<0)return;G.bub=G.bub||{};G.bub[s]={t:String(t).slice(0,60),u:Date.now()+4500};render();setTimeout(()=>{try{render()}catch(_){}},4600)}
 const cbub=s=>{const b=G.bub&&G.bub[s];return b&&Date.now()<b.u?`<div class="cbub">${esc(b.t)}</div>`:''};
